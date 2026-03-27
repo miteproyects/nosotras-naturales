@@ -74,25 +74,58 @@ def save_products(data):
     with open(PRODUCTS_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
+def _ensure_ecuador_spanish_url(url):
+    """Convert any doTERRA URL to the Ecuador Spanish version for consistent scraping.
+    E.g., doterra.com/US/en/p/lavender-oil -> doterra.com/EC/es_EC/p/lavender-oil
+    """
+    clean = url.split('?')[0]
+    # Match pattern: /XX/xx_XX/p/slug or /XX/xx/p/slug
+    slug_match = re.search(r'/p/([\w-]+)', clean)
+    if slug_match:
+        slug = slug_match.group(1)
+        return f'https://www.doterra.com/EC/es_EC/p/{slug}'
+    return clean
+
 def scrape_doterra_product(url):
     """Scrape product data from a doTERRA product page URL.
     Returns dict with 'success' bool and 'data' dict or 'error' string.
-    Extracts: imagen_url, precio_usd, precio_mayoreo, doterra_sku, pv, infografia_url, descripcion.
+    Auto-detects language: fetches both English and Spanish versions.
+    Extracts: imagen_url, precio_usd, precio_mayoreo, doterra_sku, pv,
+              infografia_url, nombre, nombre_en, descripcion.
     """
     try:
-        clean_url = url.split('?')[0]  # Remove tracking params
+        clean_url = url.split('?')[0]
+        # Always fetch the Ecuador Spanish page for prices/descriptions
+        es_url = _ensure_ecuador_spanish_url(clean_url)
         headers = {
             'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
             'Accept-Language': 'es-EC,es;q=0.9',
         }
-        response = requests.get(clean_url, headers=headers, timeout=15)
+        response = requests.get(es_url, headers=headers, timeout=15)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.text, 'lxml')
         data = {}
-        data['doterra_url'] = clean_url
+        data['doterra_url'] = es_url
 
-        # og:image for product photo
+        # ---- Extract product names from page title ----
+        # Pattern: "Aceite de Lavanda | Lavender Oil | Aceites esenciales dōTERRA"
+        og_title = soup.find('meta', {'property': 'og:title'})
+        title_text = og_title['content'] if og_title and og_title.get('content') else ''
+        if not title_text:
+            title_tag = soup.find('title')
+            title_text = title_tag.text if title_tag else ''
+
+        if '|' in title_text:
+            parts = [p.strip() for p in title_text.split('|')]
+            if len(parts) >= 2:
+                data['nombre'] = parts[0]  # Spanish name
+                # English name: remove common suffixes like "Oil", "Blend" context
+                en_name = parts[1].replace('Aceites esenciales dōTERRA', '').strip()
+                if en_name:
+                    data['nombre_en'] = en_name
+
+        # ---- og:image for product photo ----
         og_img = soup.find('meta', {'property': 'og:image'})
         if og_img and og_img.get('content'):
             img_url = og_img['content']
@@ -100,7 +133,7 @@ def scrape_doterra_product(url):
                 img_url = 'https://www.doterra.com' + img_url
             data['imagen_url'] = img_url
 
-        # Better image: look for 2x3 background-image divs (higher res product bottle)
+        # Better image: look for 2x3 background-image divs (higher res)
         for div in soup.find_all('div', style=True):
             style = div.get('style', '')
             if 'background-image' in style and '2x3' in style:
@@ -112,7 +145,7 @@ def scrape_doterra_product(url):
                     data['imagen_url'] = img_url
                     break
 
-        # Text content for prices and SKU
+        # ---- Text content for prices and SKU ----
         page_text = soup.get_text()
 
         # Retail price: "Menudeo: $38.00"
@@ -135,7 +168,7 @@ def scrape_doterra_product(url):
         if pv_match:
             data['pv'] = float(pv_match.group(1))
 
-        # Infographic PDF link — look for "Ver infografía" or any infographic PDF
+        # ---- Infographic PDF link ----
         for a in soup.find_all('a', href=True):
             href = a.get('href', '')
             if '.pdf' in href.lower() and ('infographic' in href.lower() or 'infografia' in href.lower()):
@@ -144,10 +177,32 @@ def scrape_doterra_product(url):
                 data['infografia_url'] = href
                 break
 
-        # og:description as fallback description
+        # ---- Description (Spanish from og:description) ----
         og_desc = soup.find('meta', {'property': 'og:description'})
         if og_desc and og_desc.get('content'):
-            data['og_descripcion'] = og_desc['content']
+            data['descripcion'] = og_desc['content']
+
+        # ---- Also try to get the English page for English description ----
+        slug_match = re.search(r'/p/([\w-]+)', es_url)
+        if slug_match:
+            slug = slug_match.group(1)
+            en_url = f'https://www.doterra.com/US/en/p/{slug}'
+            try:
+                en_headers = dict(headers)
+                en_headers['Accept-Language'] = 'en-US,en;q=0.9'
+                en_resp = requests.get(en_url, headers=en_headers, timeout=10)
+                if en_resp.status_code == 200:
+                    en_soup = BeautifulSoup(en_resp.text, 'lxml')
+                    en_og_title = en_soup.find('meta', {'property': 'og:title'})
+                    if en_og_title and en_og_title.get('content'):
+                        en_parts = [p.strip() for p in en_og_title['content'].split('|')]
+                        if en_parts:
+                            data['nombre_en'] = en_parts[0]  # English name from US page
+                    en_og_desc = en_soup.find('meta', {'property': 'og:description'})
+                    if en_og_desc and en_og_desc.get('content'):
+                        data['descripcion_en'] = en_og_desc['content']
+            except Exception:
+                pass  # English page fetch is optional — don't fail the whole scrape
 
         return {'success': True, 'data': data}
 
@@ -954,6 +1009,13 @@ def _render_dashboard_product_card(product):
             '</div>'
         )
 
+    # Status badges
+    is_active = product.get('active', True)
+    stock = product.get('stock', 99)
+    active_badge = '<span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Activo</span>' if is_active else '<span style="background:#ffebee;color:#c62828;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Inactivo</span>'
+    stock_badge = f'<span style="background:#fff8e1;color:#f57f17;padding:2px 8px;border-radius:10px;font-size:11px;">Stock: {stock}</span>' if stock < 10 else ''
+    stripe_badge = '<span style="background:#e8eaf6;color:#283593;padding:2px 8px;border-radius:10px;font-size:11px;">Stripe ✓</span>' if product.get('stripe_price_id') else '<span style="background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:10px;font-size:11px;">Sin Stripe</span>'
+
     # Infographic button
     infog_btn = ''
     if infografia:
@@ -963,11 +1025,13 @@ def _render_dashboard_product_card(product):
         )
 
     html = (
-        '<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
-        'box-shadow:0 2px 12px rgba(60,50,41,0.07);border:1px solid rgba(0,0,0,0.04);">'
+        f'<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
+        f'box-shadow:0 2px 12px rgba(60,50,41,0.07);border:1px solid {"rgba(0,0,0,0.04)" if is_active else "#ffcdd2"};'
+        f'{"opacity:0.7;" if not is_active else ""}">'
         '<div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:14px;">'
         f'<div style="flex-shrink:0;">{image_html}</div>'
         '<div style="flex:1;min-width:0;">'
+        f'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">{active_badge}{stock_badge}{stripe_badge}</div>'
         '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
         f'<div style="margin:0;font-size:1.15rem;font-weight:700;color:#3D3229;">{product["nombre"]}</div>'
         f'<span style="color:#aaa;font-size:13px;">{product.get("nombre_en", "")}</span>'
@@ -991,7 +1055,9 @@ def _render_dashboard_product_card(product):
 
 
 def _product_edit_form(product, key_prefix, is_new=False):
-    """Render an edit form for a product. Returns updated product dict or None if cancelled."""
+    """Render an edit form for a product. Returns updated product dict.
+    Includes Stripe-ready fields for seamless checkout integration.
+    """
     ALL_CATEGORIES = [
         'sueño', 'relajacion', 'piel', 'bienestar_emocional', 'digestion',
         'bienestar_digestivo', 'energia', 'enfoque', 'concentracion',
@@ -1004,62 +1070,110 @@ def _product_edit_form(product, key_prefix, is_new=False):
     ]
     ALL_TIPOS = ['aceite_individual', 'mezcla', 'suplemento', 'kit']
 
-    col1, col2 = st.columns(2)
-    with col1:
-        nombre = st.text_input("Nombre (Español):", value=product.get('nombre', ''), key=f"{key_prefix}_nombre")
-        nombre_en = st.text_input("Name (English):", value=product.get('nombre_en', ''), key=f"{key_prefix}_nombre_en")
-        tipo = st.selectbox("Tipo:", ALL_TIPOS, index=ALL_TIPOS.index(product.get('tipo', 'aceite_individual')) if product.get('tipo') in ALL_TIPOS else 0, key=f"{key_prefix}_tipo")
-        precio_usd = st.number_input("Precio Menudeo (USD):", value=float(product.get('precio_usd', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_precio")
-        precio_mayoreo = st.number_input("Precio Mayoreo (USD):", value=float(product.get('precio_mayoreo', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_mayoreo")
+    # ---- Tab layout for organized editing ----
+    tab_basic, tab_content, tab_store = st.tabs(["📦 Producto", "📝 Contenido", "🛒 Tienda y Stripe"])
 
-    with col2:
-        pv = st.number_input("PV:", value=float(product.get('pv', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_pv")
-        sku = st.text_input("SKU (doTERRA):", value=product.get('doterra_sku', ''), key=f"{key_prefix}_sku")
-        if is_new:
-            pid = st.text_input("ID (único, sin espacios):", value='', placeholder="ej: lavender, deep_blue", key=f"{key_prefix}_id")
-        else:
-            pid = product.get('id', '')
-            st.text_input("ID:", value=pid, disabled=True, key=f"{key_prefix}_id")
-        imagen_url = st.text_input("URL Imagen:", value=product.get('imagen_url', ''), placeholder="https://www.doterra.com/medias/...", key=f"{key_prefix}_img")
-        infografia_url = st.text_input("URL Infografía PDF:", value=product.get('infografia_url', ''), placeholder="https://media.doterra.com/.../infographic-....pdf", key=f"{key_prefix}_infog")
+    with tab_basic:
+        col1, col2 = st.columns(2)
+        with col1:
+            nombre = st.text_input("Nombre (Español):", value=product.get('nombre', ''), key=f"{key_prefix}_nombre")
+            nombre_en = st.text_input("Name (English):", value=product.get('nombre_en', ''), key=f"{key_prefix}_nombre_en")
+            tipo = st.selectbox("Tipo:", ALL_TIPOS, index=ALL_TIPOS.index(product.get('tipo', 'aceite_individual')) if product.get('tipo') in ALL_TIPOS else 0, key=f"{key_prefix}_tipo")
+            if is_new:
+                pid = st.text_input("ID (único, sin espacios):", value='', placeholder="ej: lavender, deep_blue", key=f"{key_prefix}_id")
+            else:
+                pid = product.get('id', '')
+                st.text_input("ID:", value=pid, disabled=True, key=f"{key_prefix}_id")
 
-    # doTERRA link + auto-scrape
-    st.markdown("---")
-    col_url, col_scrape = st.columns([3, 1])
-    with col_url:
-        doterra_url = st.text_input("Link doTERRA Ecuador (auto-actualiza datos):", value=product.get('doterra_url', ''), placeholder="https://www.doterra.com/EC/es_EC/p/...", key=f"{key_prefix}_dturl")
-    with col_scrape:
-        st.markdown("<br>", unsafe_allow_html=True)
-        scrape_clicked = st.button("🔄 Auto-llenar desde link", key=f"{key_prefix}_scrape")
+        with col2:
+            sku = st.text_input("SKU (doTERRA):", value=product.get('doterra_sku', ''), key=f"{key_prefix}_sku")
+            imagen_url = st.text_input("URL Imagen:", value=product.get('imagen_url', ''), placeholder="https://www.doterra.com/medias/...", key=f"{key_prefix}_img")
+            infografia_url = st.text_input("URL Infografía PDF:", value=product.get('infografia_url', ''), placeholder="https://media.doterra.com/.../infographic-....pdf", key=f"{key_prefix}_infog")
 
-    descripcion = st.text_area("Descripción:", value=product.get('descripcion', ''), height=100, key=f"{key_prefix}_desc")
+        # Image preview
+        if imagen_url and 'doterra.com' in imagen_url:
+            st.markdown(
+                f'<div style="display:flex;align-items:center;gap:12px;padding:8px;background:#faf8f5;border-radius:8px;margin-top:8px;">'
+                f'<div style="width:60px;height:60px;background:url({imagen_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:8px;flex-shrink:0;"></div>'
+                f'<span style="color:#888;font-size:13px;">Vista previa de imagen</span>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
 
-    # Categories as multiselect
-    current_cats = product.get('categoria', [])
-    categorias = st.multiselect("Categorías:", ALL_CATEGORIES, default=[c for c in current_cats if c in ALL_CATEGORIES], key=f"{key_prefix}_cats")
+        # doTERRA link + auto-scrape
+        st.markdown("---")
+        col_url, col_scrape = st.columns([3, 1])
+        with col_url:
+            doterra_url = st.text_input("Link doTERRA Ecuador (auto-actualiza datos):", value=product.get('doterra_url', ''), placeholder="https://www.doterra.com/EC/es_EC/p/...", key=f"{key_prefix}_dturl")
+        with col_scrape:
+            st.markdown("<br>", unsafe_allow_html=True)
+            scrape_clicked = st.button("🔄 Auto-llenar", key=f"{key_prefix}_scrape")
 
-    # Benefits as editable text (one per line)
-    beneficios_text = st.text_area("Beneficios (uno por línea):", value='\n'.join(product.get('beneficios', [])), height=100, key=f"{key_prefix}_bene")
-    beneficios = [b.strip() for b in beneficios_text.split('\n') if b.strip()]
+    with tab_content:
+        st.markdown("**Descripción del producto**")
+        col_desc_es, col_desc_en = st.columns(2)
+        with col_desc_es:
+            descripcion = st.text_area("Descripción (Español):", value=product.get('descripcion', ''), height=100, key=f"{key_prefix}_desc")
+        with col_desc_en:
+            descripcion_en = st.text_area("Description (English):", value=product.get('descripcion_en', ''), height=100, key=f"{key_prefix}_desc_en",
+                                          help="Se llena automáticamente al usar Auto-llenar desde link doTERRA")
 
-    # Usage methods
-    uso_aromatico = st.text_input("Uso Aromático:", value=product.get('uso_aromatico', ''), key=f"{key_prefix}_usoA")
-    uso_topico = st.text_input("Uso Tópico:", value=product.get('uso_topico', ''), key=f"{key_prefix}_usoT")
-    uso_interno = st.text_input("Uso Interno:", value=product.get('uso_interno', ''), key=f"{key_prefix}_usoI")
+        # Categories as multiselect
+        current_cats = product.get('categoria', [])
+        categorias = st.multiselect("Categorías:", ALL_CATEGORIES, default=[c for c in current_cats if c in ALL_CATEGORIES], key=f"{key_prefix}_cats")
 
-    # Symptoms as editable text (one per line)
-    sintomas_text = st.text_area("Síntomas relacionados (uno por línea):", value='\n'.join(product.get('sintomas_relacionados', [])), height=80, key=f"{key_prefix}_sint")
-    sintomas = [s.strip() for s in sintomas_text.split('\n') if s.strip()]
+        # Benefits as editable text (one per line)
+        beneficios_text = st.text_area("Beneficios (uno por línea):", value='\n'.join(product.get('beneficios', [])), height=100, key=f"{key_prefix}_bene")
+        beneficios = [b.strip() for b in beneficios_text.split('\n') if b.strip()]
 
-    # Handle auto-scrape
+        # Usage methods
+        uso_aromatico = st.text_input("Uso Aromático:", value=product.get('uso_aromatico', ''), key=f"{key_prefix}_usoA")
+        uso_topico = st.text_input("Uso Tópico:", value=product.get('uso_topico', ''), key=f"{key_prefix}_usoT")
+        uso_interno = st.text_input("Uso Interno:", value=product.get('uso_interno', ''), key=f"{key_prefix}_usoI")
+
+        # Symptoms as editable text (one per line)
+        sintomas_text = st.text_area("Síntomas relacionados (uno por línea):", value='\n'.join(product.get('sintomas_relacionados', [])), height=80, key=f"{key_prefix}_sint")
+        sintomas = [s.strip() for s in sintomas_text.split('\n') if s.strip()]
+
+    with tab_store:
+        st.markdown('<div style="background:#f0f7ed;padding:12px 16px;border-radius:8px;margin-bottom:16px;">'
+                    '<span style="color:#7C9070;font-weight:600;">Configuración de Tienda y Stripe</span>'
+                    '<div style="color:#888;font-size:13px;margin-top:4px;">Estos campos conectan el producto con Stripe para pagos online.</div>'
+                    '</div>', unsafe_allow_html=True)
+
+        col_p1, col_p2 = st.columns(2)
+        with col_p1:
+            precio_usd = st.number_input("Precio Menudeo (USD):", value=float(product.get('precio_usd', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_precio")
+            precio_mayoreo = st.number_input("Precio Mayoreo (USD):", value=float(product.get('precio_mayoreo', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_mayoreo")
+            pv = st.number_input("PV:", value=float(product.get('pv', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_pv")
+        with col_p2:
+            active = st.toggle("Producto activo (visible en tienda)", value=product.get('active', True), key=f"{key_prefix}_active")
+            stock = st.number_input("Stock disponible:", value=int(product.get('stock', 99)), min_value=0, step=1, key=f"{key_prefix}_stock")
+            max_per_order = st.number_input("Máximo por pedido:", value=int(product.get('max_per_order', 10)), min_value=1, max_value=50, step=1, key=f"{key_prefix}_maxorder")
+
+        st.markdown("**Stripe IDs** (se llenan automáticamente al sincronizar con Stripe)")
+        col_s1, col_s2 = st.columns(2)
+        with col_s1:
+            stripe_product_id = st.text_input("Stripe Product ID:", value=product.get('stripe_product_id', ''), placeholder="prod_...", key=f"{key_prefix}_stripe_prod")
+        with col_s2:
+            stripe_price_id = st.text_input("Stripe Price ID:", value=product.get('stripe_price_id', ''), placeholder="price_...", key=f"{key_prefix}_stripe_price")
+
+        # Shipping info
+        st.markdown("**Envío**")
+        col_w, col_sh = st.columns(2)
+        with col_w:
+            weight_g = st.number_input("Peso (gramos):", value=int(product.get('weight_g', 0)), min_value=0, step=10, key=f"{key_prefix}_weight")
+        with col_sh:
+            requires_shipping = st.toggle("Requiere envío", value=product.get('requires_shipping', True), key=f"{key_prefix}_shipping")
+
+    # Handle auto-scrape (from tab_basic)
     if scrape_clicked and doterra_url and 'doterra.com' in doterra_url:
         with st.spinner("Obteniendo datos de doTERRA..."):
             result = scrape_doterra_product(doterra_url)
             if result['success']:
                 scraped = result['data']
                 st.success(f"✅ Datos obtenidos: {', '.join(scraped.keys())}")
-                st.info("Los datos se muestran abajo. Haz clic en **Guardar** para aplicar los cambios.")
-                # Store scraped data in session state for the form to pick up on rerun
+                st.info("Haz clic en **Guardar** para aplicar los cambios.")
                 st.session_state[f'{key_prefix}_scraped'] = scraped
                 st.rerun()
             else:
@@ -1068,17 +1182,18 @@ def _product_edit_form(product, key_prefix, is_new=False):
     # Apply scraped data if available (from previous scrape click)
     scraped = st.session_state.pop(f'{key_prefix}_scraped', None)
 
-    # Build the updated product dict
+    # Build the updated product dict (Stripe-ready, bilingual)
     updated = {
         'id': pid if is_new else product['id'],
-        'nombre': nombre,
-        'nombre_en': nombre_en,
+        'nombre': scraped.get('nombre', nombre) if scraped and scraped.get('nombre') and not nombre else nombre,
+        'nombre_en': scraped.get('nombre_en', nombre_en) if scraped and scraped.get('nombre_en') and not nombre_en else nombre_en,
         'tipo': tipo,
         'categoria': categorias,
         'imagen_url': scraped.get('imagen_url', imagen_url) if scraped else imagen_url,
         'precio_usd': scraped.get('precio_usd', precio_usd) if scraped else precio_usd,
         'pv': scraped.get('pv', pv) if scraped else pv,
-        'descripcion': descripcion,
+        'descripcion': scraped.get('descripcion', descripcion) if scraped and scraped.get('descripcion') and not descripcion else descripcion,
+        'descripcion_en': scraped.get('descripcion_en', descripcion_en) if scraped and scraped.get('descripcion_en') else descripcion_en,
         'beneficios': beneficios,
         'uso_aromatico': uso_aromatico,
         'uso_topico': uso_topico,
@@ -1086,6 +1201,15 @@ def _product_edit_form(product, key_prefix, is_new=False):
         'sintomas_relacionados': sintomas,
         'doterra_sku': scraped.get('doterra_sku', sku) if scraped else sku,
         'precio_mayoreo': scraped.get('precio_mayoreo', precio_mayoreo) if scraped else precio_mayoreo,
+        # Stripe-ready fields
+        'active': active,
+        'stock': stock,
+        'max_per_order': max_per_order,
+        'stripe_product_id': stripe_product_id,
+        'stripe_price_id': stripe_price_id,
+        'weight_g': weight_g,
+        'requires_shipping': requires_shipping,
+        'currency': 'usd',
     }
     if doterra_url:
         updated['doterra_url'] = doterra_url.split('?')[0]
@@ -1093,6 +1217,11 @@ def _product_edit_form(product, key_prefix, is_new=False):
         updated['infografia_url'] = scraped['infografia_url']
     elif infografia_url:
         updated['infografia_url'] = infografia_url
+    # Preserve existing Stripe IDs if not explicitly changed
+    if not stripe_product_id and product.get('stripe_product_id'):
+        updated['stripe_product_id'] = product['stripe_product_id']
+    if not stripe_price_id and product.get('stripe_price_id'):
+        updated['stripe_price_id'] = product['stripe_price_id']
 
     return updated
 
@@ -1256,6 +1385,19 @@ def page_dashboard():
 
         st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
 
+    # ---- Dashboard Stats ----
+    st.markdown("---")
+    active_count = sum(1 for p in products_data if p.get('active', True))
+    stripe_count = sum(1 for p in products_data if p.get('stripe_price_id'))
+    low_stock = sum(1 for p in products_data if p.get('stock', 99) < 10)
+    col_s1, col_s2, col_s3 = st.columns(3)
+    with col_s1:
+        st.metric("Productos Activos", f"{active_count}/{len(products_data)}")
+    with col_s2:
+        st.metric("Conectados a Stripe", stripe_count)
+    with col_s3:
+        st.metric("Stock Bajo", low_stock, delta=None if low_stock == 0 else f"-{low_stock}", delta_color="inverse")
+
     # ---- Configuration ----
     st.markdown("---")
     st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
@@ -1264,6 +1406,20 @@ def page_dashboard():
         st.info(f"📱 **WhatsApp:** {WHATSAPP_NUMBER}")
     with col2:
         st.info(f"🎯 **ID Advocada:** {ADVOCATE_ID}")
+
+    # Stripe configuration placeholder
+    st.markdown("---")
+    st.markdown("<h3>Stripe (Pagos Online)</h3>", unsafe_allow_html=True)
+    st.markdown(
+        '<div style="background:#f5f0ff;padding:16px;border-radius:10px;border:1px solid #d1c4e9;">'
+        '<div style="font-weight:600;color:#5e35b1;margin-bottom:8px;">Integración con Stripe</div>'
+        '<div style="color:#666;font-size:14px;line-height:1.6;">'
+        'Cuando conectes Stripe, los productos con Stripe Price ID se podrán comprar directamente desde la web. '
+        'Los clientes podrán pagar con tarjeta de crédito, débito y otros métodos de pago.'
+        '</div>'
+        '</div>',
+        unsafe_allow_html=True
+    )
 
 def page_latam():
     """doTERRA Latinoamérica page"""
