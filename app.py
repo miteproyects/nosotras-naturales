@@ -324,9 +324,14 @@ def page_inicio():
     # GUÍA DE BIENESTAR — DIRECTLY ON HOMEPAGE
     # ==========================================
     st.markdown("""
-    <div style="text-align: center; margin-bottom: 10px;">
-        <h2 style="color: #3D3229; font-size: 1.8rem; margin-bottom: 5px;">¿Cómo te sientes hoy?</h2>
-        <p style="color: #888; font-size: 15px;">Selecciona un área y en menos de 2 minutos te recomendaremos los mejores productos para ti</p>
+    <div style="text-align: center; margin: 5px 0 20px;">
+        <h2 style="color: #3D3229; font-size: 2rem; margin-bottom: 8px; font-weight: 700;">
+            Cuéntanos, ¿cómo te sientes hoy?
+        </h2>
+        <p style="color: #666; font-size: 16px; max-width: 550px; margin: 0 auto; line-height: 1.7;">
+            Toca el área que quieres mejorar. En <strong style="color: #7C9070;">menos de 2 minutos</strong>
+            descubrirás los aceites esenciales ideales para ti.
+        </p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -416,9 +421,14 @@ def page_guia_bienestar():
         # If user navigated here from sidebar without selecting a category,
         # show categories here too
         st.markdown("""
-        <div style="text-align: center; padding: 30px 20px 10px;">
-            <h2 style="margin-bottom: 5px;">¿Cómo te sientes hoy?</h2>
-            <p style="font-size: 15px; color: #888;">Elige una categoría para comenzar tu evaluación personalizada</p>
+        <div style="text-align: center; padding: 20px 20px 10px;">
+            <h2 style="color: #3D3229; font-size: 2rem; margin-bottom: 8px; font-weight: 700;">
+                Cuéntanos, ¿cómo te sientes hoy?
+            </h2>
+            <p style="color: #666; font-size: 16px; max-width: 550px; margin: 0 auto; line-height: 1.7;">
+                Toca el área que quieres mejorar. En <strong style="color: #7C9070;">menos de 2 minutos</strong>
+                descubrirás los aceites esenciales ideales para ti.
+            </p>
         </div>
         """, unsafe_allow_html=True)
 
