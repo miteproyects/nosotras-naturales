@@ -310,18 +310,18 @@ if 'dashboard_authenticated' not in st.session_state:
 def page_inicio():
     """Home page — Guía de Bienestar is front and center"""
 
-    # Combined hero banner with CTA
+    # Compact hero banner
     st.markdown("""
     <div class="hero">
         <div class="hero-content">
-            <h1>🌿 Nosotras Naturales</h1>
-            <div style="width: 45px; height: 2.5px; background: rgba(255,255,255,0.45); border-radius: 2px; margin: 0 auto 24px;"></div>
-            <h2>Cuéntanos, ¿cómo te sientes hoy?</h2>
-            <p style="max-width: 480px; margin: 0 auto;">
-                Toca el área que quieres mejorar. En
-                <strong style="color: #fff; background: rgba(255,255,255,0.16); padding: 2px 10px; border-radius: 12px;">menos de 2 minutos</strong>
-                descubrirás los aceites esenciales ideales para ti.
-            </p>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;">
+                <div style="text-align: left;">
+                    <h2 style="font-size: 1.35rem; margin: 0 0 4px; font-weight: 700;">Cuéntanos, ¿cómo te sientes hoy?</h2>
+                    <p style="font-size: 0.88rem; margin: 0; opacity: 0.85;">
+                        Elige un área abajo · En <strong style="background: rgba(255,255,255,0.15); padding: 1px 8px; border-radius: 8px;">2 min</strong> descubrirás tus aceites ideales
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
