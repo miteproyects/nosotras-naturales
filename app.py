@@ -312,15 +312,14 @@ def page_inicio():
 
     # Combined hero banner with CTA
     st.markdown("""
-    <div class="hero" style="padding: 48px 20px 40px; margin-bottom: 28px;">
+    <div class="hero">
         <div class="hero-content">
-            <h1 style="font-size: 2.4rem; margin-bottom: 20px; letter-spacing: -0.5px;">🌿 Nosotras Naturales</h1>
-            <div style="width: 50px; height: 3px; background: rgba(255,255,255,0.5); border-radius: 2px; margin: 0 auto 22px;"></div>
-            <h2 style="color: white; font-size: 1.65rem; margin-bottom: 10px; font-weight: 700; text-shadow: 0 1px 8px rgba(0,0,0,0.10);">
-                Cuéntanos, ¿cómo te sientes hoy?
-            </h2>
-            <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; max-width: 500px; margin: 0 auto; line-height: 1.7;">
-                Toca el área que quieres mejorar. En <strong style="color: #fff; background: rgba(255,255,255,0.18); padding: 1px 8px; border-radius: 10px;">menos de 2 minutos</strong>
+            <h1>🌿 Nosotras Naturales</h1>
+            <div style="width: 45px; height: 2.5px; background: rgba(255,255,255,0.45); border-radius: 2px; margin: 0 auto 24px;"></div>
+            <h2>Cuéntanos, ¿cómo te sientes hoy?</h2>
+            <p style="max-width: 480px; margin: 0 auto;">
+                Toca el área que quieres mejorar. En
+                <strong style="color: #fff; background: rgba(255,255,255,0.16); padding: 2px 10px; border-radius: 12px;">menos de 2 minutos</strong>
                 descubrirás los aceites esenciales ideales para ti.
             </p>
         </div>
@@ -353,57 +352,38 @@ def page_inicio():
     # ==========================================
     # SECONDARY SECTIONS — Below the fold
     # ==========================================
-    st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
-    st.markdown("---")
-
-    # Why doTERRA — compact
-    st.markdown("<h3 style='text-align: center; margin: 25px 0 15px;'>¿Por qué doTERRA?</h3>", unsafe_allow_html=True)
+    st.markdown("""
+    <div style="margin-top: 48px; text-align: center;">
+        <h3 style="color: var(--text); font-size: 1.4rem; margin-bottom: 6px;">¿Por qué doTERRA?</h3>
+        <p style="color: #999; font-size: 14px; margin-bottom: 20px;">Calidad que puedes sentir en cada gota</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("""
-        <div class="feature-card" style="padding: 20px;">
-            <div style="font-size: 28px; margin-bottom: 8px;">🌾</div>
-            <h4 style="font-size: 1rem;">100% Puro</h4>
-            <p style="font-size: 13px;">Grado terapéutico, sin aditivos</p>
+        <div class="feature-card" style="padding: 22px; text-align: center; border-left: none; border-top: 3px solid var(--primary);">
+            <div style="font-size: 30px; margin-bottom: 10px;">🌾</div>
+            <h4 style="font-size: 1rem; margin-bottom: 6px;">100% Puro</h4>
+            <p style="font-size: 13px; color: #888;">Grado terapéutico CPTG, sin aditivos ni sintéticos</p>
         </div>
         """, unsafe_allow_html=True)
     with col2:
         st.markdown("""
-        <div class="feature-card" style="padding: 20px;">
-            <div style="font-size: 28px; margin-bottom: 8px;">🔬</div>
-            <h4 style="font-size: 1rem;">Ciencia</h4>
-            <p style="font-size: 13px;">Respaldado por investigación</p>
+        <div class="feature-card" style="padding: 22px; text-align: center; border-left: none; border-top: 3px solid var(--gold);">
+            <div style="font-size: 30px; margin-bottom: 10px;">🔬</div>
+            <h4 style="font-size: 1rem; margin-bottom: 6px;">Ciencia</h4>
+            <p style="font-size: 13px; color: #888;">Respaldado por investigación y pruebas rigurosas</p>
         </div>
         """, unsafe_allow_html=True)
     with col3:
         st.markdown("""
-        <div class="feature-card" style="padding: 20px;">
-            <div style="font-size: 28px; margin-bottom: 8px;">💚</div>
-            <h4 style="font-size: 1rem;">Natural</h4>
-            <p style="font-size: 13px;">Bienestar holístico integral</p>
+        <div class="feature-card" style="padding: 22px; text-align: center; border-left: none; border-top: 3px solid var(--terracotta);">
+            <div style="font-size: 30px; margin-bottom: 10px;">💚</div>
+            <h4 style="font-size: 1rem; margin-bottom: 6px;">Natural</h4>
+            <p style="font-size: 13px; color: #888;">Bienestar holístico e integral para tu cuerpo</p>
         </div>
         """, unsafe_allow_html=True)
-
-    # Quick links
-    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        if st.button("📦 Catálogo", use_container_width=True, key="nav_catalog"):
-            st.session_state.page = 'productos'
-            st.rerun()
-    with col2:
-        st.markdown(f'<a href="{DOTERRA_SHOP_URL}" target="_blank" class="btn-primary" style="display: block; text-align: center; padding: 10px; font-size: 13px;">🛍️ Comprar</a>',
-                   unsafe_allow_html=True)
-    with col3:
-        if st.button("💼 Únete", use_container_width=True, key="nav_opportunity"):
-            st.session_state.page = 'unete_al_equipo'
-            st.rerun()
-    with col4:
-        if st.button("🌸 Nosotras", use_container_width=True, key="nav_about"):
-            st.session_state.page = 'sobre_nosotras'
-            st.rerun()
 
 
 def page_guia_bienestar():
@@ -859,11 +839,25 @@ st.markdown("""
         width: 0 !important;
         min-width: 0 !important;
     }
-    /* Make main content full-width */
+    /* Remove Streamlit's default header bar */
+    header[data-testid="stHeader"] {
+        display: none !important;
+    }
+    /* Main container — remove top padding, keep sides snug */
+    [data-testid="stAppViewContainer"] {
+        padding-top: 0 !important;
+    }
     [data-testid="stAppViewBlockContainer"] {
+        max-width: 100% !important;
+        padding-top: 0 !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+    /* Content below nav gets centered padding */
+    .main-content-wrapper {
         max-width: 1100px;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        margin: 0 auto;
+        padding: 0 1.5rem;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -907,8 +901,10 @@ if selected_page != st.session_state.page and selected_page != page_to_label.get
         st.rerun()
 
 # ============================================
-# MAIN APP LOGIC
+# MAIN APP LOGIC (wrapped in centered container)
 # ============================================
+
+st.markdown('<div class="main-content-wrapper">', unsafe_allow_html=True)
 
 # Render floating WhatsApp button
 render_whatsapp_float()
@@ -931,11 +927,18 @@ else:
     st.session_state.page = 'inicio'
     st.rerun()
 
+st.markdown('</div>', unsafe_allow_html=True)
+
 # Footer
-st.markdown("---")
-st.markdown("""
-<div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
-    <p>Nosotras Naturales © 2024 | Aceites Esenciales doTERRA de Grado Terapéutico</p>
-    <p>Para consultas: 📱 Contacta a Suzanna Valles por WhatsApp</p>
+wa_footer = whatsapp_link("Hola Suzanna! Me interesa saber más sobre doTERRA.")
+st.markdown(f"""
+<div style="background: linear-gradient(135deg, #3D3229 0%, #5a4a3a 100%); padding: 30px 20px; margin-top: 40px; text-align: center;">
+    <p style="color: rgba(255,255,255,0.6); font-size: 12px; margin-bottom: 8px;">
+        Nosotras Naturales © 2024 · Aceites Esenciales doTERRA de Grado Terapéutico
+    </p>
+    <a href="{wa_footer}" target="_blank"
+       style="color: #25D366; font-size: 13px; font-weight: 600; text-decoration: none;">
+       📱 Contacta a Suzanna Valles por WhatsApp
+    </a>
 </div>
 """, unsafe_allow_html=True)

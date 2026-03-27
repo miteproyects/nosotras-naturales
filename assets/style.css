@@ -75,41 +75,50 @@ a:hover {
    HORIZONTAL NAV BAR (replaces sidebar)
    ============================================ */
 
-/* Horizontal radio nav bar — style the st.radio as a menu bar */
+/* ---- Nav bar: sticky, edge-to-edge, no border-radius ---- */
+[data-testid="stRadio"] {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
 [data-testid="stRadio"] > div {
-    background: linear-gradient(135deg, #4a6741 0%, #5a7a50 50%, #7C9070 100%);
-    padding: 8px 14px;
-    border-radius: 14px;
-    margin-bottom: 16px;
-    box-shadow: 0 3px 15px rgba(74, 103, 65, 0.18);
-    gap: 2px;
+    background: linear-gradient(135deg, #3a5a30 0%, #4a6741 40%, #5a7a50 100%);
+    padding: 10px 24px;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    box-shadow: 0 3px 18px rgba(0, 0, 0, 0.15);
+    gap: 0;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 /* Radio option labels */
 [data-testid="stRadio"] [role="radiogroup"] {
-    gap: 4px !important;
+    gap: 2px !important;
     justify-content: center;
     flex-wrap: wrap;
 }
 
 [data-testid="stRadio"] [role="radiogroup"] label {
     background: transparent !important;
-    color: rgba(255, 255, 255, 0.85) !important;
+    color: rgba(255, 255, 255, 0.82) !important;
     border: none !important;
-    border-radius: 9px !important;
-    font-size: 13.5px !important;
+    border-radius: 8px !important;
+    font-size: 14px !important;
     font-weight: 500 !important;
-    padding: 7px 13px !important;
+    padding: 9px 16px !important;
     cursor: pointer;
     transition: all 0.2s ease !important;
     white-space: nowrap;
     margin: 0 !important;
+    letter-spacing: 0.01em;
 }
 
 [data-testid="stRadio"] [role="radiogroup"] label:hover {
-    background: rgba(255, 255, 255, 0.15) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
     color: #fff !important;
 }
 
@@ -121,7 +130,7 @@ a:hover {
 /* Checked / active state */
 [data-testid="stRadio"] [role="radiogroup"] label[data-checked="true"],
 [data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {
-    background: rgba(255, 255, 255, 0.22) !important;
+    background: rgba(255, 255, 255, 0.20) !important;
     color: #fff !important;
     font-weight: 700 !important;
 }
@@ -136,18 +145,18 @@ a:hover {
 /* Mobile responsive */
 @media (max-width: 768px) {
     [data-testid="stRadio"] > div {
-        padding: 6px 8px;
+        padding: 7px 10px;
     }
     [data-testid="stRadio"] [role="radiogroup"] label {
         font-size: 12px !important;
-        padding: 6px 9px !important;
+        padding: 7px 10px !important;
     }
 }
 
 @media (max-width: 480px) {
     [data-testid="stRadio"] [role="radiogroup"] label {
         font-size: 11px !important;
-        padding: 5px 7px !important;
+        padding: 6px 8px !important;
     }
 }
 
@@ -157,35 +166,35 @@ a:hover {
 
 .hero {
     position: relative;
-    background: linear-gradient(135deg, #6B8E5E 0%, #7C9070 30%, #A8976A 70%, #B8965A 100%);
+    background: linear-gradient(160deg, #5a7a4a 0%, #7C9070 35%, #a89e6a 70%, #B8965A 100%);
     color: white;
-    padding: 60px 20px;
+    padding: 56px 24px 48px;
     text-align: center;
-    border-radius: 22px;
-    margin-bottom: 40px;
+    border-radius: 20px;
+    margin-bottom: 32px;
     overflow: hidden;
-    box-shadow: 0 8px 32px rgba(124, 144, 112, 0.25), 0 2px 8px rgba(0,0,0,0.08);
+    box-shadow: 0 12px 40px rgba(90, 122, 74, 0.22), 0 2px 10px rgba(0,0,0,0.06);
 }
 
 .hero::before {
     content: '';
     position: absolute;
-    top: -60px;
+    top: -80px;
     right: -60px;
-    width: 280px;
-    height: 280px;
-    background: rgba(255, 255, 255, 0.07);
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(255,255,255,0.10) 0%, transparent 70%);
     border-radius: 50%;
 }
 
 .hero::after {
     content: '';
     position: absolute;
-    bottom: -40px;
-    left: -40px;
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.05);
+    bottom: -50px;
+    left: -50px;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, rgba(255,255,255,0.07) 0%, transparent 70%);
     border-radius: 50%;
 }
 
@@ -196,28 +205,29 @@ a:hover {
 
 .hero h1 {
     color: white;
-    font-size: 3rem;
+    font-size: 2.6rem;
     margin-bottom: 15px;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+    letter-spacing: -0.5px;
 }
 
 .hero h2 {
     color: white;
-    font-size: 1.65rem;
+    font-size: 1.6rem;
     margin-bottom: 10px;
     font-weight: 700;
-    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.10);
+    text-shadow: 0 1px 6px rgba(0, 0, 0, 0.08);
 }
 
 .hero p {
-    color: rgba(255, 255, 255, 0.93);
-    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.92);
+    font-size: 1.05rem;
     margin-bottom: 10px;
     line-height: 1.7;
 }
 
 .hero .subtitle {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.75);
     font-size: 1rem;
 }
 
@@ -264,23 +274,31 @@ a:hover {
 
 .feature-card {
     background: white;
-    border-radius: 15px;
-    padding: 30px 25px;
-    box-shadow: 0 2px 10px rgba(60, 50, 41, 0.08);
-    transition: var(--transition);
-    border-left: 5px solid var(--primary);
+    border-radius: 16px;
+    padding: 28px 24px;
+    box-shadow: 0 2px 12px rgba(60, 50, 41, 0.06);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary);
     margin-bottom: 20px;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
 }
 
 .feature-card:hover {
-    transform: translateY(-5px);
-    box-shadow: var(--shadow);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(60, 50, 41, 0.12);
 }
 
 .feature-card h3 {
     color: var(--primary);
-    margin-bottom: 15px;
-    font-size: 1.3rem;
+    margin-bottom: 12px;
+    font-size: 1.2rem;
+}
+
+.feature-card h4 {
+    color: var(--primary);
+    margin-bottom: 8px;
 }
 
 .feature-card p, .feature-card li {
@@ -310,20 +328,21 @@ a:hover {
 
 .product-card {
     background: white;
-    border-radius: 15px;
+    border-radius: 18px;
     overflow: hidden;
-    box-shadow: 0 2px 15px rgba(60, 50, 41, 0.1);
-    transition: var(--transition);
+    box-shadow: 0 2px 14px rgba(60, 50, 41, 0.07);
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     height: 100%;
     position: relative;
     margin-bottom: 20px;
+    border: 1px solid rgba(0,0,0,0.04);
 }
 
 .product-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 25px rgba(60, 50, 41, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 14px 35px rgba(60, 50, 41, 0.14);
 }
 
 .match-badge {
@@ -639,9 +658,10 @@ a:hover {
 
 [data-testid="stMetricContainer"] {
     background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 2px 10px rgba(60, 50, 41, 0.08);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 2px 12px rgba(60, 50, 41, 0.06);
+    border: 1px solid rgba(0,0,0,0.04);
 }
 
 [data-testid="stMetricLabel"] {
@@ -679,17 +699,20 @@ a:hover {
    ============================================ */
 
 .stButton > button {
-    border-radius: 8px !important;
-    padding: 10px 24px !important;
+    border-radius: 10px !important;
+    padding: 11px 24px !important;
     font-weight: 600 !important;
     border: none !important;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--gold) 100%) !important;
+    background: linear-gradient(135deg, var(--primary) 0%, #6a9a5a 100%) !important;
     color: white !important;
-    transition: var(--transition);
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(124, 144, 112, 0.18) !important;
 }
 
 .stButton > button:hover {
-    background: linear-gradient(135deg, var(--terracotta) 0%, var(--primary) 100%) !important;
+    background: linear-gradient(135deg, #5a7a4a 0%, var(--primary) 100%) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 14px rgba(124, 144, 112, 0.25) !important;
 }
 
 /* Category card buttons — styled as tall cards */
@@ -698,27 +721,28 @@ a:hover {
     margin: 0 !important;
 }
 
-/* Target multi-line buttons (category cards) by min-height */
+/* Target multi-line buttons (category cards) */
 .stButton > button:has(strong),
 .stButton > button:has(p:nth-child(3)) {
-    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--cream-bg) 100%) !important;
-    border: 2px solid var(--primary) !important;
-    border-radius: 15px !important;
-    padding: 25px 20px !important;
-    min-height: 160px !important;
+    background: white !important;
+    border: 1.5px solid #e0dcd4 !important;
+    border-radius: 16px !important;
+    padding: 28px 18px !important;
+    min-height: 165px !important;
     color: var(--text) !important;
     font-weight: 400 !important;
     text-align: center !important;
     white-space: normal !important;
     line-height: 1.5 !important;
+    box-shadow: 0 2px 12px rgba(60, 50, 41, 0.06) !important;
 }
 
 .stButton > button:has(strong):hover,
 .stButton > button:has(p:nth-child(3)):hover {
-    background: linear-gradient(135deg, rgba(124,144,112,0.15) 0%, var(--secondary-bg) 100%) !important;
-    border-color: var(--terracotta) !important;
-    transform: translateY(-5px);
-    box-shadow: var(--shadow) !important;
+    background: white !important;
+    border-color: var(--primary) !important;
+    transform: translateY(-6px);
+    box-shadow: 0 8px 28px rgba(124, 144, 112, 0.18) !important;
 }
 
 /* ============================================
@@ -727,19 +751,28 @@ a:hover {
 
 @media (max-width: 768px) {
     .hero {
-        padding: 40px 20px;
+        padding: 36px 18px 30px;
+        border-radius: 16px;
     }
 
     .hero h1 {
-        font-size: 2rem;
+        font-size: 1.9rem;
+    }
+
+    .hero h2 {
+        font-size: 1.3rem;
     }
 
     h1 {
         font-size: 1.8rem;
     }
 
+    .main-content-wrapper {
+        padding: 0 1rem;
+    }
+
     .product-card {
-        margin-bottom: 20px;
+        margin-bottom: 16px;
     }
 
     .product-buttons {
@@ -751,11 +784,12 @@ a:hover {
     }
 
     .feature-card {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
+        padding: 20px 16px;
     }
 
     .category-card {
-        margin-bottom: 15px;
+        margin-bottom: 12px;
     }
 
     .whatsapp-float {
@@ -771,11 +805,16 @@ a:hover {
 
 @media (max-width: 480px) {
     .hero {
-        padding: 30px 15px;
+        padding: 28px 14px 24px;
+        border-radius: 14px;
     }
 
     .hero h1 {
         font-size: 1.5rem;
+    }
+
+    .hero h2 {
+        font-size: 1.15rem;
     }
 
     h1 {
@@ -784,6 +823,10 @@ a:hover {
 
     h2 {
         font-size: 1.3rem;
+    }
+
+    .main-content-wrapper {
+        padding: 0 0.75rem;
     }
 
     .product-price {
