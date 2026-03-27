@@ -35,7 +35,7 @@ ADVOCATE_ID = "8205768"
 WHATSAPP_NUMBER = "593984949487"
 DOTERRA_SHOP_URL = f"https://www.doterra.com/EC/es_EC/shop?referralId={ADVOCATE_ID}"
 INSTAGRAM_URL = "https://www.instagram.com/nosotrasnaturales"
-DASHBOARD_PASSWORD = "Suzzana"
+DASHBOARD_PASSWORD = "Suzanna"
 
 # ============================================
 # LOAD CSS & DATA
@@ -906,12 +906,202 @@ def page_sobre_nosotras():
                    unsafe_allow_html=True)
 
 
+def _render_dashboard_product_card(product):
+    """Render a product card in the dashboard with the SAME visual style as the website cards."""
+    price_display = f"${product.get('precio_usd', 'N/A')}"
+    pv_display = product.get('pv', '')
+    icon = get_product_icon(product)
+    imagen_url = product.get('imagen_url', '')
+    precio_mayoreo = product.get('precio_mayoreo', '')
+    mayoreo_html = f'<span style="color:#999;font-size:12px;text-decoration:line-through;">${precio_mayoreo}</span>' if precio_mayoreo else ''
+    descripcion = product.get('descripcion', '').replace('_', ' ')
+    sku = product.get('doterra_sku', '')
+    infografia = product.get('infografia_url', '')
+
+    if imagen_url and 'doterra.com' in imagen_url:
+        image_html = f'<div style="width:80px;height:80px;background:url({imagen_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:12px;flex-shrink:0;"></div>'
+    else:
+        image_html = f'<div style="width:80px;height:80px;background:linear-gradient(135deg,#e8f0e4,#f0ead8);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;">{icon}</div>'
+
+    benefits = product.get('beneficios', [])[:4]
+    benefits_html = ''.join([f'<div style="color:#666;font-size:13px;padding:2px 0;">• {b}</div>' for b in benefits])
+
+    usos = []
+    if product.get('uso_aromatico'):
+        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">🌬️ Aromático</span>')
+    if product.get('uso_topico'):
+        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">✋ Tópico</span>')
+    if product.get('uso_interno'):
+        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">💧 Interno</span>')
+    usos_html = f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">{"".join(usos)}</div>' if usos else ''
+
+    cat_badges = ''.join([f'<span style="background:#eee;color:#888;padding:2px 8px;border-radius:10px;font-size:11px;">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:3]])
+
+    uso_details = []
+    if product.get('uso_aromatico'):
+        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">🌬️ Aromático:</span> {product["uso_aromatico"]}</div>')
+    if product.get('uso_topico'):
+        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">✋ Tópico:</span> {product["uso_topico"]}</div>')
+    if product.get('uso_interno'):
+        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">💧 Interno:</span> {product["uso_interno"]}</div>')
+    details_section = ''
+    if benefits or uso_details:
+        details_section = (
+            '<div style="margin-bottom:12px;padding:10px 14px;background:#faf8f5;border-radius:10px;border:1px solid #eee;">'
+            '<div style="color:#7C9070;font-weight:600;font-size:14px;margin-bottom:8px;">Beneficios y usos</div>'
+            f'{benefits_html}'
+            f'<div style="margin-top:8px;font-size:13px;color:#666;line-height:1.7;">{"".join(uso_details)}</div>'
+            '</div>'
+        )
+
+    # Infographic button
+    infog_btn = ''
+    if infografia:
+        infog_btn = (
+            f'<a href="{infografia}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;'
+            'background:#f5f0e6;color:#7C9070;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">📄 Infografía PDF</a>'
+        )
+
+    html = (
+        '<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
+        'box-shadow:0 2px 12px rgba(60,50,41,0.07);border:1px solid rgba(0,0,0,0.04);">'
+        '<div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:14px;">'
+        f'<div style="flex-shrink:0;">{image_html}</div>'
+        '<div style="flex:1;min-width:0;">'
+        '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+        f'<div style="margin:0;font-size:1.15rem;font-weight:700;color:#3D3229;">{product["nombre"]}</div>'
+        f'<span style="color:#aaa;font-size:13px;">{product.get("nombre_en", "")}</span>'
+        '</div>'
+        '<div style="display:flex;align-items:baseline;gap:12px;margin-top:4px;">'
+        f'<span style="font-size:1.4rem;font-weight:700;color:#C67B4F;">{price_display}</span>'
+        f'{mayoreo_html}'
+        f'<span style="color:#bbb;font-size:12px;">PV: {pv_display}</span>'
+        f'<span style="color:#ccc;font-size:11px;">SKU: {sku}</span>'
+        '</div>'
+        '</div>'
+        '</div>'
+        f'<div style="color:#666;font-size:14px;line-height:1.6;margin-bottom:12px;">{descripcion}</div>'
+        f'{usos_html}'
+        f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{cat_badges}</div>'
+        f'{details_section}'
+        f'<div style="display:flex;gap:10px;align-items:center;">{infog_btn}</div>'
+        '</div>'
+    )
+    st.markdown(html, unsafe_allow_html=True)
+
+
+def _product_edit_form(product, key_prefix, is_new=False):
+    """Render an edit form for a product. Returns updated product dict or None if cancelled."""
+    ALL_CATEGORIES = [
+        'sueño', 'relajacion', 'piel', 'bienestar_emocional', 'digestion',
+        'bienestar_digestivo', 'energia', 'enfoque', 'concentracion',
+        'respiracion', 'bienestar_respiratorio', 'proteccion', 'defensa_natural',
+        'bienestar_inmunologico', 'comodidad_muscular', 'comodidad_articular',
+        'equilibrio_hormonal', 'salud_femenina', 'autocuidado', 'limpieza',
+        'hogar_saludable', 'bienestar_general', 'claridad_mental',
+        'equilibrio_emocional', 'desintoxicacion', 'salud_celular',
+        'sistema_nervioso', 'circulacion', 'nutricion_fundamental',
+    ]
+    ALL_TIPOS = ['aceite_individual', 'mezcla', 'suplemento', 'kit']
+
+    col1, col2 = st.columns(2)
+    with col1:
+        nombre = st.text_input("Nombre (Español):", value=product.get('nombre', ''), key=f"{key_prefix}_nombre")
+        nombre_en = st.text_input("Name (English):", value=product.get('nombre_en', ''), key=f"{key_prefix}_nombre_en")
+        tipo = st.selectbox("Tipo:", ALL_TIPOS, index=ALL_TIPOS.index(product.get('tipo', 'aceite_individual')) if product.get('tipo') in ALL_TIPOS else 0, key=f"{key_prefix}_tipo")
+        precio_usd = st.number_input("Precio Menudeo (USD):", value=float(product.get('precio_usd', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_precio")
+        precio_mayoreo = st.number_input("Precio Mayoreo (USD):", value=float(product.get('precio_mayoreo', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_mayoreo")
+
+    with col2:
+        pv = st.number_input("PV:", value=float(product.get('pv', 0)), min_value=0.0, step=0.5, key=f"{key_prefix}_pv")
+        sku = st.text_input("SKU (doTERRA):", value=product.get('doterra_sku', ''), key=f"{key_prefix}_sku")
+        if is_new:
+            pid = st.text_input("ID (único, sin espacios):", value='', placeholder="ej: lavender, deep_blue", key=f"{key_prefix}_id")
+        else:
+            pid = product.get('id', '')
+            st.text_input("ID:", value=pid, disabled=True, key=f"{key_prefix}_id")
+        imagen_url = st.text_input("URL Imagen:", value=product.get('imagen_url', ''), placeholder="https://www.doterra.com/medias/...", key=f"{key_prefix}_img")
+        infografia_url = st.text_input("URL Infografía PDF:", value=product.get('infografia_url', ''), placeholder="https://media.doterra.com/.../infographic-....pdf", key=f"{key_prefix}_infog")
+
+    # doTERRA link + auto-scrape
+    st.markdown("---")
+    col_url, col_scrape = st.columns([3, 1])
+    with col_url:
+        doterra_url = st.text_input("Link doTERRA Ecuador (auto-actualiza datos):", value=product.get('doterra_url', ''), placeholder="https://www.doterra.com/EC/es_EC/p/...", key=f"{key_prefix}_dturl")
+    with col_scrape:
+        st.markdown("<br>", unsafe_allow_html=True)
+        scrape_clicked = st.button("🔄 Auto-llenar desde link", key=f"{key_prefix}_scrape")
+
+    descripcion = st.text_area("Descripción:", value=product.get('descripcion', ''), height=100, key=f"{key_prefix}_desc")
+
+    # Categories as multiselect
+    current_cats = product.get('categoria', [])
+    categorias = st.multiselect("Categorías:", ALL_CATEGORIES, default=[c for c in current_cats if c in ALL_CATEGORIES], key=f"{key_prefix}_cats")
+
+    # Benefits as editable text (one per line)
+    beneficios_text = st.text_area("Beneficios (uno por línea):", value='\n'.join(product.get('beneficios', [])), height=100, key=f"{key_prefix}_bene")
+    beneficios = [b.strip() for b in beneficios_text.split('\n') if b.strip()]
+
+    # Usage methods
+    uso_aromatico = st.text_input("Uso Aromático:", value=product.get('uso_aromatico', ''), key=f"{key_prefix}_usoA")
+    uso_topico = st.text_input("Uso Tópico:", value=product.get('uso_topico', ''), key=f"{key_prefix}_usoT")
+    uso_interno = st.text_input("Uso Interno:", value=product.get('uso_interno', ''), key=f"{key_prefix}_usoI")
+
+    # Symptoms as editable text (one per line)
+    sintomas_text = st.text_area("Síntomas relacionados (uno por línea):", value='\n'.join(product.get('sintomas_relacionados', [])), height=80, key=f"{key_prefix}_sint")
+    sintomas = [s.strip() for s in sintomas_text.split('\n') if s.strip()]
+
+    # Handle auto-scrape
+    if scrape_clicked and doterra_url and 'doterra.com' in doterra_url:
+        with st.spinner("Obteniendo datos de doTERRA..."):
+            result = scrape_doterra_product(doterra_url)
+            if result['success']:
+                scraped = result['data']
+                st.success(f"✅ Datos obtenidos: {', '.join(scraped.keys())}")
+                st.info("Los datos se muestran abajo. Haz clic en **Guardar** para aplicar los cambios.")
+                # Store scraped data in session state for the form to pick up on rerun
+                st.session_state[f'{key_prefix}_scraped'] = scraped
+                st.rerun()
+            else:
+                st.error(f"❌ {result['error']}")
+
+    # Apply scraped data if available (from previous scrape click)
+    scraped = st.session_state.pop(f'{key_prefix}_scraped', None)
+
+    # Build the updated product dict
+    updated = {
+        'id': pid if is_new else product['id'],
+        'nombre': nombre,
+        'nombre_en': nombre_en,
+        'tipo': tipo,
+        'categoria': categorias,
+        'imagen_url': scraped.get('imagen_url', imagen_url) if scraped else imagen_url,
+        'precio_usd': scraped.get('precio_usd', precio_usd) if scraped else precio_usd,
+        'pv': scraped.get('pv', pv) if scraped else pv,
+        'descripcion': descripcion,
+        'beneficios': beneficios,
+        'uso_aromatico': uso_aromatico,
+        'uso_topico': uso_topico,
+        'uso_interno': uso_interno,
+        'sintomas_relacionados': sintomas,
+        'doterra_sku': scraped.get('doterra_sku', sku) if scraped else sku,
+        'precio_mayoreo': scraped.get('precio_mayoreo', precio_mayoreo) if scraped else precio_mayoreo,
+    }
+    if doterra_url:
+        updated['doterra_url'] = doterra_url.split('?')[0]
+    if scraped and scraped.get('infografia_url'):
+        updated['infografia_url'] = scraped['infografia_url']
+    elif infografia_url:
+        updated['infografia_url'] = infografia_url
+
+    return updated
+
+
 def page_dashboard():
-    """Password-protected dashboard"""
+    """Password-protected dashboard with full product CRUD."""
     if not st.session_state.dashboard_authenticated:
         st.markdown("<h1>Dashboard de Suzanna</h1>", unsafe_allow_html=True)
         password = st.text_input("Contraseña:", type="password")
-
         if st.button("Acceder"):
             if password == DASHBOARD_PASSWORD:
                 st.session_state.dashboard_authenticated = True
@@ -920,8 +1110,8 @@ def page_dashboard():
                 st.error("❌ Contraseña incorrecta")
         return
 
+    # ---- Header ----
     st.markdown("<h1>Dashboard de Suzanna</h1>", unsafe_allow_html=True)
-
     if st.button("🚪 Cerrar Sesión", key="logout"):
         st.session_state.dashboard_authenticated = False
         st.rerun()
@@ -938,125 +1128,135 @@ def page_dashboard():
 
     st.markdown("---")
 
+    # ---- Inventory ----
     st.markdown("<h3>Inventario de Productos</h3>", unsafe_allow_html=True)
-    st.caption("Pega el link de cada producto de doTERRA Ecuador y haz clic en Guardar para actualizar la información automáticamente.")
 
-    # Search/filter
-    search_term = st.text_input("🔍 Buscar producto:", placeholder="Escribe el nombre del producto...", key="dash_search")
+    # Initialize session state
+    if 'dash_editing' not in st.session_state:
+        st.session_state.dash_editing = None  # product id being edited
+    if 'dash_adding' not in st.session_state:
+        st.session_state.dash_adding = False
+    if 'dash_msg' not in st.session_state:
+        st.session_state.dash_msg = None
 
+    # Show success/error message if any
+    if st.session_state.dash_msg:
+        msg_type, msg_text = st.session_state.dash_msg
+        if msg_type == 'success':
+            st.success(msg_text)
+        else:
+            st.error(msg_text)
+        st.session_state.dash_msg = None
+
+    # ---- Add New Product button ----
+    col_add, col_search = st.columns([1, 3])
+    with col_add:
+        if st.button("➕ Agregar Producto", key="add_new", type="primary"):
+            st.session_state.dash_adding = True
+            st.session_state.dash_editing = None
+    with col_search:
+        search_term = st.text_input("🔍 Buscar:", placeholder="Nombre del producto...", key="dash_search", label_visibility="collapsed")
+
+    # ---- Add New Product Form ----
+    if st.session_state.dash_adding:
+        st.markdown("---")
+        st.markdown('<div style="background:#f0f7ed;padding:4px 16px;border-radius:10px;border-left:4px solid #7C9070;margin-bottom:12px;"><span style="font-weight:700;color:#7C9070;font-size:1.1rem;">➕ Nuevo Producto</span></div>', unsafe_allow_html=True)
+
+        new_product = _product_edit_form({}, "new", is_new=True)
+
+        col_save, col_cancel = st.columns([1, 1])
+        with col_save:
+            if st.button("✅ Crear Producto", key="save_new", type="primary"):
+                if not new_product['id'] or not new_product['nombre']:
+                    st.error("ID y Nombre son obligatorios.")
+                elif any(p['id'] == new_product['id'] for p in products_data):
+                    st.error(f"Ya existe un producto con ID '{new_product['id']}'.")
+                else:
+                    products_data.append(new_product)
+                    save_products(products_data)
+                    load_products.clear()
+                    st.session_state.dash_adding = False
+                    st.session_state.dash_msg = ('success', f"✅ Producto '{new_product['nombre']}' creado exitosamente.")
+                    st.rerun()
+        with col_cancel:
+            if st.button("❌ Cancelar", key="cancel_new"):
+                st.session_state.dash_adding = False
+                st.rerun()
+        st.markdown("---")
+
+    # ---- Product list ----
     filtered = products_data
     if search_term:
         term = search_term.lower()
-        filtered = [p for p in products_data if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower()]
+        filtered = [p for p in products_data if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower() or term in p.get('doterra_sku', '')]
 
-    st.markdown(f"<p style='color: #888; font-size: 14px;'>Mostrando {len(filtered)} de {len(products_data)} productos</p>", unsafe_allow_html=True)
+    st.caption(f"Mostrando {len(filtered)} de {len(products_data)} productos")
 
-    # Initialize session state for scrape messages
-    if 'scrape_msg' not in st.session_state:
-        st.session_state.scrape_msg = {}
-
-    # Editable product cards in dashboard
     for p in filtered:
         pid = p['id']
-        img_url = p.get('imagen_url', '')
-        mayoreo = p.get('precio_mayoreo', '')
-        mayoreo_str = f" | Mayoreo: ${mayoreo}" if mayoreo else ""
-        sku = p.get('doterra_sku', '')
-        cats = ', '.join([c.replace('_', ' ') for c in p.get('categoria', [])[:3]])
-        infografia = p.get('infografia_url', '')
-        current_url = p.get('doterra_url', '')
+        is_editing = st.session_state.dash_editing == pid
 
-        with st.expander(f"{'✅' if current_url else '⚠️'} {p['nombre']} ({p.get('nombre_en', '')}) — ${p.get('precio_usd', 'N/A')}", expanded=False):
-            # Product info header with image
-            col_img, col_info = st.columns([1, 4])
-            with col_img:
-                if img_url and 'doterra.com' in img_url:
-                    st.markdown(
-                        f'<div style="width:70px;height:70px;background:url({img_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:10px;"></div>',
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.markdown('<div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0e6;border-radius:10px;">📦</div>', unsafe_allow_html=True)
-            with col_info:
-                st.markdown(f"**SKU:** {sku} &nbsp;|&nbsp; **PV:** {p.get('pv', '')} &nbsp;|&nbsp; **Menudeo:** ${p.get('precio_usd', 'N/A')} &nbsp;|&nbsp; **Mayoreo:** ${mayoreo or 'N/A'}")
-                st.markdown(f"**Categorías:** {cats}")
+        # ---- Product Card (view mode) ----
+        if not is_editing:
+            _render_dashboard_product_card(p)
 
-            # Editable URL input
-            new_url = st.text_input(
-                "Link de doTERRA Ecuador:",
-                value=current_url,
-                placeholder="https://www.doterra.com/EC/es_EC/p/...",
-                key=f"url_{pid}"
-            )
+            # Action buttons below the card
+            col_edit, col_del, col_spacer = st.columns([1, 1, 4])
+            with col_edit:
+                if st.button(f"✏️ Editar", key=f"edit_{pid}"):
+                    st.session_state.dash_editing = pid
+                    st.session_state.dash_adding = False
+                    st.rerun()
+            with col_del:
+                if st.button(f"🗑️ Eliminar", key=f"del_{pid}"):
+                    st.session_state[f'confirm_del_{pid}'] = True
+                    st.rerun()
 
-            # Action buttons row
-            col_save, col_pdf, col_status = st.columns([1, 1, 2])
-
-            with col_save:
-                if st.button("💾 Guardar y Actualizar", key=f"save_{pid}"):
-                    if new_url and 'doterra.com' in new_url:
-                        with st.spinner(f"Actualizando {p['nombre']}..."):
-                            result = scrape_doterra_product(new_url)
-                            if result['success']:
-                                scraped = result['data']
-                                # Update product in products_data (in memory)
-                                for prod in products_data:
-                                    if prod['id'] == pid:
-                                        prod['doterra_url'] = scraped.get('doterra_url', new_url.split('?')[0])
-                                        if scraped.get('imagen_url'):
-                                            prod['imagen_url'] = scraped['imagen_url']
-                                        if scraped.get('precio_usd'):
-                                            prod['precio_usd'] = scraped['precio_usd']
-                                        if scraped.get('precio_mayoreo'):
-                                            prod['precio_mayoreo'] = scraped['precio_mayoreo']
-                                        if scraped.get('doterra_sku'):
-                                            prod['doterra_sku'] = scraped['doterra_sku']
-                                        if scraped.get('pv'):
-                                            prod['pv'] = scraped['pv']
-                                        if scraped.get('infografia_url'):
-                                            prod['infografia_url'] = scraped['infografia_url']
-                                        break
-                                # Save to file
-                                try:
-                                    save_products(products_data)
-                                    # Clear cache so next reload picks up changes
-                                    load_products.clear()
-                                    fields_updated = ', '.join(scraped.keys())
-                                    st.session_state.scrape_msg[pid] = ('success', f"Actualizado: {fields_updated}")
-                                except Exception as e:
-                                    st.session_state.scrape_msg[pid] = ('error', f"Error al guardar: {e}")
-                            else:
-                                st.session_state.scrape_msg[pid] = ('error', result['error'])
-                        st.rerun()
-                    elif new_url:
-                        st.warning("El link debe ser de doterra.com")
-                    else:
-                        # Just save the URL field even if empty (to clear it)
-                        for prod in products_data:
-                            if prod['id'] == pid:
-                                prod.pop('doterra_url', None)
-                                break
+            # Confirm delete
+            if st.session_state.get(f'confirm_del_{pid}'):
+                st.warning(f"¿Estás segura de eliminar **{p['nombre']}**? Esta acción no se puede deshacer.")
+                col_yes, col_no, _ = st.columns([1, 1, 4])
+                with col_yes:
+                    if st.button("Sí, eliminar", key=f"confirm_yes_{pid}", type="primary"):
+                        products_data[:] = [pr for pr in products_data if pr['id'] != pid]
                         save_products(products_data)
                         load_products.clear()
+                        st.session_state.pop(f'confirm_del_{pid}', None)
+                        st.session_state.dash_msg = ('success', f"✅ Producto '{p['nombre']}' eliminado.")
+                        st.rerun()
+                with col_no:
+                    if st.button("No, cancelar", key=f"confirm_no_{pid}"):
+                        st.session_state.pop(f'confirm_del_{pid}', None)
+                        st.rerun()
 
-            with col_pdf:
-                if infografia:
-                    st.markdown(
-                        f'<a href="{infografia}" target="_blank" style="display:inline-block;padding:8px 16px;background:#7C9070;color:white;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">📄 Infografía PDF</a>',
-                        unsafe_allow_html=True
-                    )
-                else:
-                    st.markdown('<span style="color:#bbb;font-size:13px;">Sin infografía</span>', unsafe_allow_html=True)
+        # ---- Edit mode ----
+        else:
+            st.markdown('<div style="background:#fff8ee;padding:4px 16px;border-radius:10px;border-left:4px solid #C67B4F;margin-bottom:12px;">'
+                        f'<span style="font-weight:700;color:#C67B4F;font-size:1.1rem;">✏️ Editando: {p["nombre"]}</span></div>', unsafe_allow_html=True)
 
-            with col_status:
-                # Show scrape result message
-                if pid in st.session_state.scrape_msg:
-                    msg_type, msg_text = st.session_state.scrape_msg[pid]
-                    if msg_type == 'success':
-                        st.success(f"✅ {msg_text}")
-                    else:
-                        st.error(f"❌ {msg_text}")
+            updated = _product_edit_form(p, f"edit_{pid}")
 
+            col_save, col_cancel = st.columns([1, 1])
+            with col_save:
+                if st.button("💾 Guardar Cambios", key=f"save_edit_{pid}", type="primary"):
+                    # Update in-place
+                    for i, prod in enumerate(products_data):
+                        if prod['id'] == pid:
+                            products_data[i] = updated
+                            break
+                    save_products(products_data)
+                    load_products.clear()
+                    st.session_state.dash_editing = None
+                    st.session_state.dash_msg = ('success', f"✅ Producto '{updated['nombre']}' actualizado.")
+                    st.rerun()
+            with col_cancel:
+                if st.button("❌ Cancelar", key=f"cancel_edit_{pid}"):
+                    st.session_state.dash_editing = None
+                    st.rerun()
+
+        st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
+
+    # ---- Configuration ----
     st.markdown("---")
     st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
