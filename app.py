@@ -308,137 +308,137 @@ if 'dashboard_authenticated' not in st.session_state:
 # ============================================
 
 def page_inicio():
-    """Home page with hero and CTAs"""
+    """Home page — Guía de Bienestar is front and center"""
+
+    # Compact hero with direct CTA
     st.markdown("""
-    <div class="hero">
+    <div class="hero" style="padding: 40px 20px; margin-bottom: 25px;">
         <div class="hero-content">
-            <h1>Bienvenida a Nosotras Naturales</h1>
-            <p>Aceites esenciales doTERRA de grado terapéutico para tu bienestar</p>
-            <p class="subtitle">Descubre el poder de la naturaleza con Suzanna Valles</p>
+            <h1 style="font-size: 2.5rem; margin-bottom: 8px;">🌿 Nosotras Naturales</h1>
+            <p style="font-size: 1.1rem;">Tu guía personalizada de bienestar con aceites esenciales doTERRA</p>
         </div>
     </div>
     """, unsafe_allow_html=True)
 
-    st.markdown("")
+    # ==========================================
+    # GUÍA DE BIENESTAR — DIRECTLY ON HOMEPAGE
+    # ==========================================
+    st.markdown("""
+    <div style="text-align: center; margin-bottom: 10px;">
+        <h2 style="color: #3D3229; font-size: 1.8rem; margin-bottom: 5px;">¿Cómo te sientes hoy?</h2>
+        <p style="color: #888; font-size: 15px;">Selecciona un área y en menos de 2 minutos te recomendaremos los mejores productos para ti</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    # Main CTA
-    col1, col2, col3 = st.columns([1, 1.5, 1])
-    with col2:
-        st.markdown("""
-        <div style="text-align: center; padding: 25px; background: linear-gradient(135deg, #7C9070 0%, #B8965A 100%);
-                    border-radius: 15px; color: white; margin: 20px 0;">
-            <h3 style="margin-top: 0; color: white;">¿Cómo te sientes hoy?</h3>
-            <p style="color: white;">Descubre cuáles productos doTERRA son perfectos para ti</p>
-        </div>
-        """, unsafe_allow_html=True)
+    # Category cards — 3 per row
+    cols = st.columns(3)
+    col_idx = 0
 
-        if st.button("▶ Iniciar Guía de Bienestar", key="cta_wellness", use_container_width=True):
-            st.session_state.page = 'guia_bienestar'
-            st.session_state.symptom_flow_started = True
-            st.rerun()
+    for category in symptom_flow['categories']:
+        with cols[col_idx % 3]:
+            st.markdown(f"""
+            <div class="category-card">
+                <div style="font-size: 38px; margin-bottom: 8px;">{category.get('icono', '🌿')}</div>
+                <h4 style="margin-bottom: 5px; font-size: 1.05rem;">{category['nombre']}</h4>
+                <p style="font-size: 13px; color: #888; margin: 0;">{category['descripcion']}</p>
+            </div>
+            """, unsafe_allow_html=True)
 
+            if st.button(f"Empezar →", key=f"home_cat_{category['id']}", use_container_width=True):
+                st.session_state.current_category = category['id']
+                first_question = category['preguntas'][0]
+                st.session_state.current_question = first_question['id']
+                st.session_state.question_history = [first_question['id']]
+                st.session_state.selected_tags = []
+                st.session_state.symptom_flow_started = True
+                st.session_state.page = 'guia_bienestar'
+                st.rerun()
+
+        col_idx += 1
+
+    # ==========================================
+    # SECONDARY SECTIONS — Below the fold
+    # ==========================================
+    st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
     st.markdown("---")
 
-    # Feature cards
-    st.markdown("<h2 style='text-align: center; margin: 40px 0;'>¿Por qué doTERRA?</h2>", unsafe_allow_html=True)
+    # Why doTERRA — compact
+    st.markdown("<h3 style='text-align: center; margin: 25px 0 15px;'>¿Por qué doTERRA?</h3>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
-
     with col1:
         st.markdown("""
-        <div class="feature-card">
-            <div class="feature-icon">🌾</div>
-            <h4>100% Puro</h4>
-            <p>Aceites esenciales de grado terapéutico, sin aditivos ni rellenos</p>
+        <div class="feature-card" style="padding: 20px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🌾</div>
+            <h4 style="font-size: 1rem;">100% Puro</h4>
+            <p style="font-size: 13px;">Grado terapéutico, sin aditivos</p>
         </div>
         """, unsafe_allow_html=True)
-
     with col2:
         st.markdown("""
-        <div class="feature-card">
-            <div class="feature-icon">🔬</div>
-            <h4>Probado Científicamente</h4>
-            <p>Formulaciones respaldadas por investigación y pruebas de calidad</p>
+        <div class="feature-card" style="padding: 20px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🔬</div>
+            <h4 style="font-size: 1rem;">Ciencia</h4>
+            <p style="font-size: 13px;">Respaldado por investigación</p>
         </div>
         """, unsafe_allow_html=True)
-
     with col3:
         st.markdown("""
-        <div class="feature-card">
-            <div class="feature-icon">💚</div>
-            <h4>Bienestar Natural</h4>
-            <p>Apoyo holístico para tu salud y bienestar emocional</p>
+        <div class="feature-card" style="padding: 20px;">
+            <div style="font-size: 28px; margin-bottom: 8px;">💚</div>
+            <h4 style="font-size: 1rem;">Natural</h4>
+            <p style="font-size: 13px;">Bienestar holístico integral</p>
         </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("---")
-
-    # Quick actions
-    st.markdown("<h2 style='text-align: center; margin: 40px 0;'>Explora Más</h2>", unsafe_allow_html=True)
+    # Quick links
+    st.markdown("<div style='margin-top: 20px;'></div>", unsafe_allow_html=True)
 
     col1, col2, col3, col4 = st.columns(4)
-
     with col1:
-        if st.button("📚 Catálogo", use_container_width=True, key="nav_catalog"):
+        if st.button("📦 Catálogo", use_container_width=True, key="nav_catalog"):
             st.session_state.page = 'productos'
             st.rerun()
-
     with col2:
-        st.markdown(f'<a href="{DOTERRA_SHOP_URL}" target="_blank" class="btn-primary" style="display: block; text-align: center; padding: 10px;">🛍️ Comprar</a>',
+        st.markdown(f'<a href="{DOTERRA_SHOP_URL}" target="_blank" class="btn-primary" style="display: block; text-align: center; padding: 10px; font-size: 13px;">🛍️ Comprar</a>',
                    unsafe_allow_html=True)
-
     with col3:
-        if st.button("💼 Oportunidad", use_container_width=True, key="nav_opportunity"):
+        if st.button("💼 Únete", use_container_width=True, key="nav_opportunity"):
             st.session_state.page = 'unete_al_equipo'
             st.rerun()
-
     with col4:
-        if st.button("ℹ️ Sobre Nosotras", use_container_width=True, key="nav_about"):
+        if st.button("🌸 Nosotras", use_container_width=True, key="nav_about"):
             st.session_state.page = 'sobre_nosotras'
             st.rerun()
 
 
 def page_guia_bienestar():
     """Symptom checker page - Ubie style"""
-    st.markdown("<h1>Guía de Bienestar</h1>", unsafe_allow_html=True)
-    st.markdown("<p class='subtitle'>Encuentra los productos doTERRA perfectos para ti</p>", unsafe_allow_html=True)
 
     if not st.session_state.symptom_flow_started:
-        # Landing screen
+        # If user navigated here from sidebar without selecting a category,
+        # show categories here too
         st.markdown("""
-        <div style="text-align: center; padding: 40px 20px;">
-            <h2>¿Cómo te sientes hoy?</h2>
-            <p style="font-size: 16px; color: #666; margin: 20px 0;">
-                Responde algunas preguntas simples para descubrir qué productos doTERRA
-                pueden apoyar tu bienestar natural.
-            </p>
+        <div style="text-align: center; padding: 30px 20px 10px;">
+            <h2 style="margin-bottom: 5px;">¿Cómo te sientes hoy?</h2>
+            <p style="font-size: 15px; color: #888;">Elige una categoría para comenzar tu evaluación personalizada</p>
         </div>
         """, unsafe_allow_html=True)
 
-        st.markdown("<h3 style='text-align: center; margin: 40px 0;'>Elige una categoría:</h3>", unsafe_allow_html=True)
-
-        # Show categories as cards
         cols = st.columns(3)
         col_idx = 0
 
         for category in symptom_flow['categories']:
             with cols[col_idx % 3]:
-                st.markdown("""
-                <style>
-                    .category-btn { cursor: pointer; }
-                    .category-btn:hover { opacity: 0.8; }
-                </style>
-                """, unsafe_allow_html=True)
-
                 st.markdown(f"""
                 <div class="category-card">
-                    <div style="font-size: 40px; margin-bottom: 10px;">{category.get('icono', '🌿')}</div>
-                    <h4>{category['nombre']}</h4>
-                    <p style="font-size: 14px; color: #666;">{category['descripcion']}</p>
+                    <div style="font-size: 38px; margin-bottom: 8px;">{category.get('icono', '🌿')}</div>
+                    <h4 style="margin-bottom: 5px; font-size: 1.05rem;">{category['nombre']}</h4>
+                    <p style="font-size: 13px; color: #888; margin: 0;">{category['descripcion']}</p>
                 </div>
                 """, unsafe_allow_html=True)
 
-                if st.button(f"Explorar {category['nombre']}", key=f"cat_{category['id']}", use_container_width=True):
+                if st.button(f"Empezar →", key=f"cat_{category['id']}", use_container_width=True):
                     st.session_state.current_category = category['id']
                     first_question = category['preguntas'][0]
                     st.session_state.current_question = first_question['id']
