@@ -32,7 +32,7 @@ ADVOCATE_ID = "8205768"
 WHATSAPP_NUMBER = "593984949487"
 DOTERRA_SHOP_URL = f"https://www.doterra.com/EC/es_EC/shop?referralId={ADVOCATE_ID}"
 INSTAGRAM_URL = "https://www.instagram.com/nosotrasnaturales"
-DASHBOARD_PASSWORD = "nosotras2024"
+DASHBOARD_PASSWORD = "Suzzana"
 
 # ============================================
 # LOAD CSS & DATA
