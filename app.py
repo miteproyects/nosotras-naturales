@@ -1,5 +1,6 @@
 """
-Nosotras Naturales - Spanish-language doTERRA Wellness Web App
+Nosotras Naturales - REDESIGNED doTERRA Wellness Web App
+Modern, clean UI with Ubie-style symptom checker
 Created by Suzanna Valles
 doTERRA Wellness Advocate ID: 8205768
 WhatsApp: +593 98 494 9487
@@ -9,7 +10,7 @@ Instagram: @nosotrasnaturales
 import streamlit as st
 import json
 import os
-from pathlib import Path
+import urllib.parse
 from datetime import datetime
 
 # ============================================
@@ -17,1077 +18,703 @@ from datetime import datetime
 # ============================================
 
 st.set_page_config(
-    page_title="Nosotras Naturales - Bienestar con doTERRA",
+    page_title="Nosotras Naturales - doTERRA",
     page_icon="🌿",
     layout="wide",
-    initial_sidebar_state="expanded",
-    menu_items={
-        "About": "Nosotras Naturales - Tu guía natural de bienestar con aceites esenciales dōTERRA"
-    }
+    initial_sidebar_state="collapsed"
 )
 
 # ============================================
 # CONSTANTS
 # ============================================
 
-# Brand Information
 ADVOCATE_ID = "8205768"
 WHATSAPP_NUMBER = "593984949487"
-WHATSAPP_DISPLAY = "+593 98 494 9487"
-INSTAGRAM_HANDLE = "@nosotrasnaturales"
-DOTERRA_STORE_URL = "https://www.doterra.com/EC/es_EC"
 DOTERRA_SHOP_URL = f"https://www.doterra.com/EC/es_EC/shop?referralId={ADVOCATE_ID}"
+INSTAGRAM_URL = "https://www.instagram.com/nosotrasnaturales"
+DASHBOARD_PASSWORD = "nosotras2024"
 
-# Color Palette
-COLORS = {
-    "primary_green": "#7C9070",
-    "warm_beige": "#D4C5A9",
-    "terracotta": "#C67B4F",
-    "cream_bg": "#FDF8F0",
-    "dark_brown": "#3D3229",
-    "light_sage": "#E8EDE5",
-    "accent_gold": "#B8965A",
-    "white": "#FFFFFF",
-    "whatsapp_green": "#25D366"
-}
+# ============================================
+# LOAD CSS & DATA
+# ============================================
 
-# FDA Disclaimer
-FDA_DISCLAIMER = """
-**Aviso Legal:** Estas declaraciones no han sido evaluadas por la Administración de Alimentos y Medicamentos (FDA).
-Estos productos no tienen el propósito de diagnosticar, tratar, curar o evitar ninguna enfermedad.
-Consulta a un profesional de la salud antes de usar cualquier producto.
-"""
+def load_css():
+    """Load custom CSS"""
+    css_path = "assets/style.css"
+    if os.path.exists(css_path):
+        with open(css_path, encoding="utf-8") as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+
+@st.cache_data
+def load_products():
+    """Load products from JSON"""
+    with open("data/products.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+
+@st.cache_data
+def load_symptom_flow():
+    """Load symptom flow from JSON"""
+    with open("data/symptom_flow.json", "r", encoding="utf-8") as f:
+        return json.load(f)
+
+load_css()
+products_data = load_products()
+symptom_flow = load_symptom_flow()
 
 # ============================================
 # UTILITY FUNCTIONS
 # ============================================
 
-@st.cache_resource
-def load_css():
-    """Load custom CSS from assets/style.css"""
-    css_path = Path("assets/style.css")
-    if css_path.exists():
-        with open(css_path, "r", encoding="utf-8") as f:
-            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+def whatsapp_link(message):
+    """Create WhatsApp link with URL-encoded message"""
+    encoded = urllib.parse.quote(message)
+    return f"https://wa.me/{WHATSAPP_NUMBER}?text={encoded}"
 
-@st.cache_data
-def load_products():
-    """Load products from data/products.json"""
-    products_path = Path("data/products.json")
-    if products_path.exists():
-        with open(products_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return []
+def create_product_card(product, match_percentage=None):
+    """Create HTML card for a product"""
+    price_display = f"${product.get('precio_usd', 'N/A')}"
+    match_html = f'<div class="match-badge">{match_percentage}% Match</div>' if match_percentage else ''
+    comprar_link = DOTERRA_SHOP_URL
+    consult_msg = f"Hola Suzanna! 👋 Me gustaría conocer más sobre {product['nombre']}. ¿Puedes ayudarme?"
+    consult_link = whatsapp_link(consult_msg)
 
-@st.cache_data
-def load_symptom_flow():
-    """Load symptom checker flow from data/symptom_flow.json"""
-    symptom_path = Path("data/symptom_flow.json")
-    if symptom_path.exists():
-        with open(symptom_path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    return {}
+    benefits_html = ''.join([f'<li>{b}</li>' for b in product.get('beneficios', [])[:3]])
 
-def get_whatsapp_link(message=""):
-    """Generate WhatsApp contact link"""
-    if message:
-        return f"https://wa.me/{WHATSAPP_NUMBER}?text={message.replace(' ', '%20')}"
-    return f"https://wa.me/{WHATSAPP_NUMBER}"
+    html = f"""
+    <div class="product-card">
+        {match_html}
+        <div class="product-image">
+            <img src="{product['imagen_url']}" alt="{product['nombre']}">
+        </div>
+        <div class="product-info">
+            <h3>{product['nombre']}</h3>
+            <p class="product-price">{price_display}</p>
+            <p class="product-description">{product['descripcion']}</p>
+            <div class="product-benefits">
+                <strong>Beneficios:</strong>
+                <ul>{benefits_html}</ul>
+            </div>
+            <div class="product-usage">
+                <p><strong>Uso Aromático:</strong> {product.get('uso_aromatico', 'N/A')}</p>
+            </div>
+            <div class="product-buttons">
+                <a href="{comprar_link}" class="btn-primary" target="_blank">Comprar</a>
+                <a href="{consult_link}" class="btn-whatsapp" target="_blank">Consultar con Suzanna</a>
+            </div>
+        </div>
+    </div>
+    """
+    return html
 
-def display_whatsapp_button():
-    """Display floating WhatsApp button"""
-    whatsapp_html = f"""
-    <a href="https://wa.me/{WHATSAPP_NUMBER}?text=Hola%20Suzanna"
-       class="whatsapp-button"
-       target="_blank"
-       title="Contactar por WhatsApp">
-        <span class="whatsapp-icon">💬</span>
-    </a>
+def get_current_question(flow_data, category_id, question_id):
+    """Get a specific question from the symptom flow"""
+    for category in flow_data['categories']:
+        if category['id'] == category_id:
+            for question in category['preguntas']:
+                if question['id'] == question_id:
+                    return question
+    return None
+
+def calculate_product_matches(selected_tags, products):
+    """Calculate match scores for products based on tags"""
+    matches = {}
+
+    for product in products:
+        product_symptoms = set(product.get('sintomas_relacionados', []))
+        selected_tags_set = set(selected_tags)
+        common = product_symptoms.intersection(selected_tags_set)
+
+        if common:
+            match_percentage = int((len(common) / max(len(selected_tags_set), len(product_symptoms))) * 100)
+            matches[product['id']] = {
+                'product': product,
+                'percentage': match_percentage
+            }
+
+    sorted_matches = sorted(matches.items(), key=lambda x: x[1]['percentage'], reverse=True)
+    return sorted_matches[:3]
+
+def render_fda_disclaimer():
+    """Render FDA compliance disclaimer"""
+    disclaimer = """
+    <div class="fda-disclaimer">
+        <p><strong>Aviso Importante:</strong> Estos productos no están destinados a diagnosticar, tratar, curar o prevenir ninguna enfermedad.
+        Las declaraciones sobre estos productos no han sido evaluadas por organismos de salud. Consulte con un profesional de la salud antes de usar si está
+        embarazada, amamantando, tomando medicamentos o tiene condiciones de salud preexistentes.</p>
+    </div>
+    """
+    st.markdown(disclaimer, unsafe_allow_html=True)
+
+def render_whatsapp_float():
+    """Render floating WhatsApp button"""
+    whatsapp_html = """
+    <div class="whatsapp-float">
+        <a href="https://wa.me/593984949487" target="_blank" title="Contactar por WhatsApp">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.67-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.076 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421-7.403h-.004a9.87 9.87 0 00-9.746 9.798c0 2.718.738 5.33 2.146 7.591L2.885 23.68l8.29-2.161a9.885 9.885 0 004.748 1.212h.005c5.435 0 9.85-4.414 9.85-9.85 0-2.631-1.039-5.1-2.927-6.965-1.888-1.865-4.39-2.89-7.032-2.89z"/>
+            </svg>
+        </a>
+    </div>
     """
     st.markdown(whatsapp_html, unsafe_allow_html=True)
 
-def display_disclaimer():
-    """Display FDA disclaimer banner"""
-    st.markdown(
-        f"""
-        <div class="disclaimer">
-            <div class="disclaimer-title">⚠️ Aviso Importante</div>
-            <div class="disclaimer-text">{FDA_DISCLAIMER}</div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-def initialize_session_state():
-    """Initialize session state variables"""
-    if "page" not in st.session_state:
-        st.session_state.page = "home"
-    if "symptom_flow_active" not in st.session_state:
-        st.session_state.symptom_flow_active = False
-    if "current_symptom_question" not in st.session_state:
-        st.session_state.current_symptom_question = None
-    if "selected_answers" not in st.session_state:
-        st.session_state.selected_answers = []
-    if "dashboard_authenticated" not in st.session_state:
-        st.session_state.dashboard_authenticated = False
-
 # ============================================
-# PAGE COMPONENTS
+# SESSION STATE INITIALIZATION
 # ============================================
 
-def page_home():
-    """Home page (Inicio)"""
+if 'page' not in st.session_state:
+    st.session_state.page = 'inicio'
+if 'symptom_flow_started' not in st.session_state:
+    st.session_state.symptom_flow_started = False
+if 'current_category' not in st.session_state:
+    st.session_state.current_category = None
+if 'current_question' not in st.session_state:
+    st.session_state.current_question = None
+if 'selected_tags' not in st.session_state:
+    st.session_state.selected_tags = []
+if 'question_history' not in st.session_state:
+    st.session_state.question_history = []
+if 'dashboard_authenticated' not in st.session_state:
+    st.session_state.dashboard_authenticated = False
 
-    # Hero Section
-    st.markdown(
-        """
-        <h1 style="text-align: center; margin-bottom: 0.5rem;">🌿 Nosotras Naturales</h1>
-        <p style="text-align: center; font-size: 1.3rem; color: #7C9070; margin-bottom: 2rem;">
-        Tu guía natural de bienestar con aceites esenciales dōTERRA
-        </p>
-        """,
-        unsafe_allow_html=True
-    )
+# ============================================
+# PAGE FUNCTIONS
+# ============================================
 
-    # Main CTA Button
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("🤔 ¿Cómo te sientes hoy?", key="home_symptom_btn", use_container_width=True):
-            st.session_state.page = "symptom_checker"
-            st.rerun()
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Feature Cards Section
-    st.markdown("<h2 style='text-align: center; border: none; padding: 0;'>Nuestros Servicios</h2>",
-                unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns(3, gap="medium")
-
-    with col1:
-        st.markdown(
-            """
-            <div class="card" style="text-align: center;">
-                <h3 style="color: #7C9070; border: none;">📋 Guía Personalizada</h3>
-                <p>Descubre qué aceites esenciales son perfectos para tus necesidades específicas
-                con nuestro cuestionario inteligente de bienestar.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with col2:
-        st.markdown(
-            """
-            <div class="card" style="text-align: center;">
-                <h3 style="color: #7C9070; border: none;">🌱 Productos Naturales</h3>
-                <p>Explora nuestra selección curada de aceites esenciales de grado terapéutico
-                certificados por doTERRA.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with col3:
-        st.markdown(
-            """
-            <div class="card" style="text-align: center;">
-                <h3 style="color: #7C9070; border: none;">👩‍💼 Asesoría Personal</h3>
-                <p>Conecta directamente con Suzanna para consultas personalizadas
-                y recomendaciones específicas.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.markdown("<div style='margin: 3rem 0;'></div>", unsafe_allow_html=True)
-
-    # Welcome Section
-    st.markdown(
-        """
-        <div class="card">
-            <h3>✨ Bienvenida a tu Viaje de Bienestar</h3>
-            <p>
-            En Nosotras Naturales, creemos en el poder de la naturaleza para apoyar tu bienestar integral.
-            Con más de X años de experiencia como Wellness Advocate de doTERRA, estoy dedicada a ayudarte
-            a descubrir cómo los aceites esenciales puros y de grado terapéutico pueden mejorar tu calidad de vida.
-            </p>
-            <p>
-            Cada producto ha sido cuidadosamente seleccionado y probado para garantizar la máxima pureza y eficacia.
-            Ya sea que busques mejorar tu sueño, aumentar tu energía, o simplemente crear un ambiente más armonioso,
-            tenemos la solución perfecta para ti.
-            </p>
+def page_inicio():
+    """Home page with hero and CTAs"""
+    st.markdown("""
+    <div class="hero">
+        <div class="hero-content">
+            <h1>Bienvenida a Nosotras Naturales</h1>
+            <p>Aceites esenciales doTERRA de grado terapéutico para tu bienestar</p>
+            <p class="subtitle">Descubre el poder de la naturaleza con Suzanna Valles</p>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    st.markdown("")
 
-    # Quick Links Section
-    st.markdown("<h3>Accesos Rápidos</h3>", unsafe_allow_html=True)
-
-    col1, col2, col3, col4 = st.columns(4)
-
-    with col1:
-        if st.button("📦 Ver Productos", key="home_products_btn", use_container_width=True):
-            st.session_state.page = "products"
-            st.rerun()
-
+    # Main CTA
+    col1, col2, col3 = st.columns([1, 1.5, 1])
     with col2:
-        if st.button("🌍 doTERRA América", key="home_latam_btn", use_container_width=True):
-            st.session_state.page = "latam"
-            st.rerun()
-
-    with col3:
-        if st.button("💼 Únete al Equipo", key="home_team_btn", use_container_width=True):
-            st.session_state.page = "join_team"
-            st.rerun()
-
-    with col4:
-        if st.button("💬 Contactar", key="home_contact_btn", use_container_width=True):
-            st.markdown(get_whatsapp_link("Hola Suzanna, me interesa saber más sobre los productos"),
-                       unsafe_allow_html=True)
-
-    st.markdown("<div style='margin: 3rem 0;'></div>", unsafe_allow_html=True)
-
-    # Disclaimer
-    display_disclaimer()
-
-
-def page_symptom_checker():
-    """Symptom Checker page (Guía de Bienestar)"""
-
-    st.markdown("<h1>🌿 Guía de Bienestar Personalizada</h1>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-        Responde algunas preguntas simples sobre cómo te sientes y te recomendaremos
-        los productos de doTERRA más adecuados para ti.
-        """,
-        unsafe_allow_html=True
-    )
-
-    symptom_data = load_symptom_flow()
-
-    if not symptom_data:
-        st.warning("📖 El flujo de síntomas aún no está disponible. Por favor, contacta con Suzanna.")
-        if st.button("Ir al Inicio", key="symptom_home_btn"):
-            st.session_state.page = "home"
-            st.rerun()
-        return
-
-    # Placeholder for symptom flow implementation
-    categories = symptom_data.get("categories", [])
-
-    st.markdown("<h3>Selecciona una categoría:</h3>", unsafe_allow_html=True)
-
-    col_count = 2
-    cols = st.columns(col_count)
-
-    for idx, category in enumerate(categories):
-        col = cols[idx % col_count]
-        with col:
-            category_name = category.get("nombre", "")
-            category_icon = category.get("icono", "")
-            category_desc = category.get("descripcion", "")
-
-            st.markdown(
-                f"""
-                <div class="card" style="cursor: pointer; text-align: center;">
-                    <h3>{category_icon} {category_name}</h3>
-                    <p>{category_desc}</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-            if st.button("Explorar", key=f"explore_{category.get('id', '')}"):
-                st.info(f"Guía para {category_name} en desarrollo. Por favor, contacta con Suzanna para asesoría personalizada.")
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Contact Suzanna CTA
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown(
-            f"""
-            <div class="cta-card">
-                <div class="cta-title">¿Necesitas Asesoría Personalizada?</div>
-                <div class="cta-description">
-                Contacta directamente con Suzanna para una recomendación personalizada basada en tus necesidades específicas.
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        if st.button("💬 Contactar a Suzanna por WhatsApp", key="symptom_contact_btn", use_container_width=True):
-            st.markdown(
-                f'<a href="{get_whatsapp_link("Me gustaría una asesoría personalizada de bienestar")}" target="_blank">Abrir WhatsApp</a>',
-                unsafe_allow_html=True
-            )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    if st.button("← Volver al Inicio", key="symptom_back_btn"):
-        st.session_state.page = "home"
-        st.rerun()
-
-
-def page_products():
-    """Products page (Productos)"""
-
-    st.markdown("<h1>📦 Productos doTERRA</h1>", unsafe_allow_html=True)
-
-    products = load_products()
-
-    if not products:
-        st.error("❌ No se pudieron cargar los productos. Por favor, intenta más tarde.")
-        if st.button("← Volver al Inicio", key="products_home_btn"):
-            st.session_state.page = "home"
-            st.rerun()
-        return
-
-    # Extract unique categories
-    all_categories = set()
-    for product in products:
-        categories = product.get("categoria", [])
-        all_categories.update(categories)
-    all_categories = sorted(list(all_categories))
-
-    # Sidebar Filters
-    st.sidebar.markdown("<h3>🔍 Filtros</h3>", unsafe_allow_html=True)
-
-    # Category filter
-    selected_categories = st.sidebar.multiselect(
-        "Categorías",
-        options=all_categories,
-        default=[]
-    )
-
-    # Price range filter
-    prices = [p.get("precio_usd", 0) for p in products]
-    min_price, max_price = st.sidebar.slider(
-        "Rango de Precio (USD)",
-        min_value=int(min(prices)) if prices else 0,
-        max_value=int(max(prices)) if prices else 100,
-        value=(int(min(prices)) if prices else 0, int(max(prices)) if prices else 100),
-        step=5
-    )
-
-    # Search filter
-    search_term = st.sidebar.text_input(
-        "Buscar producto",
-        placeholder="Ej: Lavanda, Menta..."
-    )
-
-    # Apply filters
-    filtered_products = products
-
-    if selected_categories:
-        filtered_products = [
-            p for p in filtered_products
-            if any(cat in selected_categories for cat in p.get("categoria", []))
-        ]
-
-    filtered_products = [
-        p for p in filtered_products
-        if min_price <= p.get("precio_usd", 0) <= max_price
-    ]
-
-    if search_term:
-        search_lower = search_term.lower()
-        filtered_products = [
-            p for p in filtered_products
-            if search_lower in p.get("nombre", "").lower()
-            or search_lower in p.get("descripcion", "").lower()
-        ]
-
-    # Display results count
-    st.markdown(f"**Mostrando {len(filtered_products)} de {len(products)} productos**", unsafe_allow_html=True)
-
-    st.markdown("<div style='margin: 1.5rem 0;'></div>", unsafe_allow_html=True)
-
-    # Product Grid
-    cols_per_row = 3
-    for idx, product in enumerate(filtered_products):
-        if idx % cols_per_row == 0:
-            cols = st.columns(cols_per_row, gap="medium")
-
-        col = cols[idx % cols_per_row]
-
-        with col:
-            product_id = product.get("id", "")
-            product_name = product.get("nombre", "Sin nombre")
-            product_desc = product.get("descripcion", "")
-            product_price = product.get("precio_usd", 0)
-            product_pv = product.get("pv", 0)
-
-            # Truncate description
-            if len(product_desc) > 100:
-                product_desc = product_desc[:100] + "..."
-
-            product_html = f"""
-            <div class="product-card">
-                <div class="product-image" style="background: linear-gradient(135deg, #E8EDE5 0%, #FDF8F0 100%); display: flex; align-items: center; justify-content: center;">
-                    <span style="font-size: 3rem;">🌿</span>
-                </div>
-                <div class="product-info">
-                    <div class="product-title">{product_name}</div>
-                    <div class="product-description">{product_desc}</div>
-                    <div class="product-price">${product_price:.2f}</div>
-                    <div class="price-badge">PV: {product_pv}</div>
-                </div>
-            </div>
-            """
-
-            st.markdown(product_html, unsafe_allow_html=True)
-
-            # Action buttons
-            col_a, col_b = st.columns(2)
-
-            with col_a:
-                if st.button("🛒 Comprar", key=f"buy_{product_id}", use_container_width=True):
-                    st.markdown(
-                        f'<a href="{DOTERRA_SHOP_URL}" target="_blank">Ir a doTERRA</a>',
-                        unsafe_allow_html=True
-                    )
-
-            with col_b:
-                if st.button("💬 Consultar", key=f"consult_{product_id}", use_container_width=True):
-                    st.markdown(
-                        f'<a href="{get_whatsapp_link(f"Me interesa el producto: {product_name}")}" target="_blank">WhatsApp</a>',
-                        unsafe_allow_html=True
-                    )
-
-    st.markdown("<div style='margin: 3rem 0;'></div>", unsafe_allow_html=True)
-
-    # Back button
-    if st.button("← Volver al Inicio", key="products_back_btn"):
-        st.session_state.page = "home"
-        st.rerun()
-
-    display_disclaimer()
-
-
-def page_latam():
-    """doTERRA Latinoamérica page"""
-
-    st.markdown("<h1>🌎 doTERRA América Latina</h1>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-        Explora nuestros productos y oportunidades en toda América Latina.
-        doTERRA está comprometida con traer los mejores aceites esenciales
-        de grado terapéutico a toda la región.
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Country cards
-    countries = [
-        {
-            "flag": "🇪🇨",
-            "name": "Ecuador",
-            "details": "Tu tienda local",
-            "url": f"{DOTERRA_STORE_URL}/shop?referralId={ADVOCATE_ID}"
-        },
-        {
-            "flag": "🇵🇪",
-            "name": "Perú",
-            "details": "Bienestar natural",
-            "url": "https://www.doterra.com/PE/es_PE/shop"
-        },
-        {
-            "flag": "🇨🇴",
-            "name": "Colombia",
-            "details": "Aceites esenciales puros",
-            "url": "https://www.doterra.com/CO/es_CO/shop"
-        },
-        {
-            "flag": "🇧🇴",
-            "name": "Bolivia",
-            "details": "Productos certificados",
-            "url": "https://www.doterra.com/BO/es_BO/shop"
-        },
-    ]
-
-    col_count = 2
-    cols = st.columns(col_count, gap="medium")
-
-    for idx, country in enumerate(countries):
-        col = cols[idx % col_count]
-        with col:
-            st.markdown(
-                f"""
-                <div class="country-card">
-                    <div class="country-flag">{country['flag']}</div>
-                    <div class="country-name">{country['name']}</div>
-                    <div class="country-details">{country['details']}</div>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-            if st.button("Visitar Tienda", key=f"visit_{country['name']}", use_container_width=True):
-                st.markdown(f'<a href="{country["url"]}" target="_blank">Ir a {country["name"]}</a>',
-                           unsafe_allow_html=True)
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Join Team CTA
-    st.markdown(
-        """
-        <div class="cta-card">
-            <div class="cta-title">¿Quieres ser parte de este movimiento?</div>
-            <div class="cta-description">
-            Únete a miles de Wellness Advocates en América Latina que están transformando
-            sus vidas a través de doTERRA.
-            </div>
+        st.markdown("""
+        <div style="text-align: center; padding: 25px; background: linear-gradient(135deg, #7C9070 0%, #B8965A 100%);
+                    border-radius: 15px; color: white; margin: 20px 0;">
+            <h3 style="margin-top: 0; color: white;">¿Cómo te sientes hoy?</h3>
+            <p style="color: white;">Descubre cuáles productos doTERRA son perfectos para ti</p>
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+        """, unsafe_allow_html=True)
 
-    if st.button("Conocer Oportunidades de Negocio", key="latam_business_btn", use_container_width=True):
-        st.session_state.page = "join_team"
-        st.rerun()
+        if st.button("▶ Iniciar Guía de Bienestar", key="cta_wellness", use_container_width=True):
+            st.session_state.page = 'guia_bienestar'
+            st.session_state.symptom_flow_started = True
+            st.rerun()
 
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    st.markdown("---")
 
-    if st.button("← Volver al Inicio", key="latam_back_btn"):
-        st.session_state.page = "home"
-        st.rerun()
-
-
-def page_join_team():
-    """Join the Team page (Únete al Equipo)"""
-
-    st.markdown("<h1>💼 Únete al Equipo de Nosotras Naturales</h1>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-        ¿Te apasiona el bienestar natural? ¿Quieres ayudar a otros mientras construyes
-        un negocio rentable? Únete a nuestra creciente comunidad de Wellness Advocates de doTERRA.
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Benefits Section
-    st.markdown("<h3>✨ Beneficios de ser un Wellness Advocate</h3>", unsafe_allow_html=True)
-
-    benefits = [
-        ("💰", "Ingresos Flexible", "Gana comisiones generosas en cada venta"),
-        ("🎁", "Descuentos Especiales", "Obtén descuentos de 25-30% en todos los productos"),
-        ("📚", "Capacitación Completa", "Acceso a materiales de entrenamiento y webinars"),
-        ("👥", "Comunidad de Apoyo", "Únete a un equipo de mujeres empoderadas"),
-        ("🌍", "Alcance Global", "Vende en cualquier lugar con el programa doTERRA"),
-        ("🚀", "Crecimiento Ilimitado", "Construye tu propio equipo y gana bonificaciones"),
-    ]
-
-    col_count = 3
-    cols = st.columns(col_count, gap="medium")
-
-    for idx, (icon, title, desc) in enumerate(benefits):
-        col = cols[idx % col_count]
-        with col:
-            st.markdown(
-                f"""
-                <div class="card" style="text-align: center;">
-                    <h4 style="border: none; color: #3D3229;">{icon} {title}</h4>
-                    <p>{desc}</p>
-                </div>
-                """,
-                unsafe_allow_html=True
-            )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Enrollment Info
-    st.markdown("<h3>📋 Cómo Comenzar</h3>", unsafe_allow_html=True)
-
-    steps = [
-        ("1️⃣", "Selecciona tu Kit Inicial", "Elige entre nuestros kits curados de bienvenida"),
-        ("2️⃣", "Completa el Registro", "Regístrate como Wellness Advocate de doTERRA"),
-        ("3️⃣", "Recibe tu Paquete", "Tu kit llega a tu puerta en 5-7 días hábiles"),
-        ("4️⃣", "Comienza a Vender", "Comparte productos y gana comisiones"),
-    ]
-
-    for icon, title, desc in steps:
-        st.markdown(
-            f"""
-            <div class="card">
-                <h4 style="border: none;">{icon} {title}</h4>
-                <p>{desc}</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Contact CTA
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown(
-            f"""
-            <div class="cta-card">
-                <div class="cta-title">¿Listo para Comenzar?</div>
-                <div class="cta-description">
-                Contacta a Suzanna para más información sobre cómo unirte a nuestro equipo
-                y comenzar tu viaje como Wellness Advocate de doTERRA.
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        if st.button("💬 Solicitar Información", key="join_contact_btn", use_container_width=True):
-            st.markdown(
-                f'<a href="{get_whatsapp_link("Me interesa ser Wellness Advocate de doTERRA")}" target="_blank">Abrir WhatsApp</a>',
-                unsafe_allow_html=True
-            )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    if st.button("← Volver al Inicio", key="join_back_btn"):
-        st.session_state.page = "home"
-        st.rerun()
-
-
-def page_community():
-    """Nosotras Naturales Community page"""
-
-    st.markdown("<h1>🌸 Nosotras Naturales - Nuestra Comunidad</h1>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-        Somos una comunidad de mujeres dedicadas al bienestar natural y la construcción
-        de un futuro próspero para nosotras y nuestras familias.
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Social Links
-    st.markdown("<h3>Conéctate Con Nosotros</h3>", unsafe_allow_html=True)
+    # Feature cards
+    st.markdown("<h2 style='text-align: center; margin: 40px 0;'>¿Por qué doTERRA?</h2>", unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
 
     with col1:
-        if st.button("📱 Instagram @nosotrasnaturales", key="community_instagram_btn", use_container_width=True):
-            st.markdown('https://www.instagram.com/nosotrasnaturales', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">🌾</div>
+            <h4>100% Puro</h4>
+            <p>Aceites esenciales de grado terapéutico, sin aditivos ni rellenos</p>
+        </div>
+        """, unsafe_allow_html=True)
 
     with col2:
-        if st.button("💬 WhatsApp +593 98 494 9487", key="community_whatsapp_btn", use_container_width=True):
-            st.markdown(f'<a href="{get_whatsapp_link()}" target="_blank">Abrir WhatsApp</a>',
-                       unsafe_allow_html=True)
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">🔬</div>
+            <h4>Probado Científicamente</h4>
+            <p>Formulaciones respaldadas por investigación y pruebas de calidad</p>
+        </div>
+        """, unsafe_allow_html=True)
 
     with col3:
-        if st.button("🌐 Visita doTERRA", key="community_doterra_btn", use_container_width=True):
-            st.markdown(f'<a href="{DOTERRA_STORE_URL}" target="_blank">Visitar</a>',
-                       unsafe_allow_html=True)
+        st.markdown("""
+        <div class="feature-card">
+            <div class="feature-icon">💚</div>
+            <h4>Bienestar Natural</h4>
+            <p>Apoyo holístico para tu salud y bienestar emocional</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    st.markdown("---")
 
-    # Community Content
-    st.markdown("<h3>📖 Nuestros Valores</h3>", unsafe_allow_html=True)
+    # Quick actions
+    st.markdown("<h2 style='text-align: center; margin: 40px 0;'>Explora Más</h2>", unsafe_allow_html=True)
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.markdown(
-            """
-            <div class="card">
-                <h4 style="border: none;">🌱 Autenticidad</h4>
-                <p>Recomendamos solo productos en los que creemos y hemos probado personalmente.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        st.markdown(
-            """
-            <div class="card">
-                <h4 style="border: none;">💪 Empoderamiento</h4>
-                <p>Apoyamos a cada mujer en su viaje hacia la independencia y el éxito.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        if st.button("📚 Catálogo", use_container_width=True, key="nav_catalog"):
+            st.session_state.page = 'productos'
+            st.rerun()
 
     with col2:
-        st.markdown(
-            """
-            <div class="card">
-                <h4 style="border: none;">❤️ Comunidad</h4>
-                <p>Juntas somos más fuertes. Celebramos nuestros logros y nos apoyamos mutuamente.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-        st.markdown(
-            """
-            <div class="card">
-                <h4 style="border: none;">🌍 Sostenibilidad</h4>
-                <p>Comprometidas con prácticas sustentables y el bienestar del planeta.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+        st.markdown(f'<a href="{DOTERRA_SHOP_URL}" target="_blank" class="btn-primary" style="display: block; text-align: center; padding: 10px;">🛍️ Comprar</a>',
+                   unsafe_allow_html=True)
 
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    with col3:
+        if st.button("💼 Oportunidad", use_container_width=True, key="nav_opportunity"):
+            st.session_state.page = 'unete_al_equipo'
+            st.rerun()
 
-    if st.button("← Volver al Inicio", key="community_back_btn"):
-        st.session_state.page = "home"
-        st.rerun()
+    with col4:
+        if st.button("ℹ️ Sobre Nosotras", use_container_width=True, key="nav_about"):
+            st.session_state.page = 'sobre_nosotras'
+            st.rerun()
+
+
+def page_guia_bienestar():
+    """Symptom checker page - Ubie style"""
+    st.markdown("<h1>Guía de Bienestar</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>Encuentra los productos doTERRA perfectos para ti</p>", unsafe_allow_html=True)
+
+    if not st.session_state.symptom_flow_started:
+        # Landing screen
+        st.markdown("""
+        <div style="text-align: center; padding: 40px 20px;">
+            <h2>¿Cómo te sientes hoy?</h2>
+            <p style="font-size: 16px; color: #666; margin: 20px 0;">
+                Responde algunas preguntas simples para descubrir qué productos doTERRA
+                pueden apoyar tu bienestar natural.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("<h3 style='text-align: center; margin: 40px 0;'>Elige una categoría:</h3>", unsafe_allow_html=True)
+
+        # Show categories as cards
+        cols = st.columns(3)
+        col_idx = 0
+
+        for category in symptom_flow['categories']:
+            with cols[col_idx % 3]:
+                st.markdown("""
+                <style>
+                    .category-btn { cursor: pointer; }
+                    .category-btn:hover { opacity: 0.8; }
+                </style>
+                """, unsafe_allow_html=True)
+
+                st.markdown(f"""
+                <div class="category-card">
+                    <div style="font-size: 40px; margin-bottom: 10px;">{category.get('icono', '🌿')}</div>
+                    <h4>{category['nombre']}</h4>
+                    <p style="font-size: 14px; color: #666;">{category['descripcion']}</p>
+                </div>
+                """, unsafe_allow_html=True)
+
+                if st.button(f"Explorar {category['nombre']}", key=f"cat_{category['id']}", use_container_width=True):
+                    st.session_state.current_category = category['id']
+                    first_question = category['preguntas'][0]
+                    st.session_state.current_question = first_question['id']
+                    st.session_state.question_history = [first_question['id']]
+                    st.session_state.selected_tags = []
+                    st.session_state.symptom_flow_started = True
+                    st.rerun()
+
+            col_idx += 1
+
+    else:
+        # Question flow
+        if st.session_state.current_category and st.session_state.current_question:
+            category = None
+            for cat in symptom_flow['categories']:
+                if cat['id'] == st.session_state.current_category:
+                    category = cat
+                    break
+
+            if category:
+                current_q = get_current_question(symptom_flow, st.session_state.current_category, st.session_state.current_question)
+
+                if current_q:
+                    # Progress bar
+                    progress = min(len(st.session_state.question_history) / 5, 1.0)
+                    st.progress(progress, f"Pregunta {len(st.session_state.question_history)} de ~5")
+
+                    # Question title
+                    st.markdown(f"<h3>{current_q['texto']}</h3>", unsafe_allow_html=True)
+
+                    # Options as buttons
+                    for i, option in enumerate(current_q['opciones']):
+                        col1, col2, col3 = st.columns([1, 2, 1])
+                        with col2:
+                            if st.button(option['texto'], key=f"opt_{i}", use_container_width=True):
+                                st.session_state.selected_tags.extend(option.get('tags', []))
+                                next_question_id = option.get('siguiente')
+
+                                if next_question_id == 'resultado':
+                                    st.session_state.page = 'resultado_sintomas'
+                                    st.rerun()
+                                else:
+                                    st.session_state.current_question = next_question_id
+                                    st.session_state.question_history.append(next_question_id)
+                                    st.rerun()
+
+                    # Back button
+                    col1, col2, col3 = st.columns([1, 2, 1])
+                    with col1:
+                        if st.button("← Atrás", key="back_btn"):
+                            if len(st.session_state.question_history) > 1:
+                                st.session_state.question_history.pop()
+                                st.session_state.current_question = st.session_state.question_history[-1]
+                                st.rerun()
+                            else:
+                                st.session_state.symptom_flow_started = False
+                                st.rerun()
+
+
+def page_resultado_sintomas():
+    """Results page with recommended products"""
+    st.markdown("<h1>Tu Recomendación Personalizada</h1>", unsafe_allow_html=True)
+
+    top_products = calculate_product_matches(st.session_state.selected_tags, products_data)
+
+    if top_products:
+        st.markdown("<h3 style='text-align: center; margin: 30px 0;'>Top 3 Productos Recomendados</h3>", unsafe_allow_html=True)
+
+        for idx, (product_id, match_data) in enumerate(top_products, 1):
+            st.markdown(f"<h4>Recomendación #{idx}</h4>", unsafe_allow_html=True)
+            st.markdown(create_product_card(match_data['product'], match_data['percentage']), unsafe_allow_html=True)
+            st.markdown("---")
+    else:
+        st.info("No se encontraron productos que coincidan. Por favor, intenta de nuevo.")
+
+    render_fda_disclaimer()
+
+    col1, col2, col3 = st.columns(3)
+    with col2:
+        if st.button("🔄 Volver a Empezar", use_container_width=True, key="restart_symptom"):
+            st.session_state.symptom_flow_started = False
+            st.session_state.current_category = None
+            st.session_state.current_question = None
+            st.session_state.selected_tags = []
+            st.session_state.question_history = []
+            st.rerun()
+
+
+def page_productos():
+    """Product catalog page"""
+    st.markdown("<h1>Catálogo de Productos</h1>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([3, 1])
+    with col1:
+        search_term = st.text_input("🔍 Buscar productos...", placeholder="Ej: Lavanda, Menta...")
+    with col2:
+        categories = ["Todos"] + list(set([cat for p in products_data for cat in p.get('categoria', [])]))
+        category_filter = st.selectbox("Categoría", options=categories, key="category_filter")
+
+    filtered_products = products_data
+
+    if search_term:
+        filtered_products = [p for p in filtered_products
+                            if search_term.lower() in p['nombre'].lower()
+                            or search_term.lower() in p['descripcion'].lower()]
+
+    if category_filter != "Todos":
+        filtered_products = [p for p in filtered_products if category_filter in p.get('categoria', [])]
+
+    if filtered_products:
+        st.markdown(f"<p style='text-align: center; color: #666;'>{len(filtered_products)} productos encontrados</p>", unsafe_allow_html=True)
+
+        cols = st.columns(3)
+        for idx, product in enumerate(filtered_products):
+            with cols[idx % 3]:
+                st.markdown(create_product_card(product), unsafe_allow_html=True)
+    else:
+        st.info("No se encontraron productos que coincidan con tu búsqueda.")
+
+    st.markdown("---")
+    render_fda_disclaimer()
+
+
+def page_unete_al_equipo():
+    """Business opportunity page"""
+    st.markdown("<h1>Únete al Equipo</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>Crea una oportunidad de negocio con doTERRA</p>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>¿Por qué unirse?</h3>
+            <ul style="font-size: 14px;">
+                <li>Comisiones atractivas y crecientes</li>
+                <li>Productos de excelente calidad</li>
+                <li>Soporte continuo del equipo</li>
+                <li>Oportunidad de ganar desde casa</li>
+                <li>Comunidad de emprendedoras</li>
+                <li>Capacitación y recursos gratuitos</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div class="feature-card">
+            <h3>¿Cómo funciona?</h3>
+            <ol style="font-size: 14px;">
+                <li><strong>Inscríbete</strong> como miembro preferente</li>
+                <li><strong>Recibe</strong> tus aceites con descuento</li>
+                <li><strong>Comparte</strong> con amigos y familia</li>
+                <li><strong>Gana</strong> comisiones por tus ventas</li>
+                <li><strong>Crece</strong> tu equipo y expandir ingresos</li>
+                <li><strong>Disfruta</strong> beneficios exclusivos</li>
+            </ol>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    st.markdown("""
+    <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #7C9070 0%, #B8965A 100%);
+                border-radius: 15px; color: white; margin: 20px 0;">
+        <h3 style="color: white;">¿Listo para comenzar?</h3>
+        <p style="color: white;">Contacta a Suzanna Valles hoy mismo para más información</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col1, col2, col3 = st.columns(3)
+    with col2:
+        wa_msg = "¡Hola Suzanna! 👋 Me gustaría saber más sobre la oportunidad de negocio con doTERRA. ¿Puedes ayudarme?"
+        wa_link = whatsapp_link(wa_msg)
+        st.markdown(f'<a href="{wa_link}" target="_blank" class="btn-primary" style="display: block; text-align: center; padding: 12px; background: #25D366; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0;">📱 Contactar por WhatsApp</a>',
+                   unsafe_allow_html=True)
+
+
+def page_sobre_nosotras():
+    """About page"""
+    st.markdown("<h1>Sobre Nosotras</h1>", unsafe_allow_html=True)
+
+    col1, col2 = st.columns([1, 1])
+
+    with col1:
+        st.markdown("""
+        <div style="background: #F0E8D8; padding: 20px; border-radius: 10px;">
+            <h3>Suzanna Valles</h3>
+            <p><strong>Embajadora doTERRA en Ecuador</strong></p>
+            <p>Con más de 5 años de experiencia en aceites esenciales doTERRA, Suzanna se dedica a ayudar
+            a las personas a descubrir el poder transformador de los productos naturales de grado terapéutico.</p>
+            <p style="margin-top: 15px;">
+                <strong>Misión:</strong> Llevar bienestar natural a cada hogar en Ecuador y Latinoamérica.
+            </p>
+            <p>
+                <strong>Visión:</strong> Crear una comunidad de mujeres empoderadas que viven con salud,
+                abundancia y propósito a través de doTERRA.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col2:
+        st.markdown("""
+        <div style="background: #F0E8D8; padding: 20px; border-radius: 10px;">
+            <h3>¿Por qué Nosotras Naturales?</h3>
+            <p>Creemos que la naturaleza tiene soluciones poderosas para el bienestar:</p>
+            <ul>
+                <li><strong>Pureza:</strong> Grado terapéutico, sin aditivos</li>
+                <li><strong>Efectividad:</strong> Probado científicamente</li>
+                <li><strong>Sostenibilidad:</strong> Producción ética y responsable</li>
+                <li><strong>Accesibilidad:</strong> Precios competitivos</li>
+                <li><strong>Comunidad:</strong> Apoyo continuo y educación</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    st.markdown("<h3 style='text-align: center;'>Síguenos en Redes</h3>", unsafe_allow_html=True)
+    col1, col2, col3 = st.columns(3)
+    with col2:
+        st.markdown(f'<a href="{INSTAGRAM_URL}" target="_blank" style="font-size: 18px; text-decoration: none; display: block; text-align: center;">📱 Instagram @nosotrasnaturales</a>',
+                   unsafe_allow_html=True)
 
 
 def page_dashboard():
-    """Suzanna's Dashboard (Dashboard de Suzanna) - Password Protected"""
-
-    st.markdown("<h1>👩‍💼 Dashboard de Suzanna</h1>", unsafe_allow_html=True)
-
+    """Password-protected dashboard"""
     if not st.session_state.dashboard_authenticated:
-        st.warning("⚠️ Acceso Restringido")
+        st.markdown("<h1>Dashboard de Suzanna</h1>", unsafe_allow_html=True)
+        password = st.text_input("Contraseña:", type="password")
 
-        password = st.text_input("Ingresa la contraseña:", type="password")
-
-        if password:
-            # Simple password check (in production, use proper authentication)
-            if password == "doterra2024":
+        if st.button("Acceder"):
+            if password == DASHBOARD_PASSWORD:
                 st.session_state.dashboard_authenticated = True
-                st.success("✓ Acceso concedido")
                 st.rerun()
             else:
                 st.error("❌ Contraseña incorrecta")
-
-        if st.button("← Volver al Inicio", key="dashboard_back_btn"):
-            st.session_state.page = "home"
-            st.rerun()
         return
 
-    # Dashboard Content
+    st.markdown("<h1>Dashboard de Suzanna</h1>", unsafe_allow_html=True)
+
+    if st.button("🚪 Cerrar Sesión", key="logout"):
+        st.session_state.dashboard_authenticated = False
+        st.rerun()
+
     col1, col2, col3, col4 = st.columns(4)
-
     with col1:
-        st.metric(label="Productos", value="50+", delta="En catálogo")
-
+        st.metric("Productos", len(products_data))
     with col2:
-        st.metric(label="Clientes", value="150+", delta="Activos")
-
+        st.metric("Categorías", len(symptom_flow['categories']))
     with col3:
-        st.metric(label="Advocate ID", value="8205768", delta=ADVOCATE_ID)
-
+        st.metric("ID Advocada", ADVOCATE_ID)
     with col4:
-        st.metric(label="Región", value="Ecuador", delta="América Latina")
+        st.metric("Fecha", datetime.now().strftime("%d/%m/%Y"))
 
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
+    st.markdown("---")
 
-    # Admin Actions
-    st.markdown("<h3>Acciones de Administración</h3>", unsafe_allow_html=True)
-
-    col1, col2 = st.columns(2)
-
-    with col1:
-        if st.button("📊 Ver Analytics", key="dashboard_analytics_btn", use_container_width=True):
-            st.info("Analytics dashboard en desarrollo")
-
-    with col2:
-        if st.button("👥 Gestionar Clientes", key="dashboard_clients_btn", use_container_width=True):
-            st.info("Gestor de clientes en desarrollo")
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Contact Info Section
-    st.markdown("<h3>📋 Información de Contacto</h3>", unsafe_allow_html=True)
-
-    st.markdown(
-        f"""
-        **ID de Wellness Advocate:** {ADVOCATE_ID}
-
-        **WhatsApp:** {WHATSAPP_DISPLAY}
-
-        **Instagram:** {INSTAGRAM_HANDLE}
-
-        **Tienda doTERRA:** {DOTERRA_STORE_URL}
-        """,
-        unsafe_allow_html=True
+    st.markdown("<h3>Inventario de Productos</h3>", unsafe_allow_html=True)
+    st.dataframe(
+        [(p['nombre'], p['precio_usd'], p['pv'], ', '.join(p.get('categoria', [])))
+         for p in products_data],
+        columns=["Producto", "Precio USD", "PV", "Categorías"],
+        use_container_width=True
     )
 
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
+    st.markdown("---")
+    st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
     col1, col2 = st.columns(2)
-
     with col1:
-        if st.button("Cerrar Sesión", key="dashboard_logout_btn", use_container_width=True):
-            st.session_state.dashboard_authenticated = False
-            st.session_state.page = "home"
-            st.rerun()
-
+        st.info(f"📱 **WhatsApp:** {WHATSAPP_NUMBER}")
     with col2:
-        if st.button("← Volver al Inicio", key="dashboard_back_btn_2"):
-            st.session_state.page = "home"
-            st.rerun()
+        st.info(f"🎯 **ID Advocada:** {ADVOCATE_ID}")
 
+def page_latam():
+    """doTERRA Latinoamérica page"""
+    st.markdown("<h1>doTERRA en América Latina</h1>", unsafe_allow_html=True)
+    st.markdown("<p class='subtitle'>Explora los productos doTERRA disponibles en tu país</p>", unsafe_allow_html=True)
 
-def page_about():
-    """About Suzanna page (Sobre Suzanna)"""
+    countries = [
+        {"flag": "🇪🇨", "name": "Ecuador", "code": "EC", "lang": "es_EC", "highlight": True},
+        {"flag": "🇨🇴", "name": "Colombia", "code": "CO", "lang": "es_CO"},
+        {"flag": "🇵🇪", "name": "Perú", "code": "PE", "lang": "es_PE"},
+        {"flag": "🇨🇱", "name": "Chile", "code": "CL", "lang": "es_CL"},
+        {"flag": "🇦🇷", "name": "Argentina", "code": "AR", "lang": "es_AR"},
+        {"flag": "🇧🇴", "name": "Bolivia", "code": "BO", "lang": "es_BO"},
+        {"flag": "🇲🇽", "name": "México", "code": "MX", "lang": "es_MX"},
+        {"flag": "🇧🇷", "name": "Brasil", "code": "BR", "lang": "pt_BR"},
+        {"flag": "🇨🇷", "name": "Costa Rica", "code": "CR", "lang": "es_CR"},
+        {"flag": "🇬🇹", "name": "Guatemala", "code": "GT", "lang": "es_GT"},
+        {"flag": "🇵🇾", "name": "Paraguay", "code": "PY", "lang": "es_PY"},
+        {"flag": "🇺🇾", "name": "Uruguay", "code": "UY", "lang": "es_UY"},
+    ]
 
-    st.markdown("<h1>👤 Sobre Suzanna</h1>", unsafe_allow_html=True)
-
-    col1, col2 = st.columns([1, 2], gap="large")
-
-    with col1:
-        st.markdown(
-            """
-            <div style="text-align: center;">
-                <div style="width: 150px; height: 150px; border-radius: 50%;
-                           background: linear-gradient(135deg, #7C9070 0%, #B8965A 100%);
-                           margin: 0 auto 1.5rem; display: flex; align-items: center;
-                           justify-content: center; color: white; font-size: 3rem;">
-                    👩‍💼
+    cols = st.columns(4)
+    for idx, country in enumerate(countries):
+        with cols[idx % 4]:
+            url = f"https://www.doterra.com/{country['code']}/{country['lang']}"
+            if country.get('highlight'):
+                url = f"https://www.doterra.com/{country['code']}/{country['lang']}/shop?referralId={ADVOCATE_ID}"
+            border = "3px solid #7C9070" if country.get('highlight') else "1px solid #D4C5A9"
+            badge = '<span style="background: #7C9070; color: white; padding: 2px 8px; border-radius: 10px; font-size: 11px;">Tu país</span>' if country.get('highlight') else ''
+            st.markdown(f"""
+            <a href="{url}" target="_blank" style="text-decoration: none; color: inherit;">
+                <div style="background: white; border: {border}; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 15px; transition: all 0.3s; cursor: pointer;">
+                    <div style="font-size: 36px;">{country['flag']}</div>
+                    <div style="font-weight: 700; color: #3D3229; margin: 8px 0;">{country['name']}</div>
+                    {badge}
                 </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+            </a>
+            """, unsafe_allow_html=True)
 
-    with col2:
-        st.markdown(
-            """
-            <h3>Suzanna Valles</h3>
-            <p><strong>Wellness Advocate de doTERRA</strong></p>
-            <p><strong>ID:</strong> 8205768</p>
-            <p><strong>Ubicación:</strong> Ecuador</p>
-            <p><strong>Especialidad:</strong> Bienestar Holístico con Aceites Esenciales</p>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Bio Section
-    st.markdown("<h3>Mi Historia</h3>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-        Mi viaje con el bienestar natural comenzó cuando descubrí el poder transformador
-        de los aceites esenciales de grado terapéutico. Desde entonces, he dedicado mi vida
-        a compartir estos productos extraordinarios con mujeres en toda América Latina.
-
-        Como Wellness Advocate certificada de doTERRA, estoy comprometida con proporcionar
-        educación de calidad, recomendaciones personalizadas y apoyo continuo a cada cliente.
-        Creo que el bienestar es un derecho, no un lujo, y que cada persona merece acceso a
-        productos de la más alta calidad.
-
-        A través de Nosotras Naturales, he creado una comunidad de mujeres apasionadas que
-        comparten mi visión: transformar vidas a través de la naturaleza, una gota a la vez.
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Mission Section
-    st.markdown("<h3>🎯 Nuestra Misión</h3>", unsafe_allow_html=True)
-
-    st.markdown(
-        """
-        Empoderar a mujeres ecuatorianas y latinoamericanas a través de:
-
-        - 🌿 **Educación en Bienestar:** Proporcionar conocimiento profundo sobre aceites esenciales
-        - 💪 **Oportunidades Económicas:** Crear caminos para la independencia financiera
-        - 👥 **Comunidad Solidaria:** Construir redes de apoyo mutuo y crecimiento
-        - 🌍 **Impacto Sostenible:** Promover prácticas responsables con el ambiente
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    # Social Links
-    st.markdown("<h3>Conéctate Conmigo</h3>", unsafe_allow_html=True)
+    st.markdown("---")
+    st.markdown("""
+    <div style="text-align: center; padding: 30px; background: linear-gradient(135deg, #7C9070, #B8965A); border-radius: 15px; color: white;">
+        <h3 style="color: white;">¿Quieres ser parte de doTERRA?</h3>
+        <p style="color: rgba(255,255,255,0.9);">Únete a la comunidad más grande de bienestar natural en América Latina</p>
+    </div>
+    """, unsafe_allow_html=True)
 
     col1, col2, col3 = st.columns(3)
-
-    with col1:
-        st.markdown(
-            f"""
-            <a href="https://www.instagram.com/nosotrasnaturales" target="_blank" style="text-decoration: none;">
-                <button style="width: 100%; padding: 0.8rem; background-color: #E4405F; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                    📱 Instagram
-                </button>
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
-
     with col2:
-        st.markdown(
-            f"""
-            <a href="{get_whatsapp_link('Hola Suzanna')}" target="_blank" style="text-decoration: none;">
-                <button style="width: 100%; padding: 0.8rem; background-color: #25D366; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                    💬 WhatsApp
-                </button>
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with col3:
-        st.markdown(
-            f"""
-            <a href="{DOTERRA_STORE_URL}" target="_blank" style="text-decoration: none;">
-                <button style="width: 100%; padding: 0.8rem; background-color: #7C9070; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">
-                    🛒 Tienda
-                </button>
-            </a>
-            """,
-            unsafe_allow_html=True
-        )
-
-    st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-    if st.button("← Volver al Inicio", key="about_back_btn"):
-        st.session_state.page = "home"
-        st.rerun()
+        if st.button("💼 Únete al Equipo", use_container_width=True, key="latam_join"):
+            st.session_state.page = 'unete_al_equipo'
+            st.rerun()
 
 
 # ============================================
 # SIDEBAR NAVIGATION
 # ============================================
 
-def setup_sidebar():
-    """Setup sidebar navigation"""
+with st.sidebar:
+    st.markdown("""
+    <div style="text-align: center; padding: 15px 0;">
+        <h2 style="color: white; margin: 0;">🌿 Nosotras Naturales</h2>
+        <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 5px 0;">Bienestar Natural con doTERRA</p>
+    </div>
+    """, unsafe_allow_html=True)
 
-    with st.sidebar:
-        # Logo/Brand
-        st.markdown(
-            """
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <h2 style="color: white; border: none; margin-bottom: 0;">🌿 Nosotras Naturales</h2>
-                <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem; margin: 0;">
-                    Bienestar Natural con doTERRA
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+    st.markdown("---")
 
-        st.markdown("<div style='margin: 1.5rem 0;'></div>", unsafe_allow_html=True)
+    nav_items = [
+        ("🏠 Inicio", "inicio"),
+        ("🌿 Guía de Bienestar", "guia_bienestar"),
+        ("📦 Productos", "productos"),
+        ("🌎 doTERRA Latinoamérica", "latam"),
+        ("💼 Únete al Equipo", "unete_al_equipo"),
+        ("🌸 Sobre Nosotras", "sobre_nosotras"),
+        ("👩‍💼 Dashboard", "dashboard"),
+    ]
 
-        # Navigation buttons
-        nav_items = [
-            ("🏠 Inicio", "home"),
-            ("🌿 Guía de Bienestar", "symptom_checker"),
-            ("📦 Productos", "products"),
-            ("🌎 doTERRA Latinoamérica", "latam"),
-            ("👩‍💼 Dashboard de Suzanna", "dashboard"),
-            ("💼 Únete al Equipo", "join_team"),
-            ("🌸 Nosotras Naturales", "community"),
-            ("👤 Sobre Suzanna", "about"),
-        ]
+    for label, page_key in nav_items:
+        if st.button(label, key=f"nav_{page_key}", use_container_width=True):
+            st.session_state.page = page_key
+            # Reset symptom flow when navigating away
+            if page_key != 'guia_bienestar' and page_key != 'resultado_sintomas':
+                st.session_state.symptom_flow_started = False
+                st.session_state.current_category = None
+                st.session_state.current_question = None
+                st.session_state.selected_tags = []
+                st.session_state.question_history = []
+            st.rerun()
 
-        for label, page_key in nav_items:
-            if st.button(label, key=f"nav_{page_key}", use_container_width=True):
-                st.session_state.page = page_key
-                st.rerun()
-
-        st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-        # Contact Info
-        st.markdown("<h4 style='color: white; text-align: center;'>📞 Contacto Directo</h4>", unsafe_allow_html=True)
-
-        st.markdown(
-            f"""
-            <div style="background: rgba(255,255,255,0.1); border-radius: 8px; padding: 1rem; text-align: center;">
-                <p style="color: white; margin: 0.5rem 0; font-size: 0.9rem;">
-                    <strong>WhatsApp:</strong><br>
-                    {WHATSAPP_DISPLAY}
-                </p>
-                <p style="color: white; margin: 0.5rem 0; font-size: 0.9rem;">
-                    <strong>Instagram:</strong><br>
-                    {INSTAGRAM_HANDLE}
-                </p>
-                <p style="color: white; margin: 0.5rem 0; font-size: 0.9rem;">
-                    <strong>ID doTERRA:</strong><br>
-                    {ADVOCATE_ID}
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.markdown("<div style='margin: 2rem 0;'></div>", unsafe_allow_html=True)
-
-        # Footer Info
-        st.markdown(
-            """
-            <div style="text-align: center; font-size: 0.8rem; color: rgba(255,255,255,0.6);">
-                <p>© 2024 Nosotras Naturales</p>
-                <p>Tous droits réservés</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+    st.markdown("---")
+    wa_link = whatsapp_link("Hola Suzanna! Me interesa saber más sobre doTERRA.")
+    st.markdown(f"""
+    <a href="{wa_link}" target="_blank" style="display: block; text-align: center; background: #25D366;
+       color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
+       💬 WhatsApp Suzanna
+    </a>
+    """, unsafe_allow_html=True)
 
 
 # ============================================
-# MAIN APPLICATION
+# MAIN APP LOGIC
 # ============================================
 
-def main():
-    """Main application function"""
+# Render floating WhatsApp button
+render_whatsapp_float()
 
-    # Load styles
-    load_css()
+# Page routing
+page_map = {
+    'inicio': page_inicio,
+    'guia_bienestar': page_guia_bienestar,
+    'resultado_sintomas': page_resultado_sintomas,
+    'productos': page_productos,
+    'unete_al_equipo': page_unete_al_equipo,
+    'sobre_nosotras': page_sobre_nosotras,
+    'latam': page_latam,
+    'dashboard': page_dashboard,
+}
 
-    # Initialize session state
-    initialize_session_state()
+if st.session_state.page in page_map:
+    page_map[st.session_state.page]()
+else:
+    st.session_state.page = 'inicio'
+    st.rerun()
 
-    # Setup sidebar navigation
-    setup_sidebar()
-
-    # Display WhatsApp button
-    display_whatsapp_button()
-
-    # Route to appropriate page
-    page_map = {
-        "home": page_home,
-        "symptom_checker": page_symptom_checker,
-        "products": page_products,
-        "latam": page_latam,
-        "join_team": page_join_team,
-        "community": page_community,
-        "dashboard": page_dashboard,
-        "about": page_about,
-    }
-
-    current_page = st.session_state.page
-    page_function = page_map.get(current_page, page_home)
-    page_function()
-
-    # Footer
-    st.markdown("<div style='margin: 4rem 0 2rem 0;'></div>", unsafe_allow_html=True)
-    st.markdown(
-        """
-        <footer style='text-align: center; color: #666; font-size: 0.9rem; border-top: 1px solid #D4C5A9; padding-top: 2rem;'>
-            <p>Nosotras Naturales © 2024 | Wellness Advocate doTERRA ID: 8205768</p>
-            <p>
-                <a href='https://www.doterra.com/EC/es_EC' target='_blank' style='color: #7C9070; text-decoration: none;'>
-                    Visita nuestra tienda doTERRA
-                </a>
-            </p>
-        </footer>
-        """,
-        unsafe_allow_html=True
-    )
-
-
-if __name__ == "__main__":
-    main()
+# Footer
+st.markdown("---")
+st.markdown("""
+<div style="text-align: center; padding: 20px; color: #999; font-size: 12px;">
+    <p>Nosotras Naturales © 2024 | Aceites Esenciales doTERRA de Grado Terapéutico</p>
+    <p>Para consultas: 📱 Contacta a Suzanna Valles por WhatsApp</p>
+</div>
+""", unsafe_allow_html=True)
