@@ -1,0 +1,17 @@
+{
+  "countries": [
+    {"code": "EC", "lang": "es_EC", "nombre": "Ecuador", "bandera": "🇪🇨", "activo": true},
+    {"code": "CO", "lang": "es_CO", "nombre": "Colombia", "bandera": "🇨🇴", "activo": true},
+    {"code": "PE", "lang": "es_PE", "nombre": "Perú", "bandera": "🇵🇪", "activo": true},
+    {"code": "CL", "lang": "es_CL", "nombre": "Chile", "bandera": "🇨🇱", "activo": true},
+    {"code": "AR", "lang": "es_AR", "nombre": "Argentina", "bandera": "🇦🇷", "activo": true},
+    {"code": "BO", "lang": "es_BO", "nombre": "Bolivia", "bandera": "🇧🇴", "activo": true},
+    {"code": "MX", "lang": "es_MX", "nombre": "México", "bandera": "🇲🇽", "activo": true},
+    {"code": "BR", "lang": "pt_BR", "nombre": "Brasil", "bandera": "🇧🇷", "activo": true},
+    {"code": "CR", "lang": "es_CR", "nombre": "Costa Rica", "bandera": "🇨🇷", "activo": true},
+    {"code": "GT", "lang": "es_GT", "nombre": "Guatemala", "bandera": "🇬🇹", "activo": true},
+    {"code": "PY", "lang": "es_PY", "nombre": "Paraguay", "bandera": "🇵🇾", "activo": true},
+    {"code": "UY", "lang": "es_UY", "nombre": "Uruguay", "bandera": "🇺🇾", "activo": false},
+    {"code": "VE", "lang": "es_VE", "nombre": "Venezuela", "bandera": "🇻🇪", "activo": false}
+  ]
+}
