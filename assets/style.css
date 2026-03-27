@@ -897,6 +897,72 @@ svg[data-testid="stHeaderNoBadge"] {
     display: none !important;
 }
 
+/* ============================================
+   PRODUCT USAGE METHOD ICONS WITH TOOLTIPS
+   ============================================ */
+
+.uso-icon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 13px;
+    font-weight: 700;
+    color: white;
+    cursor: default;
+    transition: transform 0.2s ease;
+    flex-shrink: 0;
+}
+
+.uso-icon:hover {
+    transform: scale(1.15);
+}
+
+.uso-icon .uso-tooltip {
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #3D3229;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+    z-index: 100;
+    pointer-events: none;
+}
+
+.uso-icon .uso-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #3D3229 transparent transparent transparent;
+}
+
+.uso-icon:hover .uso-tooltip {
+    visibility: visible;
+    opacity: 1;
+}
+
+.uso-A { background: #7C9070; }
+.uso-T { background: #E57C23; }
+.uso-I { background: #3B82F6; }
+.uso-N { background: #8B5CF6; }
+.uso-D { background: #EF4444; }
+.uso-S { background: #F59E0B; }
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;

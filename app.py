@@ -177,6 +177,65 @@ def scrape_doterra_product(url):
                 data['infografia_url'] = href
                 break
 
+        # Also search raw HTML text for PDF URLs (JS-rendered links)
+        if 'infografia_url' not in data:
+            pdf_matches = re.findall(r'https?://media\.doterra\.com[^\s"\'<>]*infographic[^\s"\'<>]*\.pdf', response.text, re.IGNORECASE)
+            if not pdf_matches:
+                pdf_matches = re.findall(r'https?://media\.doterra\.com[^\s"\'<>]*infografia[^\s"\'<>]*\.pdf', response.text, re.IGNORECASE)
+            if pdf_matches:
+                data['infografia_url'] = pdf_matches[0]
+
+        # Fallback: construct infographic URL from slug pattern
+        # doTERRA pattern: media.doterra.com/cr-otg/es/presentations/infographic-{slug}.pdf
+        if 'infografia_url' not in data:
+            slug_for_pdf = re.search(r'/p/([\w-]+)', es_url)
+            if slug_for_pdf:
+                raw_slug = slug_for_pdf.group(1)
+                # Remove common suffixes like "-oil", "-blend", "-touch" for the PDF name
+                pdf_slug = re.sub(r'-(oil|blend|touch|essential|aceite|mezcla)$', '', raw_slug, flags=re.IGNORECASE)
+                # Try multiple doTERRA media CDN patterns
+                fallback_urls = [
+                    f'https://media.doterra.com/cr-otg/es/presentations/infographic-{pdf_slug}.pdf',
+                    f'https://media.doterra.com/us/en/presentations/infographic-{pdf_slug}.pdf',
+                    f'https://media.doterra.com/cr-otg/es/presentations/infographic-{raw_slug}.pdf',
+                    f'https://media.doterra.com/us/en/presentations/infographic-{raw_slug}.pdf',
+                ]
+                for fb_url in fallback_urls:
+                    try:
+                        check = requests.head(fb_url, headers=headers, timeout=5, allow_redirects=True)
+                        if check.status_code == 200:
+                            data['infografia_url'] = fb_url
+                            break
+                    except Exception:
+                        continue
+
+        # ---- Additional image sources ----
+        # Try to find product image from img tags (some doTERRA pages use these)
+        if 'imagen_url' not in data:
+            for img in soup.find_all('img', src=True):
+                src = img.get('src', '')
+                if 'doterra.com' in src and ('product' in src.lower() or 'medias' in src.lower()):
+                    if not src.startswith('http'):
+                        src = 'https://www.doterra.com' + src
+                    data['imagen_url'] = src
+                    break
+
+        # Try to find image from JSON-LD structured data
+        if 'imagen_url' not in data:
+            for script in soup.find_all('script', type='application/ld+json'):
+                try:
+                    import json
+                    ld = json.loads(script.string or '{}')
+                    if isinstance(ld, dict) and ld.get('image'):
+                        img_val = ld['image']
+                        if isinstance(img_val, list):
+                            img_val = img_val[0]
+                        if isinstance(img_val, str) and img_val:
+                            data['imagen_url'] = img_val
+                            break
+                except Exception:
+                    continue
+
         # ---- Description (Spanish from og:description) ----
         og_desc = soup.find('meta', {'property': 'og:description'})
         if og_desc and og_desc.get('content'):
@@ -243,61 +302,76 @@ def get_product_icon(product):
         return '🛡️'
     return '🌿'
 
-def create_product_card(product, match_percentage=None, recommendation_reason=None, rank=None):
-    """Create a clean, compact product card with all essential info.
-    IMPORTANT: Only use div, span, and a tags — Streamlit's st.markdown breaks on
-    img, details, summary, ul, li, p, strong, h3 etc. No f-string indentation (4+ spaces
-    triggers markdown code blocks). Hardcode all colors (no CSS variables).
+def render_product_card(product, mode="catalog", match_percentage=None, recommendation_reason=None, rank=None):
+    """SINGLE SOURCE OF TRUTH for all product card rendering.
+    mode: "catalog" (website), "recommendation" (after questionnaire), "dashboard" (admin)
+    Uses only div/span/a tags. No indentation. Hardcoded colors. CSS class tooltips for usage icons.
     """
     price_display = f"${product.get('precio_usd', 'N/A')}"
     pv_display = product.get('pv', '')
-    comprar_link = DOTERRA_SHOP_URL
-    consult_msg = f"Hola Suzanna! Me interesa {product['nombre']} ({product.get('nombre_en', '')}). ¿Me puedes dar más información?"
-    consult_link = whatsapp_link(consult_msg)
     icon = get_product_icon(product)
     imagen_url = product.get('imagen_url', '')
+    sku = product.get('doterra_sku', '')
+    infografia = product.get('infografia_url', '')
+    is_active = product.get('active', True)
 
-    # Image: CSS background-image for real photos, emoji fallback
-    if imagen_url and 'doterra.com/medias/' in imagen_url:
+    # ---- Image ----
+    if imagen_url and 'doterra.com' in imagen_url:
         image_html = f'<div style="width:80px;height:80px;background:url({imagen_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:12px;flex-shrink:0;"></div>'
     else:
         image_html = f'<div style="width:80px;height:80px;background:linear-gradient(135deg,#e8f0e4,#f0ead8);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;">{icon}</div>'
 
-    # Rank label
-    rank_labels = {1: '🥇 Mejor opción', 2: '🥈 Excelente alternativa', 3: '🥉 También recomendado'}
-    rank_html = f'<div style="font-size:12px;font-weight:700;color:#7C9070;margin-bottom:6px;">{rank_labels.get(rank, "")}</div>' if rank else ''
+    # ---- Usage method circle icons (A, T, I) with CSS tooltips ----
+    uso_icons = []
+    if product.get('uso_aromatico'):
+        tooltip_text = product['uso_aromatico'][:60]
+        uso_icons.append(f'<div class="uso-icon uso-A"><span class="uso-tooltip">Aromático: {tooltip_text}</span>A</div>')
+    if product.get('uso_topico'):
+        tooltip_text = product['uso_topico'][:60]
+        uso_icons.append(f'<div class="uso-icon uso-T"><span class="uso-tooltip">Tópico: {tooltip_text}</span>T</div>')
+    if product.get('uso_interno'):
+        tooltip_text = product['uso_interno'][:60]
+        uso_icons.append(f'<div class="uso-icon uso-I"><span class="uso-tooltip">Interno: {tooltip_text}</span>I</div>')
+    uso_icons_html = f'<div style="display:flex;gap:6px;align-items:center;">{"".join(uso_icons)}</div>' if uso_icons else ''
 
-    # Match badge
+    # ---- Rank (recommendation mode only) ----
+    rank_html = ''
+    if mode == "recommendation" and rank:
+        rank_labels = {1: '🥇 Mejor opción', 2: '🥈 Excelente alternativa', 3: '🥉 También recomendado'}
+        rank_html = f'<div style="font-size:12px;font-weight:700;color:#7C9070;margin-bottom:6px;">{rank_labels.get(rank, "")}</div>'
+
+    # ---- Match badge (recommendation mode only) ----
     match_html = ''
-    if match_percentage:
+    if mode == "recommendation" and match_percentage:
         match_html = f'<span style="background:linear-gradient(135deg,#7C9070,#B8965A);color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;">{match_percentage}%</span>'
 
-    # Recommendation reason (sanitize underscores to prevent markdown interpretation)
-    reason_text = recommendation_reason.replace('_', ' ') if recommendation_reason else ''
-    reason_html = f'<div style="background:rgba(124,144,112,0.08);color:#7C9070;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:12px;border-left:3px solid #7C9070;">{reason_text}</div>' if reason_text else ''
+    # ---- Recommendation reason ----
+    reason_html = ''
+    if mode == "recommendation" and recommendation_reason:
+        reason_text = recommendation_reason.replace('_', ' ')
+        reason_html = f'<div style="background:rgba(124,144,112,0.08);color:#7C9070;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:12px;border-left:3px solid #7C9070;">{reason_text}</div>'
 
-    # Wholesale price
+    # ---- Dashboard status badges ----
+    status_badges = ''
+    if mode == "dashboard":
+        active_badge = '<span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Activo</span>' if is_active else '<span style="background:#ffebee;color:#c62828;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Inactivo</span>'
+        stock = product.get('stock', 99)
+        stock_badge = f'<span style="background:#fff8e1;color:#f57f17;padding:2px 8px;border-radius:10px;font-size:11px;">Stock: {stock}</span>' if stock < 10 else ''
+        stripe_badge = '<span style="background:#e8eaf6;color:#283593;padding:2px 8px;border-radius:10px;font-size:11px;">Stripe ✓</span>' if product.get('stripe_price_id') else ''
+        status_badges = f'<div style="display:flex;gap:6px;align-items:center;margin-bottom:4px;">{active_badge}{stock_badge}{stripe_badge}</div>'
+
+    # ---- Prices ----
     precio_mayoreo = product.get('precio_mayoreo', '')
     mayoreo_html = f'<span style="color:#999;font-size:12px;text-decoration:line-through;">${precio_mayoreo}</span>' if precio_mayoreo else ''
 
-    # Benefits as divs (no ul/li)
+    # ---- Benefits ----
     benefits = product.get('beneficios', [])[:4]
     benefits_html = ''.join([f'<div style="color:#666;font-size:13px;padding:2px 0;">• {b}</div>' for b in benefits])
 
-    # Usage method badges
-    usos = []
-    if product.get('uso_aromatico'):
-        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">🌬️ Aromático</span>')
-    if product.get('uso_topico'):
-        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">✋ Tópico</span>')
-    if product.get('uso_interno'):
-        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">💧 Interno</span>')
-    usos_html = f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{"".join(usos)}</div>' if usos else ''
-
-    # Category badges (sanitize underscores)
+    # ---- Category badges ----
     cat_badges = ''.join([f'<span style="background:#eee;color:#888;padding:2px 8px;border-radius:10px;font-size:11px;">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:3]])
 
-    # Detailed usage section (replaces details/summary with always-visible div)
+    # ---- Details section (benefits + detailed usage) ----
     uso_details = []
     if product.get('uso_aromatico'):
         uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">🌬️ Aromático:</span> {product["uso_aromatico"]}</div>')
@@ -315,13 +389,48 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
             '</div>'
         )
 
-    # Sanitize description (replace underscores)
-    descripcion = product['descripcion'].replace('_', ' ')
+    # ---- Description ----
+    descripcion = product.get('descripcion', '').replace('_', ' ')
 
-    # Build card — NO indentation, only div/span/a tags, hardcoded colors
+    # ---- Infographic button (dashboard and catalog) ----
+    infog_btn = ''
+    if infografia:
+        infog_btn = (
+            f'<a href="{infografia}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;'
+            'background:#f5f0e6;color:#7C9070;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">📄 Infografía PDF</a>'
+        )
+
+    # ---- Action buttons (catalog and recommendation: buy/consult; dashboard: infographic) ----
+    actions_html = ''
+    if mode in ("catalog", "recommendation"):
+        comprar_link = product.get('doterra_url', DOTERRA_SHOP_URL)
+        consult_msg = f"Hola Suzanna! Me interesa {product['nombre']} ({product.get('nombre_en', '')}). ¿Me puedes dar más información?"
+        consult_link = whatsapp_link(consult_msg)
+        actions_html = (
+            '<div style="display:flex;gap:10px;">'
+            f'<a href="{comprar_link}" target="_blank" style="flex:1;text-align:center;padding:11px 16px;'
+            'background:linear-gradient(135deg,#7C9070,#B8965A);color:white;border-radius:10px;'
+            'font-weight:600;font-size:14px;text-decoration:none;">🛒 Comprar</a>'
+            f'<a href="{consult_link}" target="_blank" style="flex:1;text-align:center;padding:11px 16px;'
+            'background:#25D366;color:white;border-radius:10px;font-weight:600;font-size:14px;'
+            'text-decoration:none;">💬 Consultar</a>'
+            '</div>'
+        )
+    elif mode == "dashboard":
+        actions_html = f'<div style="display:flex;gap:10px;align-items:center;">{infog_btn}</div>' if infog_btn else ''
+
+    # ---- Card border style ----
+    border = 'border:1px solid rgba(0,0,0,0.04);' if (mode != "dashboard" or is_active) else 'border:1px solid #ffcdd2;'
+    opacity = 'opacity:0.6;' if (mode == "dashboard" and not is_active) else ''
+
+    # ---- SKU line (dashboard only shows extra detail) ----
+    sku_html = f'<span style="color:#ccc;font-size:11px;">SKU: {sku}</span>' if mode == "dashboard" and sku else ''
+
+    # ---- Build card ----
     html = (
-        '<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
-        'box-shadow:0 2px 12px rgba(60,50,41,0.07);border:1px solid rgba(0,0,0,0.04);">'
+        f'<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
+        f'box-shadow:0 2px 12px rgba(60,50,41,0.07);{border}{opacity}">'
+        f'{status_badges}'
         '<div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:14px;">'
         f'<div style="flex-shrink:0;">{image_html}</div>'
         '<div style="flex:1;min-width:0;">'
@@ -330,30 +439,31 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
         f'<div style="margin:0;font-size:1.15rem;font-weight:700;color:#3D3229;">{product["nombre"]}</div>'
         f'<span style="color:#aaa;font-size:13px;">{product.get("nombre_en", "")}</span>'
         f'{match_html}'
+        f'{uso_icons_html}'
         '</div>'
         '<div style="display:flex;align-items:baseline;gap:12px;margin-top:4px;">'
         f'<span style="font-size:1.4rem;font-weight:700;color:#C67B4F;">{price_display}</span>'
         f'{mayoreo_html}'
         f'<span style="color:#bbb;font-size:12px;">PV: {pv_display}</span>'
+        f'{sku_html}'
         '</div>'
         '</div>'
         '</div>'
         f'{reason_html}'
         f'<div style="color:#666;font-size:14px;line-height:1.6;margin-bottom:12px;">{descripcion}</div>'
-        f'{usos_html}'
         f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{cat_badges}</div>'
         f'{details_section}'
-        '<div style="display:flex;gap:10px;">'
-        f'<a href="{comprar_link}" target="_blank" style="flex:1;text-align:center;padding:11px 16px;'
-        'background:linear-gradient(135deg,#7C9070,#B8965A);color:white;border-radius:10px;'
-        'font-weight:600;font-size:14px;text-decoration:none;">🛒 Comprar</a>'
-        f'<a href="{consult_link}" target="_blank" style="flex:1;text-align:center;padding:11px 16px;'
-        'background:#25D366;color:white;border-radius:10px;font-weight:600;font-size:14px;'
-        'text-decoration:none;">💬 Consultar</a>'
-        '</div>'
+        f'{actions_html}'
         '</div>'
     )
     return html
+
+
+# Backward-compatible aliases
+def create_product_card(product, match_percentage=None, recommendation_reason=None, rank=None):
+    """Alias for render_product_card in recommendation mode."""
+    return render_product_card(product, mode="recommendation", match_percentage=match_percentage,
+                               recommendation_reason=recommendation_reason, rank=rank)
 
 def get_current_question(flow_data, category_id, question_id):
     """Get a specific question from the symptom flow"""
@@ -851,7 +961,7 @@ def page_productos():
         cols = st.columns(3)
         for idx, product in enumerate(filtered_products):
             with cols[idx % 3]:
-                st.markdown(create_product_card(product), unsafe_allow_html=True)
+                st.markdown(render_product_card(product, mode="catalog"), unsafe_allow_html=True)
     else:
         st.info("No se encontraron productos que coincidan con tu búsqueda.")
 
@@ -962,96 +1072,8 @@ def page_sobre_nosotras():
 
 
 def _render_dashboard_product_card(product):
-    """Render a product card in the dashboard with the SAME visual style as the website cards."""
-    price_display = f"${product.get('precio_usd', 'N/A')}"
-    pv_display = product.get('pv', '')
-    icon = get_product_icon(product)
-    imagen_url = product.get('imagen_url', '')
-    precio_mayoreo = product.get('precio_mayoreo', '')
-    mayoreo_html = f'<span style="color:#999;font-size:12px;text-decoration:line-through;">${precio_mayoreo}</span>' if precio_mayoreo else ''
-    descripcion = product.get('descripcion', '').replace('_', ' ')
-    sku = product.get('doterra_sku', '')
-    infografia = product.get('infografia_url', '')
-
-    if imagen_url and 'doterra.com' in imagen_url:
-        image_html = f'<div style="width:80px;height:80px;background:url({imagen_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:12px;flex-shrink:0;"></div>'
-    else:
-        image_html = f'<div style="width:80px;height:80px;background:linear-gradient(135deg,#e8f0e4,#f0ead8);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;">{icon}</div>'
-
-    benefits = product.get('beneficios', [])[:4]
-    benefits_html = ''.join([f'<div style="color:#666;font-size:13px;padding:2px 0;">• {b}</div>' for b in benefits])
-
-    usos = []
-    if product.get('uso_aromatico'):
-        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">🌬️ Aromático</span>')
-    if product.get('uso_topico'):
-        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">✋ Tópico</span>')
-    if product.get('uso_interno'):
-        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">💧 Interno</span>')
-    usos_html = f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;">{"".join(usos)}</div>' if usos else ''
-
-    cat_badges = ''.join([f'<span style="background:#eee;color:#888;padding:2px 8px;border-radius:10px;font-size:11px;">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:3]])
-
-    uso_details = []
-    if product.get('uso_aromatico'):
-        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">🌬️ Aromático:</span> {product["uso_aromatico"]}</div>')
-    if product.get('uso_topico'):
-        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">✋ Tópico:</span> {product["uso_topico"]}</div>')
-    if product.get('uso_interno'):
-        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">💧 Interno:</span> {product["uso_interno"]}</div>')
-    details_section = ''
-    if benefits or uso_details:
-        details_section = (
-            '<div style="margin-bottom:12px;padding:10px 14px;background:#faf8f5;border-radius:10px;border:1px solid #eee;">'
-            '<div style="color:#7C9070;font-weight:600;font-size:14px;margin-bottom:8px;">Beneficios y usos</div>'
-            f'{benefits_html}'
-            f'<div style="margin-top:8px;font-size:13px;color:#666;line-height:1.7;">{"".join(uso_details)}</div>'
-            '</div>'
-        )
-
-    # Status badges
-    is_active = product.get('active', True)
-    stock = product.get('stock', 99)
-    active_badge = '<span style="background:#e8f5e9;color:#2e7d32;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Activo</span>' if is_active else '<span style="background:#ffebee;color:#c62828;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:600;">Inactivo</span>'
-    stock_badge = f'<span style="background:#fff8e1;color:#f57f17;padding:2px 8px;border-radius:10px;font-size:11px;">Stock: {stock}</span>' if stock < 10 else ''
-    stripe_badge = '<span style="background:#e8eaf6;color:#283593;padding:2px 8px;border-radius:10px;font-size:11px;">Stripe ✓</span>' if product.get('stripe_price_id') else '<span style="background:#fce4ec;color:#c62828;padding:2px 8px;border-radius:10px;font-size:11px;">Sin Stripe</span>'
-
-    # Infographic button
-    infog_btn = ''
-    if infografia:
-        infog_btn = (
-            f'<a href="{infografia}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;'
-            'background:#f5f0e6;color:#7C9070;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;">📄 Infografía PDF</a>'
-        )
-
-    html = (
-        f'<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
-        f'box-shadow:0 2px 12px rgba(60,50,41,0.07);border:1px solid {"rgba(0,0,0,0.04)" if is_active else "#ffcdd2"};'
-        f'{"opacity:0.7;" if not is_active else ""}">'
-        '<div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:14px;">'
-        f'<div style="flex-shrink:0;">{image_html}</div>'
-        '<div style="flex:1;min-width:0;">'
-        f'<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:4px;">{active_badge}{stock_badge}{stripe_badge}</div>'
-        '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
-        f'<div style="margin:0;font-size:1.15rem;font-weight:700;color:#3D3229;">{product["nombre"]}</div>'
-        f'<span style="color:#aaa;font-size:13px;">{product.get("nombre_en", "")}</span>'
-        '</div>'
-        '<div style="display:flex;align-items:baseline;gap:12px;margin-top:4px;">'
-        f'<span style="font-size:1.4rem;font-weight:700;color:#C67B4F;">{price_display}</span>'
-        f'{mayoreo_html}'
-        f'<span style="color:#bbb;font-size:12px;">PV: {pv_display}</span>'
-        f'<span style="color:#ccc;font-size:11px;">SKU: {sku}</span>'
-        '</div>'
-        '</div>'
-        '</div>'
-        f'<div style="color:#666;font-size:14px;line-height:1.6;margin-bottom:12px;">{descripcion}</div>'
-        f'{usos_html}'
-        f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{cat_badges}</div>'
-        f'{details_section}'
-        f'<div style="display:flex;gap:10px;align-items:center;">{infog_btn}</div>'
-        '</div>'
-    )
-    st.markdown(html, unsafe_allow_html=True)
+    """Render a product card in the dashboard — uses the unified render_product_card()."""
+    st.markdown(render_product_card(product, mode="dashboard"), unsafe_allow_html=True)
 
 
 def _product_edit_form(product, key_prefix, is_new=False):
