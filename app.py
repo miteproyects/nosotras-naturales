@@ -59,6 +59,55 @@ def get_product_country_url(slug, country_code):
         return None
     return f"https://www.doterra.com/{country_code}/{c['locale']}/p/{slug}"
 
+# Product ID → doTERRA slug mapping (products.json uses short IDs, doTERRA uses slugs)
+PRODUCT_SLUG_MAP = {
+    'lavender': 'lavender-oil', 'peppermint': 'peppermint-oil', 'lemon': 'lemon-oil',
+    'melaleuca': 'tea-tree-oil', 'frankincense': 'frankincense-oil', 'oregano': 'oregano-oil',
+    'eucalyptus': 'eucalyptus-oil', 'bergamot': 'bergamot-oil', 'cedarwood': 'cedarwood-oil',
+    'copaiba': 'copaiba-oil', 'ginger': 'ginger-oil', 'helichrysum': 'helichrysum-oil',
+    'rosemary': 'rosemary-oil', 'vetiver': 'vetiver-oil', 'wild_orange': 'wild-orange-oil',
+    'ylang_ylang': 'ylang-ylang-oil', 'clary_sage': 'clary-sage-oil', 'roman_chamomile': 'roman-chamomile-oil',
+    'turmeric': 'turmeric-oil', 'black_pepper': 'black-pepper-oil',
+    'balance': 'doterra-balance-oil', 'serenity': 'serenity-oil', 'elevation': 'elevation-oil',
+    'citrus_bliss': 'citrus-bliss-oil', 'purify': 'purify-oil', 'terrashield': 'terrashield-oil',
+    'deep_blue': 'deep-blue-oil', 'easy_air': 'breathe-oil', 'digestzen': 'zengest-oil',
+    'doterra_on_guard': 'on-guard-oil', 'intune': 'intune-oil', 'pasttense': 'past-tense-oil',
+    'claricalm': 'clary-calm-roll-on', 'zendocrine': 'zendocrine-oil',
+    'aromaouch': 'aromatouch-oil', 'metapwr': 'metapwr-oil',
+    'deep_blue_polyphenol': 'deep-blue-polyphenol-complex',
+    'copaiba_softgels': 'copaiba-softgels', 'on_guard_softgels': 'on-guard-softgels',
+    'digestzen_terrazyme': 'terrazyme', 'pb_assist_plus': 'pb-assist-plus',
+    'turmeric_capsules': 'turmeric-dual-chamber-capsules',
+    'lifelong_vitality_pack': 'lifelong-vitality-pack',
+    'healthy_start_kit': 'healthy-start-kit', 'home_essentials_kit': 'home-essentials-kit',
+    'natural_solutions_kit': 'natural-solutions-kit',
+}
+
+def _get_product_slug(product):
+    """Get the doTERRA slug for a product (from doterra_url or PRODUCT_SLUG_MAP)."""
+    url = product.get('doterra_url', '')
+    if '/p/' in url:
+        return url.split('/p/')[-1].split('?')[0]
+    return PRODUCT_SLUG_MAP.get(product.get('id', ''), product.get('id', '').replace('_', '-') + '-oil')
+
+# Scraped product availability per country (doTERRA slug sets)
+COUNTRY_PRODUCTS = {
+    'EC': {"abode-cleaner-concentrate","abode-cleaner-concentrate-dispenser","abode-duo-cleaner-concentrate-and-dispenser","abode-oil","adaptiv-oil","adaptiv-touch-oil","air-x-oil","alpha-crs","amber-foaming-hand-wash-dispenser","aromatouch-oil","aromatouch-oil-5ml","athletes-kit","basil-oil","bergamot-oil","black-spruce-oil","breathe-drops","breathe-oil","breathe-oil-5ml","breathe-stick","breathe-touch-oil","brevi-marble-diffuser","cardamom-oil","cassia-oil","cedarwood-oil","cheer-oil","cilantro-oil","cinnamon-oil","citronella-oil","citrus-bliss-oil","citrus-bloom-oil","clary-calm-roll-on","clove-oil","console-oil","copaiba-oil","copaiba-touch-oil","cypress-oil","davana-touch-oil","deep-blue-oil","deep-blue-polyphenol-complex","deep-blue-rub","deep-blue-stick","deep-blue-touch-oil","doterra-balance-oil","doterra-balance-oil-5ml","doterra-balance-touch-oil","doterra-brave-oil","doterra-calmer-oil","doterra-cheer-touch","doterra-ginger-drops","elevation-oil","eucalyptus-oil","forgive-oil","fractionated-coconut-oil","frankincense-oil","frankincense-oil-5ml","geranium-oil","ginger-oil","grapefruit-oil","hair-care-daily-conditioner","hair-care-leave-in-conditioner","hair-care-protecting-shampoo","helichrysum-oil","juniper-berry-oil","lavender-oil","lavender-oil-5ml","lavender-touch-oil","lemon-eucalyptus-oil","lemon-oil","lime-oil","marjoram-oil","melissa-oil","motivate-oil","myrrh-oil","on-guard-beadlets","on-guard-foaming-hand-wash","on-guard-oil","on-guard-oil-5ml","on-guard-touch-oil","oregano-oil","oregano-touch-oil","passion-oil","past-tense-oil","peace-oil","peppermint-oil","peppermint-oil-5ml","peppermint-touch-oil","petitgrain-oil","purify-oil","roman-chamomile-oil","rosemary-oil","serenity-oil","spearmint-oil","tea-tree-oil","tea-tree-oil-5ml","tea-tree-touch-oil","terrashield-oil","turmeric-oil","wild-orange-oil","wild-orange-oil-5ml","wintergreen-oil","ylang-ylang-oil","zengest-oil","zengest-touch-oil"},
+    'CO': {"abode-oil","adaptiv-oil","adaptiv-touch-oil","air-x-oil","aromatouch-oil","aromatouch-oil-5ml","basil-oil","bergamot-oil","breathe-oil","breathe-oil-5ml","breathe-vapor-stick","cardamom-oil","cassia-oil","cedarwood-oil","cheer-oil","cilantro-oil","cinnamon-bark-oil","citronella-oil","citrus-bliss-oil","citrus-bloom-oil","clarycalm-oil","clove-oil","console-oil","copaiba-oil","copaiba-touch-oil","cypress-oil","daily-nutrition-pack","deep-blue-oil","deep-blue-touch-oil","doterra-balance-oil","doterra-balance-oil-5ml","doterra-balance-touch-oil","doterra-brave-oil","doterra-breathe-touch-oil","doterra-calmer-oil","doterra-deep-blue-rub","doterra-deep-blue-stick","elevation-oil","eucalyptus-oil","fennel-oil","forgive-oil","fractionated-coconut-oil","frankincense-oil","geranium-oil","hair-care-daily-conditioner","hair-care-daily-conditioner-2-pack","hair-care-leave-in-conditioner","hair-care-leave-in-conditioner-2-pack","hair-care-protecting-shampoo","hair-care-protecting-shampoo-2-pack","lavender-oil","lavender-oil-5ml","lavender-touch-oil","lemon-oil","lemon-oil-5ml","lime-oil","marjoram-oil","melissa-oil","motivate-oil","myrrh-oil","on-guard-beadlets","on-guard-oil","on-guard-oil-5ml","oregano-oil","passion-oil","peppermint-oil","peppermint-oil-5ml","peppermint-touch-oil","petitgrain-oil","purify-oil","rosemary-oil","serenity-oil","tea-tree-oil","tea-tree-oil-5ml","wild-orange-oil","ylang-ylang-oil","zengest-oil","zengest-touch-oil"},
+    'CL': {"adaptiv-touch-oil","arborvitae-oil","aromatouch-oil","aromatouch-oil-5ml","basil-oil","bergamot-oil","breathe-drops","breathe-stick","cardamom-oil","cassia-oil","cedarwood-oil","cilantro-oil","citronella-oil","clary-calm-roll-on","clove-oil","copaiba-oil","coriander-oil","cypress-oil","deep-blue-oil","deep-blue-rub","deep-blue-stick","doterra-adaptiv-oil","doterra-balance-oil","doterra-balance-oil-5ml","doterra-breathe-oil","doterra-breathe-oil-5ml","doterra-breathe-touch-oil","doterra-calmer-oil","doterra-citrus-bliss-oil","doterra-ddr-prime","doterra-whisper-touch-oil","eucalyptus-oil","fennel-oil","fractionated-coconut-oil","frankincense-oil","geranium-oil","helichrysum-oil","intune-oil","juniper-berry-oil","lavender-peace-oil","lemon-eucalyptus-oil","madagascar-vanilla-oil","marjoram-oil","melissa-oil","myrrh-oil","on-guard-oil","oregano-oil","peppermint-oil","roman-chamomile-oil","rosemary-oil","serenity-oil","spearmint-oil","tea-tree-oil","terrashield-oil","turmeric-oil","vetiver-oil","wild-orange-oil","wintergreen-oil","ylang-ylang-oil","zengest-oil","zengest-touch-oil"},
+    'CR': {"abode-oil","adaptiv-oil","adaptiv-touch-oil","air-x-oil","aromatouch-oil","aromatouch-oil-5ml","balance-oil","balance-oil-5ml","bergamot-oil","breathe-oil","breathe-oil-5ml","breathe-respiratory-drops","breathe-touch-oil","breathe-vapor-stick","cardamom-oil","cedarwood-oil","cheer-oil","cinnamon-bark-oil","citronella-oil","citrus-bliss-oil","citrus-bloom-oil","clary-calm-roll-on","clove-oil","console-oil","copaiba-oil","copaiba-touch-oil","cypress-oil","davana-touch-oil","ddr-prime-oil","deep-blue-oil","deep-blue-polyphenol-complex","deep-blue-rub","deep-blue-stick","doterra-brave-oil","doterra-calmer-oil","eucalyptus-oil","forgive-oil","fractionated-coconut-oil","frankincense-oil","frankincense-oil-5ml","geranium-oil","ginger-oil","grapefruit-oil","helichrysum-oil","lavender-oil","lavender-oil-5ml","lemon-oil","lemon-oil-5ml","lime-oil","marjoram-oil","motivate-oil","myrrh-oil","on-guard-beadlets","on-guard-oil","on-guard-oil-5ml","oregano-oil","passion-oil","past-tense-oil","peace-oil","peppermint-oil","peppermint-oil-5ml","petitgrain-oil","purify-oil","rosemary-oil","serenity-oil","tea-tree-oil","tea-tree-oil-5ml","terrashield-oil","wild-orange-oil","ylang-ylang-oil","zengest-oil"},
+    'MX': {"adaptiv-oil","adaptiv-touch-oil","arborvitae-oil","aromatouch-oil","basil-oil","bergamot-oil","birch-oil","black-spruce-oil","blue-tansy-oil","cardamom-oil","cassia-oil","cedarwood-oil","cilantro-oil","cinnamon-bark-oil","citronella-oil","citrus-bliss-oil","citrus-bloom-oil","clarycalm-oil","clementine-oil","clove-oil","copaiba-oil","copaiba-touch-oil","cypress-oil","ddr-prime-oil","deep-blue-oil","deep-blue-rub","deep-blue-stick","digestzen-oil","digestzen-touch-oil","doterra-balance-touch-oil","doterra-console-oil","doterra-elevation-oil","doterra-forgive-oil","doterra-serenity-oil","eucalyptus-oil","fennel-oil","fractionated-coconut-oil","frankincense-oil","geranium-oil","ginger-oil","grapefruit-oil","green-mandarin-oil","helichrysum-oil","juniper-berry-oil","lavender-oil","lemon-oil","lemongrass-oil","lime-oil","marjoram-oil","melissa-oil","motivate-oil","myrrh-oil","on-guard-oil","oregano-oil","passion-oil","past-tense-oil","peppermint-oil","petitgrain-oil","purify-oil","roman-chamomile-oil","rosemary-oil","spearmint-oil","tea-tree-oil","vetiver-oil","wild-orange-oil","wintergreen-oil","ylang-ylang-oil"},
+    'GT': {"abode-oil","adaptiv-oil","adaptiv-touch-oil","air-x-oil","alpha-crs","aromatouch-oil","aromatouch-oil-5ml","basil-oil","bergamot-oil","black-spruce-oil","breathe-drops","breathe-oil","breathe-oil-5ml","breathe-stick","breathe-touch-oil","brevi-marble-diffuser","cardamom-oil","cassia-oil","cedarwood-oil","cheer-oil","cilantro-oil","cinnamon-oil","citronella-oil","citrus-bliss-oil","citrus-bloom-oil","clary-calm-roll-on","clove-oil","console-oil","copaiba-oil","copaiba-touch-oil","cypress-oil","davana-touch-oil","deep-blue-oil","deep-blue-polyphenol-complex","deep-blue-rub","deep-blue-stick","deep-blue-touch-oil","doterra-balance-oil","doterra-balance-oil-5ml","doterra-balance-touch-oil","doterra-brave-oil","doterra-calmer-oil","doterra-cheer-touch","doterra-ginger-drops","elevation-oil","eucalyptus-oil","forgive-oil","fractionated-coconut-oil","frankincense-oil","frankincense-oil-5ml","geranium-oil","ginger-oil","grapefruit-oil","hair-care-daily-conditioner","hair-care-leave-in-conditioner","hair-care-protecting-shampoo","helichrysum-oil","juniper-berry-oil","lavender-oil","lavender-oil-5ml","lavender-touch-oil","lemon-eucalyptus-oil","lemon-oil","lime-oil","marjoram-oil","melissa-oil","motivate-oil","myrrh-oil","on-guard-beadlets","on-guard-foaming-hand-wash","on-guard-oil","on-guard-oil-5ml","on-guard-touch-oil","oregano-oil","oregano-touch-oil","passion-oil","past-tense-oil","peace-oil","peppermint-oil","peppermint-oil-5ml","peppermint-touch-oil","petitgrain-oil","purify-oil","roman-chamomile-oil","rosemary-oil","serenity-oil","spearmint-oil","tea-tree-oil","tea-tree-oil-5ml","tea-tree-touch-oil","terrashield-oil","turmeric-oil","wild-orange-oil","wild-orange-oil-5ml","wintergreen-oil","ylang-ylang-oil","zengest-oil","zengest-touch-oil"},
+    'BR': {"adaptiv-oil","adaptiv-touch-oil","air-x-oil","aromatouch-oil-blend","basil-oil","bergamot-oil","black-pepper-oil","black-spruce-oil","cassia-oil","cedarwood-oil","cilantro-oil","citronella-oil","citrus-bliss-oil","clary-sage-oil","clarycalm-oil","clove-oil","copaiba-oil","copaiba-touch-oil","coriander-oil","cypress-oil","ddr-prime-oil","doterra-balance-oil","doterra-brave-oil","doterra-breathe-oil","doterra-breathe-touch","doterra-calmer-oil","doterra-cheer-oil","doterra-console-oil","doterra-deep-blue-oil","doterra-deep-blue-touch","doterra-elevation-oil","doterra-forgive-oil","eucalyptus-oil-blend","fennel-oil","frankincense-oil","geranium-oil","ginger-oil","grapefruit-oil","on-guard-oil","peppermint-oil","rosemary-oil","tea-tree-oil","wild-orange-oil","ylang-ylang-oil"},
+    'BO': {"foundational-wellness-bundle"},
+}
+
+def _product_available_in(product, country_code):
+    """Check if a product is available in a given country based on scraped data."""
+    slug = _get_product_slug(product)
+    country_set = COUNTRY_PRODUCTS.get(country_code, set())
+    return slug in country_set
+
 # ============================================
 # LOAD CSS & DATA
 # ============================================
@@ -1349,13 +1398,19 @@ def page_dashboard():
                 status_options = ["Todos", "Activos", "Inactivos", "Con Precio", "Sin Precio", "Con Imagen", "Sin Imagen", "Stripe Conectado", "Stripe Pendiente"]
                 filter_status = st.selectbox("Estado:", status_options, key="dash_filter_status")
 
-            # Second row: categories + sort
-            fc4, fc5 = st.columns([3, 1])
+            # Second row: categories + country + sort
+            fc4, fc5, fc6 = st.columns([2, 1, 1])
             with fc4:
                 all_cats = sorted(set(c for p in products_data for c in p.get('categoria', [])))
                 cat_labels = {c: c.replace('_', ' ').title() for c in all_cats}
                 filter_cats = st.multiselect("Categorías:", all_cats, format_func=lambda x: cat_labels.get(x, x), key="dash_filter_cats")
             with fc5:
+                country_options = {"Todos": "Todos los países"}
+                for code, info in DOTERRA_COUNTRIES.items():
+                    if code in COUNTRY_PRODUCTS and len(COUNTRY_PRODUCTS[code]) > 1:
+                        country_options[code] = f"{info['flag']} {info['name']}"
+                filter_country = st.selectbox("País doTERRA:", list(country_options.keys()), format_func=lambda x: country_options[x], key="dash_filter_country")
+            with fc6:
                 sort_options = {"nombre": "Nombre A-Z", "nombre_desc": "Nombre Z-A", "precio_asc": "Precio ↑", "precio_desc": "Precio ↓", "tipo": "Tipo"}
                 filter_sort = st.selectbox("Ordenar:", list(sort_options.keys()), format_func=lambda x: sort_options[x], key="dash_filter_sort")
 
@@ -1368,6 +1423,8 @@ def page_dashboard():
             filtered = [p for p in filtered if p.get('tipo') == filter_tipo]
         if filter_cats:
             filtered = [p for p in filtered if any(c in p.get('categoria', []) for c in filter_cats)]
+        if filter_country != "Todos":
+            filtered = [p for p in filtered if _product_available_in(p, filter_country)]
         if filter_status == "Activos":
             filtered = [p for p in filtered if p.get('active', True)]
         elif filter_status == "Inactivos":
@@ -1456,20 +1513,30 @@ def page_dashboard():
                         # ---- Product card with country flags ----
                         _render_dashboard_product_card(p)
 
-                        # Country availability flags
-                        slug = p.get('doterra_url', '').split('/p/')[-1].split('?')[0] if '/p/' in p.get('doterra_url', '') else p.get('id', '').replace('_', '-')
-                        if slug:
-                            flag_links = []
-                            for code, info in DOTERRA_COUNTRIES.items():
-                                url = f"https://www.doterra.com/{code}/{info['locale']}/p/{slug}"
-                                flag_links.append(f'<a href="{url}" target="_blank" title="{info["name"]}" style="text-decoration:none;font-size:16px;opacity:0.5;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">{info["flag"]}</a>')
-                            st.markdown(
-                                '<div style="display:flex;align-items:center;gap:2px;padding:4px 8px;background:#f8f9fa;border-radius:6px;margin-bottom:6px;">'
-                                '<span style="font-size:11px;color:#888;margin-right:6px;">doTERRA:</span>'
-                                + ' '.join(flag_links) +
-                                '</div>',
-                                unsafe_allow_html=True
-                            )
+                        # Country availability flags (bright = available, dim = not)
+                        product_slug = _get_product_slug(p)
+                        flag_links = []
+                        avail_count = 0
+                        for code, info in DOTERRA_COUNTRIES.items():
+                            if code == 'BO':
+                                continue
+                            is_avail = product_slug in COUNTRY_PRODUCTS.get(code, set())
+                            url = get_product_country_url(product_slug, code)
+                            opacity = '1.0' if is_avail else '0.25'
+                            pointer = 'pointer' if is_avail else 'default'
+                            title = f"{info['name']} ✓" if is_avail else f"{info['name']} — no disponible"
+                            if is_avail:
+                                flag_links.append(f'<a href="{url}" target="_blank" title="{title}" style="text-decoration:none;font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}</a>')
+                                avail_count += 1
+                            else:
+                                flag_links.append(f'<span title="{title}" style="font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}</span>')
+                        st.markdown(
+                            '<div style="display:flex;align-items:center;gap:3px;padding:4px 8px;background:#f8f9fa;border-radius:6px;margin-bottom:6px;">'
+                            f'<span style="font-size:11px;color:#888;margin-right:4px;">{avail_count} países:</span>'
+                            + ''.join(flag_links) +
+                            '</div>',
+                            unsafe_allow_html=True
+                        )
 
                         # Action buttons
                         bc1, bc2, bc3 = st.columns([1, 1, 2])
