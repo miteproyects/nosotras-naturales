@@ -10,8 +10,11 @@ Instagram: @nosotrasnaturales
 import streamlit as st
 import json
 import os
+import re
 import urllib.parse
 from datetime import datetime
+import requests
+from bs4 import BeautifulSoup
 
 # ============================================
 # PAGE CONFIGURATION
@@ -60,6 +63,98 @@ def load_symptom_flow():
 load_css()
 products_data = load_products()
 symptom_flow = load_symptom_flow()
+
+# ============================================
+# PRODUCT DATA FILE PATH
+# ============================================
+PRODUCTS_JSON_PATH = os.path.join(os.path.dirname(__file__), "data", "products.json")
+
+def save_products(data):
+    """Save products data to JSON file."""
+    with open(PRODUCTS_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+def scrape_doterra_product(url):
+    """Scrape product data from a doTERRA product page URL.
+    Returns dict with 'success' bool and 'data' dict or 'error' string.
+    Extracts: imagen_url, precio_usd, precio_mayoreo, doterra_sku, pv, infografia_url, descripcion.
+    """
+    try:
+        clean_url = url.split('?')[0]  # Remove tracking params
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept-Language': 'es-EC,es;q=0.9',
+        }
+        response = requests.get(clean_url, headers=headers, timeout=15)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.text, 'lxml')
+        data = {}
+        data['doterra_url'] = clean_url
+
+        # og:image for product photo
+        og_img = soup.find('meta', {'property': 'og:image'})
+        if og_img and og_img.get('content'):
+            img_url = og_img['content']
+            if not img_url.startswith('http'):
+                img_url = 'https://www.doterra.com' + img_url
+            data['imagen_url'] = img_url
+
+        # Better image: look for 2x3 background-image divs (higher res product bottle)
+        for div in soup.find_all('div', style=True):
+            style = div.get('style', '')
+            if 'background-image' in style and '2x3' in style:
+                bg_match = re.search(r'url\(["\']?(.*?)["\']?\)', style)
+                if bg_match:
+                    img_url = bg_match.group(1)
+                    if img_url.startswith('/'):
+                        img_url = 'https://www.doterra.com' + img_url
+                    data['imagen_url'] = img_url
+                    break
+
+        # Text content for prices and SKU
+        page_text = soup.get_text()
+
+        # Retail price: "Menudeo: $38.00"
+        retail_match = re.search(r'Menudeo:\s*\$([\d,.]+)', page_text)
+        if retail_match:
+            data['precio_usd'] = float(retail_match.group(1).replace(',', ''))
+
+        # Wholesale: "Mayoreo: $28.50"
+        wholesale_match = re.search(r'Mayoreo:\s*\$([\d,.]+)', page_text)
+        if wholesale_match:
+            data['precio_mayoreo'] = float(wholesale_match.group(1).replace(',', ''))
+
+        # SKU: "Artículo: 60202061"
+        sku_match = re.search(r'Art[ií]culo:\s*(\d+)', page_text)
+        if sku_match:
+            data['doterra_sku'] = sku_match.group(1)
+
+        # PV
+        pv_match = re.search(r'PV:\s*([\d.]+)', page_text)
+        if pv_match:
+            data['pv'] = float(pv_match.group(1))
+
+        # Infographic PDF link — look for "Ver infografía" or any infographic PDF
+        for a in soup.find_all('a', href=True):
+            href = a.get('href', '')
+            if '.pdf' in href.lower() and ('infographic' in href.lower() or 'infografia' in href.lower()):
+                if not href.startswith('http'):
+                    href = 'https://media.doterra.com' + href
+                data['infografia_url'] = href
+                break
+
+        # og:description as fallback description
+        og_desc = soup.find('meta', {'property': 'og:description'})
+        if og_desc and og_desc.get('content'):
+            data['og_descripcion'] = og_desc['content']
+
+        return {'success': True, 'data': data}
+
+    except requests.exceptions.RequestException as e:
+        return {'success': False, 'error': f'Error de red: {str(e)}'}
+    except Exception as e:
+        return {'success': False, 'error': f'Error: {str(e)}'}
 
 # ============================================
 # UTILITY FUNCTIONS
@@ -844,6 +939,7 @@ def page_dashboard():
     st.markdown("---")
 
     st.markdown("<h3>Inventario de Productos</h3>", unsafe_allow_html=True)
+    st.caption("Pega el link de cada producto de doTERRA Ecuador y haz clic en Guardar para actualizar la información automáticamente.")
 
     # Search/filter
     search_term = st.text_input("🔍 Buscar producto:", placeholder="Escribe el nombre del producto...", key="dash_search")
@@ -855,28 +951,111 @@ def page_dashboard():
 
     st.markdown(f"<p style='color: #888; font-size: 14px;'>Mostrando {len(filtered)} de {len(products_data)} productos</p>", unsafe_allow_html=True)
 
-    # Product cards in dashboard — only div/span tags, no indentation
+    # Initialize session state for scrape messages
+    if 'scrape_msg' not in st.session_state:
+        st.session_state.scrape_msg = {}
+
+    # Editable product cards in dashboard
     for p in filtered:
+        pid = p['id']
         img_url = p.get('imagen_url', '')
-        img_tag = f'<div style="width:50px;height:50px;background:url({img_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:8px;"></div>' if img_url and 'doterra.com' in img_url else '<div style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:24px;">📦</div>'
         mayoreo = p.get('precio_mayoreo', '')
         mayoreo_str = f" | Mayoreo: ${mayoreo}" if mayoreo else ""
         sku = p.get('doterra_sku', '')
         cats = ', '.join([c.replace('_', ' ') for c in p.get('categoria', [])[:3]])
-        card = (
-            '<div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:white;border-radius:10px;margin-bottom:8px;border:1px solid #eee;">'
-            f'<div style="flex-shrink:0;">{img_tag}</div>'
-            '<div style="flex:1;min-width:0;">'
-            f'<div style="font-weight:600;color:#333;">{p["nombre"]} <span style="color:#aaa;font-size:12px;">{p.get("nombre_en", "")}</span></div>'
-            f'<div style="font-size:12px;color:#888;">SKU: {sku} | {cats}</div>'
-            '</div>'
-            '<div style="text-align:right;flex-shrink:0;">'
-            f'<div style="font-weight:700;color:#B87333;">${p["precio_usd"]}</div>'
-            f'<div style="font-size:11px;color:#aaa;">PV: {p["pv"]}{mayoreo_str}</div>'
-            '</div>'
-            '</div>'
-        )
-        st.markdown(card, unsafe_allow_html=True)
+        infografia = p.get('infografia_url', '')
+        current_url = p.get('doterra_url', '')
+
+        with st.expander(f"{'✅' if current_url else '⚠️'} {p['nombre']} ({p.get('nombre_en', '')}) — ${p.get('precio_usd', 'N/A')}", expanded=False):
+            # Product info header with image
+            col_img, col_info = st.columns([1, 4])
+            with col_img:
+                if img_url and 'doterra.com' in img_url:
+                    st.markdown(
+                        f'<div style="width:70px;height:70px;background:url({img_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:10px;"></div>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown('<div style="width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-size:28px;background:#f5f0e6;border-radius:10px;">📦</div>', unsafe_allow_html=True)
+            with col_info:
+                st.markdown(f"**SKU:** {sku} &nbsp;|&nbsp; **PV:** {p.get('pv', '')} &nbsp;|&nbsp; **Menudeo:** ${p.get('precio_usd', 'N/A')} &nbsp;|&nbsp; **Mayoreo:** ${mayoreo or 'N/A'}")
+                st.markdown(f"**Categorías:** {cats}")
+
+            # Editable URL input
+            new_url = st.text_input(
+                "Link de doTERRA Ecuador:",
+                value=current_url,
+                placeholder="https://www.doterra.com/EC/es_EC/p/...",
+                key=f"url_{pid}"
+            )
+
+            # Action buttons row
+            col_save, col_pdf, col_status = st.columns([1, 1, 2])
+
+            with col_save:
+                if st.button("💾 Guardar y Actualizar", key=f"save_{pid}"):
+                    if new_url and 'doterra.com' in new_url:
+                        with st.spinner(f"Actualizando {p['nombre']}..."):
+                            result = scrape_doterra_product(new_url)
+                            if result['success']:
+                                scraped = result['data']
+                                # Update product in products_data (in memory)
+                                for prod in products_data:
+                                    if prod['id'] == pid:
+                                        prod['doterra_url'] = scraped.get('doterra_url', new_url.split('?')[0])
+                                        if scraped.get('imagen_url'):
+                                            prod['imagen_url'] = scraped['imagen_url']
+                                        if scraped.get('precio_usd'):
+                                            prod['precio_usd'] = scraped['precio_usd']
+                                        if scraped.get('precio_mayoreo'):
+                                            prod['precio_mayoreo'] = scraped['precio_mayoreo']
+                                        if scraped.get('doterra_sku'):
+                                            prod['doterra_sku'] = scraped['doterra_sku']
+                                        if scraped.get('pv'):
+                                            prod['pv'] = scraped['pv']
+                                        if scraped.get('infografia_url'):
+                                            prod['infografia_url'] = scraped['infografia_url']
+                                        break
+                                # Save to file
+                                try:
+                                    save_products(products_data)
+                                    # Clear cache so next reload picks up changes
+                                    load_products.clear()
+                                    fields_updated = ', '.join(scraped.keys())
+                                    st.session_state.scrape_msg[pid] = ('success', f"Actualizado: {fields_updated}")
+                                except Exception as e:
+                                    st.session_state.scrape_msg[pid] = ('error', f"Error al guardar: {e}")
+                            else:
+                                st.session_state.scrape_msg[pid] = ('error', result['error'])
+                        st.rerun()
+                    elif new_url:
+                        st.warning("El link debe ser de doterra.com")
+                    else:
+                        # Just save the URL field even if empty (to clear it)
+                        for prod in products_data:
+                            if prod['id'] == pid:
+                                prod.pop('doterra_url', None)
+                                break
+                        save_products(products_data)
+                        load_products.clear()
+
+            with col_pdf:
+                if infografia:
+                    st.markdown(
+                        f'<a href="{infografia}" target="_blank" style="display:inline-block;padding:8px 16px;background:#7C9070;color:white;border-radius:8px;text-decoration:none;font-size:14px;font-weight:600;">📄 Infografía PDF</a>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown('<span style="color:#bbb;font-size:13px;">Sin infografía</span>', unsafe_allow_html=True)
+
+            with col_status:
+                # Show scrape result message
+                if pid in st.session_state.scrape_msg:
+                    msg_type, msg_text = st.session_state.scrape_msg[pid]
+                    if msg_type == 'success':
+                        st.success(f"✅ {msg_text}")
+                    else:
+                        st.error(f"❌ {msg_text}")
 
     st.markdown("---")
     st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
