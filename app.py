@@ -104,7 +104,7 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
     imagen_url = product.get('imagen_url', '')
     # Use real product image if available, fallback to emoji icon
     if imagen_url and 'doterra.com/medias/' in imagen_url:
-        image_html = f'<img src="{imagen_url}" alt="{product["nombre"]}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px; background: #f9f6f0;">'
+        image_html = f'<div style="width:80px;height:80px;background:url({imagen_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:12px;flex-shrink:0;"></div>'
     else:
         image_html = f'<div style="width:80px;height:80px;background:linear-gradient(135deg,#e8f0e4,#f0ead8);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;">{icon}</div>'
 
@@ -836,7 +836,7 @@ def page_dashboard():
     # Product cards in dashboard
     for p in filtered:
         img_url = p.get('imagen_url', '')
-        img_tag = f'<img src="{img_url}" style="width:50px;height:50px;object-fit:contain;border-radius:8px;" onerror="this.style.display=\'none\'">' if img_url and 'doterra.com' in img_url else '📦'
+        img_tag = f'<div style="width:50px;height:50px;background:url({img_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:8px;"></div>' if img_url and 'doterra.com' in img_url else '📦'
         mayoreo = p.get('precio_mayoreo', '')
         mayoreo_str = f" | Mayoreo: ${mayoreo}" if mayoreo else ""
         sku = p.get('doterra_sku', '')
