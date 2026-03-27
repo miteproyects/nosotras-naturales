@@ -53,11 +53,27 @@ DOTERRA_COUNTRIES = {
 }
 
 def get_product_country_url(slug, country_code):
-    """Build doTERRA product URL for a given country."""
+    """Build doTERRA product URL for a given country, resolving slug aliases."""
     c = DOTERRA_COUNTRIES.get(country_code)
     if not c:
         return None
-    return f"https://www.doterra.com/{country_code}/{c['locale']}/p/{slug}"
+    # Use the actual slug that exists in that country's set
+    country_set = COUNTRY_PRODUCTS.get(country_code, set())
+    resolved_slug = slug
+    if slug not in country_set:
+        # Try aliases
+        aliases = SLUG_ALIASES.get(slug, set())
+        for alt in aliases:
+            if alt in country_set:
+                resolved_slug = alt
+                break
+        else:
+            # Try reverse aliases
+            for primary, alt_set in SLUG_ALIASES.items():
+                if slug in alt_set and primary in country_set:
+                    resolved_slug = primary
+                    break
+    return f"https://www.doterra.com/{country_code}/{c['locale']}/p/{resolved_slug}"
 
 # Product ID → doTERRA slug mapping (products.json uses short IDs, doTERRA uses slugs)
 PRODUCT_SLUG_MAP = {
@@ -102,11 +118,74 @@ COUNTRY_PRODUCTS = {
     'BO': {"foundational-wellness-bundle"},
 }
 
+# doTERRA uses different slug variants per country (e.g. "adaptiv-oil" vs "doterra-adaptiv-oil")
+# This map defines known aliases: primary_slug → set of alternative slugs seen in other countries
+SLUG_ALIASES = {
+    'adaptiv-oil': {'doterra-adaptiv-oil'},
+    'breathe-oil': {'doterra-breathe-oil'},
+    'citrus-bliss-oil': {'doterra-citrus-bliss-oil'},
+    'deep-blue-oil': {'doterra-deep-blue-oil'},
+    'elevation-oil': {'doterra-elevation-oil'},
+    'serenity-oil': {'doterra-serenity-oil', 'lavender-peace-oil'},
+    'doterra-balance-oil': {'balance-oil'},
+    'aromatouch-oil': {'aromatouch-oil-blend'},
+    'zengest-oil': {'digestzen-oil'},
+    'clary-calm-roll-on': {'clarycalm-oil'},
+}
+
 def _product_available_in(product, country_code):
-    """Check if a product is available in a given country based on scraped data."""
+    """Check if a product is available in a given country, handling slug variants."""
     slug = _get_product_slug(product)
     country_set = COUNTRY_PRODUCTS.get(country_code, set())
-    return slug in country_set
+    if slug in country_set:
+        return True
+    # Check known aliases
+    aliases = SLUG_ALIASES.get(slug, set())
+    if aliases & country_set:
+        return True
+    # Check reverse aliases (if our slug is an alias of another primary)
+    for primary, alt_set in SLUG_ALIASES.items():
+        if slug in alt_set and primary in country_set:
+            return True
+    return False
+
+
+def verify_product_urls(product, countries=None):
+    """
+    Live-check doTERRA URLs via HEAD requests for a single product.
+    Returns dict: {country_code: {'status': int, 'ok': bool, 'url': str}}
+    """
+    slug = _get_product_slug(product)
+    if countries is None:
+        countries = [c for c in DOTERRA_COUNTRIES if c != 'BO']
+    results = {}
+    for code in countries:
+        url = get_product_country_url(slug, code)
+        if not url:
+            results[code] = {'status': 0, 'ok': False, 'url': url}
+            continue
+        try:
+            resp = requests.head(url, timeout=8, allow_redirects=True)
+            # doTERRA returns 200 for valid products, 404 or redirects for invalid
+            ok = resp.status_code == 200
+            results[code] = {'status': resp.status_code, 'ok': ok, 'url': url}
+        except requests.RequestException:
+            results[code] = {'status': 0, 'ok': False, 'url': url}
+    return results
+
+
+def verify_all_products(products_data):
+    """
+    Verify all products across all countries. Returns dict:
+    {product_id: {country_code: {'status': int, 'ok': bool, 'url': str}}}
+    """
+    all_results = {}
+    countries = [c for c in DOTERRA_COUNTRIES if c != 'BO']
+    for p in products_data:
+        pid = p['id']
+        all_results[pid] = verify_product_urls(p, countries)
+    return all_results
+
 
 # ============================================
 # LOAD CSS & DATA
@@ -1360,6 +1439,14 @@ def page_dashboard():
         st.session_state.dash_adding = False
     if 'dash_msg' not in st.session_state:
         st.session_state.dash_msg = None
+    if 'verify_results' not in st.session_state:
+        st.session_state.verify_results = {}  # {product_id: {country_code: {status, ok, url}}}
+    if 'verify_timestamp' not in st.session_state:
+        st.session_state.verify_timestamp = {}  # {product_id: datetime_str}
+    if 'verify_running' not in st.session_state:
+        st.session_state.verify_running = False
+    if 'verify_bulk_running' not in st.session_state:
+        st.session_state.verify_bulk_running = False
 
     # Show success/error message if any
     if st.session_state.dash_msg:
@@ -1475,6 +1562,135 @@ def page_dashboard():
             unsafe_allow_html=True
         )
 
+        # ---- Verification panel ----
+        with st.expander("🔍 Verificador de Disponibilidad por País", expanded=False):
+            st.markdown(
+                '<div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;">'
+                'Verifica en tiempo real si los productos están disponibles en cada país haciendo '
+                'consultas directas a doTERRA.com. Compara los datos guardados con la realidad actual.'
+                '</div>',
+                unsafe_allow_html=True
+            )
+            vcol1, vcol2 = st.columns([1, 3])
+            with vcol1:
+                if st.button("🔄 Verificar Todos", key="verify_all_btn", type="primary"):
+                    st.session_state.verify_bulk_running = True
+                    with st.spinner("Verificando disponibilidad de todos los productos..."):
+                        results = verify_all_products(filtered)
+                        now_str = datetime.now().strftime("%Y-%m-%d %H:%M")
+                        for pid, res in results.items():
+                            st.session_state.verify_results[pid] = res
+                            st.session_state.verify_timestamp[pid] = now_str
+                    st.session_state.verify_bulk_running = False
+                    st.rerun()
+            with vcol2:
+                verified_count = len(st.session_state.verify_results)
+                if verified_count > 0:
+                    last_ts = max(st.session_state.verify_timestamp.values()) if st.session_state.verify_timestamp else "—"
+                    st.markdown(
+                        f'<div style="padding:8px 14px;background:#f0fdf4;border-radius:8px;border-left:3px solid #22c55e;">'
+                        f'<span style="font-weight:600;color:#16a34a;">{verified_count} productos verificados</span>'
+                        f'<span style="color:#888;margin-left:10px;font-size:12px;">Última verificación: {last_ts}</span>'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
+                else:
+                    st.markdown(
+                        '<div style="padding:8px 14px;background:#f8f9fa;border-radius:8px;border-left:3px solid #ccc;">'
+                        '<span style="color:#888;font-size:13px;">Aún no se ha verificado ningún producto. Pulsa "Verificar Todos" para empezar.</span>'
+                        '</div>',
+                        unsafe_allow_html=True
+                    )
+
+            # Show summary of discrepancies if results exist
+            if st.session_state.verify_results:
+                discrepancies = []
+                for p in filtered:
+                    pid = p['id']
+                    vr = st.session_state.verify_results.get(pid, {})
+                    if not vr:
+                        continue
+                    for code in [c for c in DOTERRA_COUNTRIES if c != 'BO']:
+                        scraped_avail = _product_available_in(p, code)
+                        live_ok = vr.get(code, {}).get('ok', False)
+                        if scraped_avail and not live_ok:
+                            discrepancies.append((p['nombre'], DOTERRA_COUNTRIES[code]['flag'], DOTERRA_COUNTRIES[code]['name'], 'Dato dice SÍ, URL dice NO'))
+                        elif not scraped_avail and live_ok:
+                            discrepancies.append((p['nombre'], DOTERRA_COUNTRIES[code]['flag'], DOTERRA_COUNTRIES[code]['name'], 'Dato dice NO, URL dice SÍ'))
+
+                if discrepancies:
+                    st.markdown(f'<div style="margin-top:12px;font-weight:600;color:#dc2626;">⚠️ {len(discrepancies)} discrepancia(s) encontrada(s):</div>', unsafe_allow_html=True)
+                    for name, flag, country, desc in discrepancies[:20]:
+                        st.markdown(
+                            f'<div style="padding:4px 12px;background:#fef2f2;border-radius:6px;margin-bottom:4px;font-size:13px;border-left:3px solid #ef4444;">'
+                            f'<span style="font-weight:600;">{name}</span> — {flag} {country}: '
+                            f'<span style="color:#dc2626;">{desc}</span></div>',
+                            unsafe_allow_html=True
+                        )
+                    if len(discrepancies) > 20:
+                        st.caption(f"... y {len(discrepancies) - 20} más")
+                else:
+                    st.markdown(
+                        '<div style="margin-top:12px;padding:8px 14px;background:#f0fdf4;border-radius:8px;border-left:3px solid #22c55e;">'
+                        '<span style="font-weight:600;color:#16a34a;">✅ Sin discrepancias — los datos guardados coinciden con las URLs en vivo.</span>'
+                        '</div>',
+                        unsafe_allow_html=True
+                    )
+
+            # ---- Audit: products with zero country matches ----
+            st.markdown("---")
+            st.markdown('<div style="font-weight:600;color:#3D3229;margin-bottom:8px;">📊 Auditoría de Cobertura</div>', unsafe_allow_html=True)
+            no_match_products = []
+            partial_match = []
+            full_match = []
+            active_countries = [c for c in DOTERRA_COUNTRIES if c != 'BO']
+            for p in products_data:
+                match_count = sum(1 for c in active_countries if _product_available_in(p, c))
+                slug = _get_product_slug(p)
+                if match_count == 0:
+                    no_match_products.append((p['nombre'], p['id'], slug, p.get('tipo', '')))
+                elif match_count < 3:
+                    partial_match.append((p['nombre'], p['id'], slug, match_count))
+                else:
+                    full_match.append((p['nombre'], match_count))
+
+            ac1, ac2, ac3 = st.columns(3)
+            with ac1:
+                st.metric("Sin coincidencia", len(no_match_products), delta=None if not no_match_products else f"⚠️", delta_color="inverse")
+            with ac2:
+                st.metric("1-2 países", len(partial_match))
+            with ac3:
+                st.metric("3+ países", len(full_match))
+
+            if no_match_products:
+                st.markdown(
+                    '<div style="margin-top:8px;font-size:13px;color:#dc2626;font-weight:600;">'
+                    'Productos sin coincidencia en ningún país (posible slug incorrecto o no disponible en LATAM):'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+                for nombre, pid, slug, tipo in no_match_products:
+                    st.markdown(
+                        f'<div style="padding:4px 12px;background:#fef2f2;border-radius:6px;margin-bottom:3px;font-size:13px;border-left:3px solid #ef4444;">'
+                        f'<span style="font-weight:600;">{nombre}</span> '
+                        f'<span style="color:#888;">({tipo}) — slug: <code>{slug}</code></span></div>',
+                        unsafe_allow_html=True
+                    )
+            if partial_match:
+                st.markdown(
+                    '<div style="margin-top:8px;font-size:13px;color:#f59e0b;font-weight:600;">'
+                    'Productos en pocos países (verificar si hay slugs alternativos):'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+                for nombre, pid, slug, count in partial_match:
+                    st.markdown(
+                        f'<div style="padding:4px 12px;background:#fffbeb;border-radius:6px;margin-bottom:3px;font-size:13px;border-left:3px solid #f59e0b;">'
+                        f'<span style="font-weight:600;">{nombre}</span> '
+                        f'<span style="color:#888;">— slug: <code>{slug}</code> — {count} país(es)</span></div>',
+                        unsafe_allow_html=True
+                    )
+
         # ---- Add New Product Form ----
         if st.session_state.dash_adding:
             st.markdown("---")
@@ -1516,33 +1732,55 @@ def page_dashboard():
                         # ---- Product card with country flags ----
                         _render_dashboard_product_card(p)
 
-                        # Country availability flags (bright = available, dim = not)
+                        # Country availability flags with verification overlay
                         product_slug = _get_product_slug(p)
+                        vr = st.session_state.verify_results.get(pid, {})
+                        vts = st.session_state.verify_timestamp.get(pid, '')
                         flag_links = []
                         avail_count = 0
                         for code, info in DOTERRA_COUNTRIES.items():
                             if code == 'BO':
                                 continue
-                            is_avail = product_slug in COUNTRY_PRODUCTS.get(code, set())
+                            is_avail = _product_available_in(p, code)
                             url = get_product_country_url(product_slug, code)
                             opacity = '1.0' if is_avail else '0.25'
                             pointer = 'pointer' if is_avail else 'default'
+
+                            # Build verification badge if data exists
+                            v_badge = ''
+                            if vr and code in vr:
+                                live_ok = vr[code].get('ok', False)
+                                if is_avail and live_ok:
+                                    v_badge = '<span style="font-size:8px;position:relative;top:-6px;">✅</span>'
+                                elif is_avail and not live_ok:
+                                    v_badge = '<span style="font-size:8px;position:relative;top:-6px;">❌</span>'
+                                elif not is_avail and live_ok:
+                                    v_badge = '<span style="font-size:8px;position:relative;top:-6px;">🟡</span>'
+                                # not avail & not live → no badge (expected)
+
                             title = f"{info['name']} ✓" if is_avail else f"{info['name']} — no disponible"
+                            if vr and code in vr:
+                                live_ok = vr[code].get('ok', False)
+                                status_code = vr[code].get('status', 0)
+                                title += f" | Verificado: {'✓ OK' if live_ok else f'✗ {status_code}'}"
+
                             if is_avail:
-                                flag_links.append(f'<a href="{url}" target="_blank" title="{title}" style="text-decoration:none;font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}</a>')
+                                flag_links.append(f'<a href="{url}" target="_blank" title="{title}" style="text-decoration:none;font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}{v_badge}</a>')
                                 avail_count += 1
                             else:
-                                flag_links.append(f'<span title="{title}" style="font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}</span>')
+                                flag_links.append(f'<span title="{title}" style="font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}{v_badge}</span>')
+
+                        verify_label = f'<span style="font-size:10px;color:#16a34a;margin-left:6px;">verificado {vts}</span>' if vts else ''
                         st.markdown(
                             '<div style="display:flex;align-items:center;gap:3px;padding:4px 8px;background:#f8f9fa;border-radius:6px;margin-bottom:6px;">'
                             f'<span style="font-size:11px;color:#888;margin-right:4px;">{avail_count} países:</span>'
-                            + ''.join(flag_links) +
+                            + ''.join(flag_links) + verify_label +
                             '</div>',
                             unsafe_allow_html=True
                         )
 
                         # Action buttons
-                        bc1, bc2, bc3 = st.columns([1, 1, 2])
+                        bc1, bc2, bc3 = st.columns([1, 1, 1])
                         with bc1:
                             if st.button("✏️ Editar", key=f"edit_{pid}"):
                                 st.session_state.dash_editing = pid
@@ -1551,6 +1789,13 @@ def page_dashboard():
                         with bc2:
                             if st.button("🗑️ Eliminar", key=f"del_{pid}"):
                                 st.session_state[f'confirm_del_{pid}'] = True
+                                st.rerun()
+                        with bc3:
+                            if st.button("🔍 Verificar", key=f"verify_{pid}"):
+                                with st.spinner("Verificando..."):
+                                    result = verify_product_urls(p)
+                                    st.session_state.verify_results[pid] = result
+                                    st.session_state.verify_timestamp[pid] = datetime.now().strftime("%Y-%m-%d %H:%M")
                                 st.rerun()
 
                         # Confirm delete
