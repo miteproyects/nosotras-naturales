@@ -94,7 +94,11 @@ def get_product_icon(product):
     return '🌿'
 
 def create_product_card(product, match_percentage=None, recommendation_reason=None, rank=None):
-    """Create a clean, compact product card with all essential info."""
+    """Create a clean, compact product card with all essential info.
+    IMPORTANT: Only use div, span, and a tags — Streamlit's st.markdown breaks on
+    img, details, summary, ul, li, p, strong, h3 etc. No f-string indentation (4+ spaces
+    triggers markdown code blocks). Hardcode all colors (no CSS variables).
+    """
     price_display = f"${product.get('precio_usd', 'N/A')}"
     pv_display = product.get('pv', '')
     comprar_link = DOTERRA_SHOP_URL
@@ -102,7 +106,8 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
     consult_link = whatsapp_link(consult_msg)
     icon = get_product_icon(product)
     imagen_url = product.get('imagen_url', '')
-    # Use real product image if available, fallback to emoji icon
+
+    # Image: CSS background-image for real photos, emoji fallback
     if imagen_url and 'doterra.com/medias/' in imagen_url:
         image_html = f'<div style="width:80px;height:80px;background:url({imagen_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:12px;flex-shrink:0;"></div>'
     else:
@@ -110,77 +115,94 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
 
     # Rank label
     rank_labels = {1: '🥇 Mejor opción', 2: '🥈 Excelente alternativa', 3: '🥉 También recomendado'}
-    rank_html = f'<div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">{rank_labels.get(rank, "")}</div>' if rank else ''
+    rank_html = f'<div style="font-size:12px;font-weight:700;color:#7C9070;margin-bottom:6px;">{rank_labels.get(rank, "")}</div>' if rank else ''
 
     # Match badge
     match_html = ''
     if match_percentage:
-        match_html = f'<span style="background: linear-gradient(135deg, var(--primary), var(--gold)); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">{match_percentage}%</span>'
+        match_html = f'<span style="background:linear-gradient(135deg,#7C9070,#B8965A);color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;">{match_percentage}%</span>'
 
-    reason_html = f'<div style="background: rgba(124,144,112,0.08); color: var(--primary); padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 12px; border-left: 3px solid var(--primary);">{recommendation_reason}</div>' if recommendation_reason else ''
+    # Recommendation reason (sanitize underscores to prevent markdown interpretation)
+    reason_text = recommendation_reason.replace('_', ' ') if recommendation_reason else ''
+    reason_html = f'<div style="background:rgba(124,144,112,0.08);color:#7C9070;padding:8px 12px;border-radius:8px;font-size:13px;font-weight:500;margin-bottom:12px;border-left:3px solid #7C9070;">{reason_text}</div>' if reason_text else ''
 
-    # Wholesale price display
+    # Wholesale price
     precio_mayoreo = product.get('precio_mayoreo', '')
-    mayoreo_html = f'<span style="color: #999; font-size: 12px; text-decoration: line-through;">${precio_mayoreo}</span>' if precio_mayoreo else ''
+    mayoreo_html = f'<span style="color:#999;font-size:12px;text-decoration:line-through;">${precio_mayoreo}</span>' if precio_mayoreo else ''
 
-    # Benefits (max 4)
+    # Benefits as divs (no ul/li)
     benefits = product.get('beneficios', [])[:4]
-    benefits_html = ''.join([f'<li style="color: #666; font-size: 13px; padding: 2px 0;">{b}</li>' for b in benefits])
+    benefits_html = ''.join([f'<div style="color:#666;font-size:13px;padding:2px 0;">• {b}</div>' for b in benefits])
 
-    # Usage methods inline
+    # Usage method badges
     usos = []
     if product.get('uso_aromatico'):
-        usos.append(f'<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #777; background: #f5f0e6; padding: 4px 10px; border-radius: 6px;">🌬️ Aromático</span>')
+        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">🌬️ Aromático</span>')
     if product.get('uso_topico'):
-        usos.append(f'<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #777; background: #f5f0e6; padding: 4px 10px; border-radius: 6px;">✋ Tópico</span>')
+        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">✋ Tópico</span>')
     if product.get('uso_interno'):
-        usos.append(f'<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #777; background: #f5f0e6; padding: 4px 10px; border-radius: 6px;">💧 Interno</span>')
-    usos_html = f'<div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">{"".join(usos)}</div>' if usos else ''
+        usos.append('<span style="display:inline-flex;align-items:center;gap:4px;font-size:12px;color:#777;background:#f5f0e6;padding:4px 10px;border-radius:6px;">💧 Interno</span>')
+    usos_html = f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{"".join(usos)}</div>' if usos else ''
 
-    # Categories as tiny badges
-    cat_badges = ''.join([f'<span style="background: #eee; color: #888; padding: 2px 8px; border-radius: 10px; font-size: 11px;">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:3]])
+    # Category badges (sanitize underscores)
+    cat_badges = ''.join([f'<span style="background:#eee;color:#888;padding:2px 8px;border-radius:10px;font-size:11px;">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:3]])
 
-    html = f"""
-    <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 18px; box-shadow: 0 2px 12px rgba(60,50,41,0.07); border: 1px solid rgba(0,0,0,0.04);">
-        <div style="display: flex; align-items: flex-start; gap: 18px; margin-bottom: 14px;">
-            <div style="flex-shrink: 0;">
-                {image_html}
-            </div>
-            <div style="flex: 1; min-width: 0;">
-                {rank_html}
-                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                    <h3 style="margin: 0; font-size: 1.15rem; color: var(--text);">{product['nombre']}</h3>
-                    <span style="color: #aaa; font-size: 13px;">{product.get('nombre_en', '')}</span>
-                    {match_html}
-                </div>
-                <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 4px;">
-                    <span style="font-size: 1.4rem; font-weight: 700; color: var(--terracotta);">{price_display}</span>
-                    {mayoreo_html}
-                    <span style="color: #bbb; font-size: 12px;">PV: {pv_display}</span>
-                </div>
-            </div>
-        </div>
-        {reason_html}
-        <p style="color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 12px;">{product['descripcion']}</p>
-        {usos_html}
-        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">{cat_badges}</div>
-        <details style="margin-bottom: 14px;">
-            <summary style="cursor: pointer; color: var(--primary); font-weight: 600; font-size: 14px; padding: 6px 0;">Ver beneficios y usos detallados</summary>
-            <div style="padding: 10px 0 0;">
-                <ul style="list-style: none; margin: 0; padding: 0;">{benefits_html}</ul>
-                <div style="margin-top: 10px; font-size: 13px; color: #666; line-height: 1.7;">
-                    {'<p><strong style="color: var(--primary);">🌬️ Aromático:</strong> ' + product.get('uso_aromatico', '') + '</p>' if product.get('uso_aromatico') else ''}
-                    {'<p><strong style="color: var(--primary);">✋ Tópico:</strong> ' + product.get('uso_topico', '') + '</p>' if product.get('uso_topico') else ''}
-                    {'<p><strong style="color: var(--primary);">💧 Interno:</strong> ' + product.get('uso_interno', '') + '</p>' if product.get('uso_interno') else ''}
-                </div>
-            </div>
-        </details>
-        <div style="display: flex; gap: 10px;">
-            <a href="{comprar_link}" target="_blank" style="flex: 1; text-align: center; padding: 11px 16px; background: linear-gradient(135deg, var(--primary), var(--gold)); color: white; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none;">🛒 Comprar</a>
-            <a href="{consult_link}" target="_blank" style="flex: 1; text-align: center; padding: 11px 16px; background: #25D366; color: white; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none;">💬 Consultar</a>
-        </div>
-    </div>
-    """
+    # Detailed usage section (replaces details/summary with always-visible div)
+    uso_details = []
+    if product.get('uso_aromatico'):
+        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">🌬️ Aromático:</span> {product["uso_aromatico"]}</div>')
+    if product.get('uso_topico'):
+        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">✋ Tópico:</span> {product["uso_topico"]}</div>')
+    if product.get('uso_interno'):
+        uso_details.append(f'<div style="margin-bottom:4px;"><span style="color:#7C9070;font-weight:700;">💧 Interno:</span> {product["uso_interno"]}</div>')
+    details_section = ''
+    if benefits or uso_details:
+        details_section = (
+            '<div style="margin-bottom:14px;padding:10px 14px;background:#faf8f5;border-radius:10px;border:1px solid #eee;">'
+            '<div style="color:#7C9070;font-weight:600;font-size:14px;margin-bottom:8px;">Beneficios y usos</div>'
+            f'{benefits_html}'
+            f'<div style="margin-top:8px;font-size:13px;color:#666;line-height:1.7;">{"".join(uso_details)}</div>'
+            '</div>'
+        )
+
+    # Sanitize description (replace underscores)
+    descripcion = product['descripcion'].replace('_', ' ')
+
+    # Build card — NO indentation, only div/span/a tags, hardcoded colors
+    html = (
+        '<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
+        'box-shadow:0 2px 12px rgba(60,50,41,0.07);border:1px solid rgba(0,0,0,0.04);">'
+        '<div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:14px;">'
+        f'<div style="flex-shrink:0;">{image_html}</div>'
+        '<div style="flex:1;min-width:0;">'
+        f'{rank_html}'
+        '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">'
+        f'<div style="margin:0;font-size:1.15rem;font-weight:700;color:#3D3229;">{product["nombre"]}</div>'
+        f'<span style="color:#aaa;font-size:13px;">{product.get("nombre_en", "")}</span>'
+        f'{match_html}'
+        '</div>'
+        '<div style="display:flex;align-items:baseline;gap:12px;margin-top:4px;">'
+        f'<span style="font-size:1.4rem;font-weight:700;color:#C67B4F;">{price_display}</span>'
+        f'{mayoreo_html}'
+        f'<span style="color:#bbb;font-size:12px;">PV: {pv_display}</span>'
+        '</div>'
+        '</div>'
+        '</div>'
+        f'{reason_html}'
+        f'<div style="color:#666;font-size:14px;line-height:1.6;margin-bottom:12px;">{descripcion}</div>'
+        f'{usos_html}'
+        f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{cat_badges}</div>'
+        f'{details_section}'
+        '<div style="display:flex;gap:10px;">'
+        f'<a href="{comprar_link}" target="_blank" style="flex:1;text-align:center;padding:11px 16px;'
+        'background:linear-gradient(135deg,#7C9070,#B8965A);color:white;border-radius:10px;'
+        'font-weight:600;font-size:14px;text-decoration:none;">🛒 Comprar</a>'
+        f'<a href="{consult_link}" target="_blank" style="flex:1;text-align:center;padding:11px 16px;'
+        'background:#25D366;color:white;border-radius:10px;font-weight:600;font-size:14px;'
+        'text-decoration:none;">💬 Consultar</a>'
+        '</div>'
+        '</div>'
+    )
     return html
 
 def get_current_question(flow_data, category_id, question_id):
@@ -833,27 +855,28 @@ def page_dashboard():
 
     st.markdown(f"<p style='color: #888; font-size: 14px;'>Mostrando {len(filtered)} de {len(products_data)} productos</p>", unsafe_allow_html=True)
 
-    # Product cards in dashboard
+    # Product cards in dashboard — only div/span tags, no indentation
     for p in filtered:
         img_url = p.get('imagen_url', '')
-        img_tag = f'<div style="width:50px;height:50px;background:url({img_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:8px;"></div>' if img_url and 'doterra.com' in img_url else '📦'
+        img_tag = f'<div style="width:50px;height:50px;background:url({img_url}) center/contain no-repeat;background-color:#f9f6f0;border-radius:8px;"></div>' if img_url and 'doterra.com' in img_url else '<div style="width:50px;height:50px;display:flex;align-items:center;justify-content:center;font-size:24px;">📦</div>'
         mayoreo = p.get('precio_mayoreo', '')
         mayoreo_str = f" | Mayoreo: ${mayoreo}" if mayoreo else ""
         sku = p.get('doterra_sku', '')
-        cats = ', '.join(p.get('categoria', [])[:3])
-        st.markdown(f"""
-        <div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: white; border-radius: 10px; margin-bottom: 8px; border: 1px solid #eee;">
-            <div style="flex-shrink:0;">{img_tag}</div>
-            <div style="flex: 1; min-width: 0;">
-                <div style="font-weight: 600; color: #333;">{p['nombre']} <span style="color: #aaa; font-size: 12px;">{p.get('nombre_en', '')}</span></div>
-                <div style="font-size: 12px; color: #888;">SKU: {sku} | {cats}</div>
-            </div>
-            <div style="text-align: right; flex-shrink: 0;">
-                <div style="font-weight: 700; color: #B87333;">${p['precio_usd']}</div>
-                <div style="font-size: 11px; color: #aaa;">PV: {p['pv']}{mayoreo_str}</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        cats = ', '.join([c.replace('_', ' ') for c in p.get('categoria', [])[:3]])
+        card = (
+            '<div style="display:flex;align-items:center;gap:14px;padding:12px 16px;background:white;border-radius:10px;margin-bottom:8px;border:1px solid #eee;">'
+            f'<div style="flex-shrink:0;">{img_tag}</div>'
+            '<div style="flex:1;min-width:0;">'
+            f'<div style="font-weight:600;color:#333;">{p["nombre"]} <span style="color:#aaa;font-size:12px;">{p.get("nombre_en", "")}</span></div>'
+            f'<div style="font-size:12px;color:#888;">SKU: {sku} | {cats}</div>'
+            '</div>'
+            '<div style="text-align:right;flex-shrink:0;">'
+            f'<div style="font-weight:700;color:#B87333;">${p["precio_usd"]}</div>'
+            f'<div style="font-size:11px;color:#aaa;">PV: {p["pv"]}{mayoreo_str}</div>'
+            '</div>'
+            '</div>'
+        )
+        st.markdown(card, unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
