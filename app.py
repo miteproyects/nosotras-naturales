@@ -304,6 +304,28 @@ if 'dashboard_authenticated' not in st.session_state:
     st.session_state.dashboard_authenticated = False
 
 # ============================================
+# NAVIGATION HELPER — keeps radio in sync
+# ============================================
+
+# Map page keys to radio labels
+PAGE_TO_RADIO = {
+    'inicio': "🏠 Inicio",
+    'guia_bienestar': "🌿 Guía",
+    'resultado_sintomas': "🌿 Guía",
+    'productos': "📦 Productos",
+    'latam': "🌎 Latinoamérica",
+    'unete_al_equipo': "💼 Únete",
+    'sobre_nosotras': "🌸 Nosotras",
+    'dashboard': "👩‍💼 Dashboard",
+}
+
+def navigate_to(page_key):
+    """Navigate to a page and sync the radio nav widget."""
+    st.session_state.page = page_key
+    st.session_state.top_nav_radio = PAGE_TO_RADIO.get(page_key, "🏠 Inicio")
+    st.rerun()
+
+# ============================================
 # PAGE FUNCTIONS
 # ============================================
 
@@ -344,8 +366,7 @@ def page_inicio():
                 st.session_state.question_history = [first_question['id']]
                 st.session_state.selected_tags = []
                 st.session_state.symptom_flow_started = True
-                st.session_state.page = 'guia_bienestar'
-                st.rerun()
+                navigate_to('guia_bienestar')
 
         col_idx += 1
 
@@ -453,8 +474,7 @@ def page_guia_bienestar():
                                 next_question_id = option.get('siguiente')
 
                                 if next_question_id == 'resultado':
-                                    st.session_state.page = 'resultado_sintomas'
-                                    st.rerun()
+                                    navigate_to('resultado_sintomas')
                                 else:
                                     st.session_state.current_question = next_question_id
                                     st.session_state.question_history.append(next_question_id)
@@ -573,16 +593,13 @@ def page_resultado_sintomas():
             st.session_state.current_question = None
             st.session_state.selected_tags = []
             st.session_state.question_history = []
-            st.session_state.page = 'guia_bienestar'
-            st.rerun()
+            navigate_to('guia_bienestar')
     with col2:
         if st.button("📦 Ver Catálogo Completo", use_container_width=True, key="go_catalog"):
-            st.session_state.page = 'productos'
-            st.rerun()
+            navigate_to('productos')
     with col3:
         if st.button("🏠 Ir al Inicio", use_container_width=True, key="go_home"):
-            st.session_state.page = 'inicio'
-            st.rerun()
+            navigate_to('inicio')
 
 
 def page_productos():
@@ -819,8 +836,7 @@ def page_latam():
     col1, col2, col3 = st.columns(3)
     with col2:
         if st.button("💼 Únete al Equipo", use_container_width=True, key="latam_join"):
-            st.session_state.page = 'unete_al_equipo'
-            st.rerun()
+            navigate_to('unete_al_equipo')
 
 
 # ============================================
@@ -891,33 +907,32 @@ nav_options = {
     "👩‍💼 Dashboard": "dashboard",
 }
 
-# Reverse map to find the label for the current page
-page_to_label = {v: k for k, v in nav_options.items()}
-# Pages not in nav (resultado_sintomas) default to Guía highlight
-current_label = page_to_label.get(st.session_state.page, "🌿 Guía")
-
-selected_label = st.radio(
-    "nav",
-    options=list(nav_options.keys()),
-    index=list(nav_options.keys()).index(current_label) if current_label in nav_options else 0,
-    horizontal=True,
-    label_visibility="collapsed",
-    key="top_nav_radio"
-)
-
-# Navigate when selection changes (only if user explicitly clicked a different tab)
-selected_page = nav_options[selected_label]
-if selected_page != st.session_state.page and selected_page != page_to_label.get(st.session_state.page, ""):
-    # Don't redirect if current page is resultado_sintomas and Guía is highlighted
-    if not (st.session_state.page == 'resultado_sintomas' and selected_page == 'guia_bienestar'):
-        st.session_state.page = selected_page
-        if selected_page not in ('guia_bienestar', 'resultado_sintomas'):
+def on_nav_change():
+    """Callback when user clicks a radio nav item."""
+    selected = st.session_state.top_nav_radio
+    page_key = nav_options.get(selected, 'inicio')
+    if page_key != st.session_state.page:
+        st.session_state.page = page_key
+        if page_key not in ('guia_bienestar', 'resultado_sintomas'):
             st.session_state.symptom_flow_started = False
             st.session_state.current_category = None
             st.session_state.current_question = None
             st.session_state.selected_tags = []
             st.session_state.question_history = []
-        st.rerun()
+
+# Ensure radio value is synced with current page
+current_radio = PAGE_TO_RADIO.get(st.session_state.page, "🏠 Inicio")
+if 'top_nav_radio' not in st.session_state:
+    st.session_state.top_nav_radio = current_radio
+
+st.radio(
+    "nav",
+    options=list(nav_options.keys()),
+    horizontal=True,
+    label_visibility="collapsed",
+    key="top_nav_radio",
+    on_change=on_nav_change
+)
 
 # ============================================
 # MAIN APP LOGIC (wrapped in centered container)
