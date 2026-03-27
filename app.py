@@ -38,6 +38,28 @@ INSTAGRAM_URL = "https://www.instagram.com/nosotrasnaturales"
 DASHBOARD_PASSWORD = "Suzanna"
 
 # ============================================
+# DOTERRA COUNTRY AVAILABILITY (scraped March 2026)
+# ============================================
+DOTERRA_COUNTRIES = {
+    'EC': {'name': 'Ecuador', 'locale': 'es_EC', 'flag': '🇪🇨'},
+    'CO': {'name': 'Colombia', 'locale': 'es_CO', 'flag': '🇨🇴'},
+    'CL': {'name': 'Chile', 'locale': 'es_CL', 'flag': '🇨🇱'},
+    'CR': {'name': 'Costa Rica', 'locale': 'es_CR', 'flag': '🇨🇷'},
+    'MX': {'name': 'México', 'locale': 'es_MX', 'flag': '🇲🇽'},
+    'GT': {'name': 'Guatemala', 'locale': 'es_GT', 'flag': '🇬🇹'},
+    'BR': {'name': 'Brasil', 'locale': 'pt_BR', 'flag': '🇧🇷'},
+    'BO': {'name': 'Bolivia', 'locale': 'es_BO', 'flag': '🇧🇴'},
+    'US': {'name': 'USA', 'locale': 'en', 'flag': '🇺🇸'},
+}
+
+def get_product_country_url(slug, country_code):
+    """Build doTERRA product URL for a given country."""
+    c = DOTERRA_COUNTRIES.get(country_code)
+    if not c:
+        return None
+    return f"https://www.doterra.com/{country_code}/{c['locale']}/p/{slug}"
+
+# ============================================
 # LOAD CSS & DATA
 # ============================================
 
@@ -1308,14 +1330,90 @@ def page_dashboard():
     # TAB 1: PRODUCTOS
     # ============================================
     with tab_productos:
-        # ---- Add New Product button + Search ----
-        col_add, col_search = st.columns([1, 3])
+        # ---- Top action bar ----
+        col_add, col_view = st.columns([1, 5])
         with col_add:
             if st.button("➕ Agregar Producto", key="add_new", type="primary"):
                 st.session_state.dash_adding = True
                 st.session_state.dash_editing = None
-        with col_search:
-            search_term = st.text_input("🔍 Buscar:", placeholder="Nombre del producto...", key="dash_search", label_visibility="collapsed")
+
+        # ---- Filter bar (collapsible) ----
+        with st.expander("🔍 Filtros y Búsqueda", expanded=True):
+            fc1, fc2, fc3 = st.columns(3)
+            with fc1:
+                search_term = st.text_input("Buscar:", placeholder="Nombre, SKU, o palabra clave...", key="dash_search", label_visibility="collapsed")
+            with fc2:
+                tipo_labels = {"Todos": "Todos", "aceite_individual": "Aceites Individuales", "mezcla": "Mezclas", "suplemento": "Suplementos", "kit": "Kits"}
+                filter_tipo = st.selectbox("Tipo:", list(tipo_labels.keys()), format_func=lambda x: tipo_labels[x], key="dash_filter_tipo")
+            with fc3:
+                status_options = ["Todos", "Activos", "Inactivos", "Con Precio", "Sin Precio", "Con Imagen", "Sin Imagen", "Stripe Conectado", "Stripe Pendiente"]
+                filter_status = st.selectbox("Estado:", status_options, key="dash_filter_status")
+
+            # Second row: categories + sort
+            fc4, fc5 = st.columns([3, 1])
+            with fc4:
+                all_cats = sorted(set(c for p in products_data for c in p.get('categoria', [])))
+                cat_labels = {c: c.replace('_', ' ').title() for c in all_cats}
+                filter_cats = st.multiselect("Categorías:", all_cats, format_func=lambda x: cat_labels.get(x, x), key="dash_filter_cats")
+            with fc5:
+                sort_options = {"nombre": "Nombre A-Z", "nombre_desc": "Nombre Z-A", "precio_asc": "Precio ↑", "precio_desc": "Precio ↓", "tipo": "Tipo"}
+                filter_sort = st.selectbox("Ordenar:", list(sort_options.keys()), format_func=lambda x: sort_options[x], key="dash_filter_sort")
+
+        # ---- Apply filters ----
+        filtered = list(products_data)
+        if search_term:
+            term = search_term.lower()
+            filtered = [p for p in filtered if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower() or term in p.get('doterra_sku', '') or term in p.get('descripcion', '').lower() or any(term in b.lower() for b in p.get('beneficios', []))]
+        if filter_tipo != "Todos":
+            filtered = [p for p in filtered if p.get('tipo') == filter_tipo]
+        if filter_cats:
+            filtered = [p for p in filtered if any(c in p.get('categoria', []) for c in filter_cats)]
+        if filter_status == "Activos":
+            filtered = [p for p in filtered if p.get('active', True)]
+        elif filter_status == "Inactivos":
+            filtered = [p for p in filtered if not p.get('active', True)]
+        elif filter_status == "Con Precio":
+            filtered = [p for p in filtered if p.get('precio_usd', 0) > 0]
+        elif filter_status == "Sin Precio":
+            filtered = [p for p in filtered if not p.get('precio_usd', 0)]
+        elif filter_status == "Con Imagen":
+            filtered = [p for p in filtered if p.get('imagen_url')]
+        elif filter_status == "Sin Imagen":
+            filtered = [p for p in filtered if not p.get('imagen_url')]
+        elif filter_status == "Stripe Conectado":
+            filtered = [p for p in filtered if p.get('stripe_price_id')]
+        elif filter_status == "Stripe Pendiente":
+            filtered = [p for p in filtered if not p.get('stripe_price_id')]
+
+        # Sort
+        if filter_sort == "nombre":
+            filtered.sort(key=lambda p: p['nombre'].lower())
+        elif filter_sort == "nombre_desc":
+            filtered.sort(key=lambda p: p['nombre'].lower(), reverse=True)
+        elif filter_sort == "precio_asc":
+            filtered.sort(key=lambda p: p.get('precio_usd', 0))
+        elif filter_sort == "precio_desc":
+            filtered.sort(key=lambda p: p.get('precio_usd', 0), reverse=True)
+        elif filter_sort == "tipo":
+            filtered.sort(key=lambda p: p.get('tipo', ''))
+
+        # ---- Results summary with type badges ----
+        type_counts = {}
+        for p in filtered:
+            t = p.get('tipo', 'otro')
+            type_counts[t] = type_counts.get(t, 0) + 1
+        badge_colors = {'aceite_individual': '#7C9070', 'mezcla': '#C67B4F', 'suplemento': '#3B82F6', 'kit': '#8B5CF6'}
+        badge_labels = {'aceite_individual': 'Aceites', 'mezcla': 'Mezclas', 'suplemento': 'Suplementos', 'kit': 'Kits'}
+        badges_html = ''.join(
+            f'<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:600;color:white;background:{badge_colors.get(t,"#888")};margin-right:6px;">{badge_labels.get(t,t)} ({c})</span>'
+            for t, c in sorted(type_counts.items())
+        )
+        st.markdown(
+            f'<div style="display:flex;align-items:center;gap:12px;padding:8px 0;">'
+            f'<span style="font-weight:600;color:#3D3229;">{len(filtered)} de {len(products_data)} productos</span>'
+            f'<span>{badges_html}</span></div>',
+            unsafe_allow_html=True
+        )
 
         # ---- Add New Product Form ----
         if st.session_state.dash_adding:
@@ -1344,76 +1442,89 @@ def page_dashboard():
                     st.rerun()
             st.markdown("---")
 
-        # ---- Product list ----
-        filtered = products_data
-        if search_term:
-            term = search_term.lower()
-            filtered = [p for p in products_data if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower() or term in p.get('doterra_sku', '')]
+        # ---- Product cards (grid: 2 columns) ----
+        if not filtered:
+            st.info("No se encontraron productos con los filtros seleccionados.")
+        else:
+            cols = st.columns(2)
+            for idx, p in enumerate(filtered):
+                pid = p['id']
+                is_editing = st.session_state.dash_editing == pid
 
-        st.caption(f"Mostrando {len(filtered)} de {len(products_data)} productos")
+                with cols[idx % 2]:
+                    if not is_editing:
+                        # ---- Product card with country flags ----
+                        _render_dashboard_product_card(p)
 
-        for p in filtered:
-            pid = p['id']
-            is_editing = st.session_state.dash_editing == pid
+                        # Country availability flags
+                        slug = p.get('doterra_url', '').split('/p/')[-1].split('?')[0] if '/p/' in p.get('doterra_url', '') else p.get('id', '').replace('_', '-')
+                        if slug:
+                            flag_links = []
+                            for code, info in DOTERRA_COUNTRIES.items():
+                                url = f"https://www.doterra.com/{code}/{info['locale']}/p/{slug}"
+                                flag_links.append(f'<a href="{url}" target="_blank" title="{info["name"]}" style="text-decoration:none;font-size:16px;opacity:0.5;transition:opacity 0.2s;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=0.5">{info["flag"]}</a>')
+                            st.markdown(
+                                '<div style="display:flex;align-items:center;gap:2px;padding:4px 8px;background:#f8f9fa;border-radius:6px;margin-bottom:6px;">'
+                                '<span style="font-size:11px;color:#888;margin-right:6px;">doTERRA:</span>'
+                                + ' '.join(flag_links) +
+                                '</div>',
+                                unsafe_allow_html=True
+                            )
 
-            # ---- Product Card (view mode) ----
-            if not is_editing:
-                _render_dashboard_product_card(p)
+                        # Action buttons
+                        bc1, bc2, bc3 = st.columns([1, 1, 2])
+                        with bc1:
+                            if st.button("✏️ Editar", key=f"edit_{pid}"):
+                                st.session_state.dash_editing = pid
+                                st.session_state.dash_adding = False
+                                st.rerun()
+                        with bc2:
+                            if st.button("🗑️ Eliminar", key=f"del_{pid}"):
+                                st.session_state[f'confirm_del_{pid}'] = True
+                                st.rerun()
 
-                # Action buttons below the card
-                col_edit, col_del, col_spacer = st.columns([1, 1, 4])
-                with col_edit:
-                    if st.button(f"✏️ Editar", key=f"edit_{pid}"):
-                        st.session_state.dash_editing = pid
-                        st.session_state.dash_adding = False
-                        st.rerun()
-                with col_del:
-                    if st.button(f"🗑️ Eliminar", key=f"del_{pid}"):
-                        st.session_state[f'confirm_del_{pid}'] = True
-                        st.rerun()
+                        # Confirm delete
+                        if st.session_state.get(f'confirm_del_{pid}'):
+                            st.warning(f"¿Eliminar **{p['nombre']}**?")
+                            cy, cn = st.columns(2)
+                            with cy:
+                                if st.button("Sí", key=f"confirm_yes_{pid}", type="primary"):
+                                    products_data[:] = [pr for pr in products_data if pr['id'] != pid]
+                                    save_products(products_data)
+                                    load_products.clear()
+                                    st.session_state.pop(f'confirm_del_{pid}', None)
+                                    st.session_state.dash_msg = ('success', f"✅ '{p['nombre']}' eliminado.")
+                                    st.rerun()
+                            with cn:
+                                if st.button("No", key=f"confirm_no_{pid}"):
+                                    st.session_state.pop(f'confirm_del_{pid}', None)
+                                    st.rerun()
 
-                # Confirm delete
-                if st.session_state.get(f'confirm_del_{pid}'):
-                    st.warning(f"¿Estás segura de eliminar **{p['nombre']}**? Esta acción no se puede deshacer.")
-                    col_yes, col_no, _ = st.columns([1, 1, 4])
-                    with col_yes:
-                        if st.button("Sí, eliminar", key=f"confirm_yes_{pid}", type="primary"):
-                            products_data[:] = [pr for pr in products_data if pr['id'] != pid]
-                            save_products(products_data)
-                            load_products.clear()
-                            st.session_state.pop(f'confirm_del_{pid}', None)
-                            st.session_state.dash_msg = ('success', f"✅ Producto '{p['nombre']}' eliminado.")
-                            st.rerun()
-                    with col_no:
-                        if st.button("No, cancelar", key=f"confirm_no_{pid}"):
-                            st.session_state.pop(f'confirm_del_{pid}', None)
-                            st.rerun()
+                    # ---- Edit mode ----
+                    else:
+                        st.markdown('<div style="background:#fff8ee;padding:4px 16px;border-radius:10px;border-left:4px solid #C67B4F;margin-bottom:12px;">'
+                                    f'<span style="font-weight:700;color:#C67B4F;font-size:1.1rem;">✏️ Editando: {p["nombre"]}</span></div>', unsafe_allow_html=True)
 
-            # ---- Edit mode ----
-            else:
-                st.markdown('<div style="background:#fff8ee;padding:4px 16px;border-radius:10px;border-left:4px solid #C67B4F;margin-bottom:12px;">'
-                            f'<span style="font-weight:700;color:#C67B4F;font-size:1.1rem;">✏️ Editando: {p["nombre"]}</span></div>', unsafe_allow_html=True)
+                        updated = _product_edit_form(p, f"edit_{pid}")
 
-                updated = _product_edit_form(p, f"edit_{pid}")
+                        col_save, col_cancel = st.columns([1, 1])
+                        with col_save:
+                            if st.button("💾 Guardar", key=f"save_edit_{pid}", type="primary"):
+                                for i, prod in enumerate(products_data):
+                                    if prod['id'] == pid:
+                                        products_data[i] = updated
+                                        break
+                                save_products(products_data)
+                                load_products.clear()
+                                st.session_state.dash_editing = None
+                                st.session_state.dash_msg = ('success', f"✅ '{updated['nombre']}' actualizado.")
+                                st.rerun()
+                        with col_cancel:
+                            if st.button("❌ Cancelar", key=f"cancel_edit_{pid}"):
+                                st.session_state.dash_editing = None
+                                st.rerun()
 
-                col_save, col_cancel = st.columns([1, 1])
-                with col_save:
-                    if st.button("💾 Guardar Cambios", key=f"save_edit_{pid}", type="primary"):
-                        for i, prod in enumerate(products_data):
-                            if prod['id'] == pid:
-                                products_data[i] = updated
-                                break
-                        save_products(products_data)
-                        load_products.clear()
-                        st.session_state.dash_editing = None
-                        st.session_state.dash_msg = ('success', f"✅ Producto '{updated['nombre']}' actualizado.")
-                        st.rerun()
-                with col_cancel:
-                    if st.button("❌ Cancelar", key=f"cancel_edit_{pid}"):
-                        st.session_state.dash_editing = None
-                        st.rerun()
-
-            st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
+                    st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
 
     # ============================================
     # TAB 2: STRIPE
