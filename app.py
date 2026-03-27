@@ -330,21 +330,18 @@ def page_inicio():
     </div>
     """, unsafe_allow_html=True)
 
-    # Category cards — 3 per row
+    # Category cards — 3 per row, entire card is clickable (no separate button)
     cols = st.columns(3)
     col_idx = 0
 
     for category in symptom_flow['categories']:
         with cols[col_idx % 3]:
-            st.markdown(f"""
-            <div class="category-card">
-                <div style="font-size: 38px; margin-bottom: 8px;">{category.get('icono', '🌿')}</div>
-                <h4 style="margin-bottom: 5px; font-size: 1.05rem;">{category['nombre']}</h4>
-                <p style="font-size: 13px; color: #888; margin: 0;">{category['descripcion']}</p>
-            </div>
-            """, unsafe_allow_html=True)
-
-            if st.button(f"Empezar →", key=f"home_cat_{category['id']}", use_container_width=True):
+            # The button IS the card — styled to look like the category card
+            if st.button(
+                f"{category.get('icono', '🌿')}\n\n**{category['nombre']}**\n\n{category['descripcion']}",
+                key=f"home_cat_{category['id']}",
+                use_container_width=True
+            ):
                 st.session_state.current_category = category['id']
                 first_question = category['preguntas'][0]
                 st.session_state.current_question = first_question['id']
@@ -430,15 +427,11 @@ def page_guia_bienestar():
 
         for category in symptom_flow['categories']:
             with cols[col_idx % 3]:
-                st.markdown(f"""
-                <div class="category-card">
-                    <div style="font-size: 38px; margin-bottom: 8px;">{category.get('icono', '🌿')}</div>
-                    <h4 style="margin-bottom: 5px; font-size: 1.05rem;">{category['nombre']}</h4>
-                    <p style="font-size: 13px; color: #888; margin: 0;">{category['descripcion']}</p>
-                </div>
-                """, unsafe_allow_html=True)
-
-                if st.button(f"Empezar →", key=f"cat_{category['id']}", use_container_width=True):
+                if st.button(
+                    f"{category.get('icono', '🌿')}\n\n**{category['nombre']}**\n\n{category['descripcion']}",
+                    key=f"cat_{category['id']}",
+                    use_container_width=True
+                ):
                     st.session_state.current_category = category['id']
                     first_question = category['preguntas'][0]
                     st.session_state.current_question = first_question['id']

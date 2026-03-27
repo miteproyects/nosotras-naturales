@@ -592,6 +592,35 @@ a:hover {
     background: linear-gradient(135deg, var(--terracotta) 0%, var(--primary) 100%) !important;
 }
 
+/* Category card buttons — styled as tall cards */
+.stButton > button[kind="secondary"] p,
+.stButton > button p {
+    margin: 0 !important;
+}
+
+/* Target multi-line buttons (category cards) by min-height */
+.stButton > button:has(strong),
+.stButton > button:has(p:nth-child(3)) {
+    background: linear-gradient(135deg, var(--secondary-bg) 0%, var(--cream-bg) 100%) !important;
+    border: 2px solid var(--primary) !important;
+    border-radius: 15px !important;
+    padding: 25px 20px !important;
+    min-height: 160px !important;
+    color: var(--text) !important;
+    font-weight: 400 !important;
+    text-align: center !important;
+    white-space: normal !important;
+    line-height: 1.5 !important;
+}
+
+.stButton > button:has(strong):hover,
+.stButton > button:has(p:nth-child(3)):hover {
+    background: linear-gradient(135deg, rgba(124,144,112,0.15) 0%, var(--secondary-bg) 100%) !important;
+    border-color: var(--terracotta) !important;
+    transform: translateY(-5px);
+    box-shadow: var(--shadow) !important;
+}
+
 /* ============================================
    RESPONSIVE DESIGN
    ============================================ */
@@ -692,6 +721,22 @@ a:hover {
 
 .p-2 {
     padding: 20px;
+}
+
+/* Hide Streamlit anchor link icons on headers */
+.stMarkdown a[href^="#"],
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+[data-testid="stHeaderActionElements"],
+.stMarkdown [data-testid="StyledLinkIconContainer"] {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+/* Also hide the link icon that appears near header elements */
+a.header-anchor,
+.css-zt5igj,
+svg[data-testid="stHeaderNoBadge"] {
+    display: none !important;
 }
 
 /* Smooth scrolling */
