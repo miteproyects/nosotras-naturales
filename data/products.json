@@ -4,781 +4,1514 @@
     "nombre": "Lavanda",
     "nombre_en": "Lavender",
     "tipo": "aceite_individual",
-    "categoria": ["sueño", "relajacion", "piel", "bienestar_emocional"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/lavender-oil.png",
-    "precio_usd": 30.67,
-    "pv": 24,
-    "descripcion": "La Lavanda es una flor aromática versátil que ha sido valorada durante siglos. Apoya un ambiente relajante y mantiene el bienestar emocional. Promueve una sensación de calma y tranquilidad. Apoya un descanso reparador cuando se utiliza antes de dormir.",
-    "beneficios": ["Promueve un ambiente relajante", "Apoya un descanso reparador", "Mantiene la calma emocional", "Apoya la salud de la piel", "Promueve la relajación"],
-    "uso_aromatico": "Difundir 3-4 gotas para crear un ambiente calmante y relajante",
-    "uso_topico": "Diluir con aceite portador y aplicar en las plantas de los pies, muñecas o nuca",
-    "uso_interno": "Agregar 1-2 gotas a bebidas, agua o cápsulas vegetales",
-    "sintomas_relacionados": ["tension", "inquietud", "irritabilidad", "dificultad_para_dormir", "piel_sensible"],
-    "doterra_sku": "30110001"
+    "categoria": [
+      "sueño",
+      "relajacion",
+      "piel",
+      "bienestar_emocional"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60202061-lavender-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDk3MDN8aW1hZ2UvanBlZ3xpbWFnZXMvaDdlL2g4OC85ODg1MTExMjg3ODM4LmpwZ3xjMmU4ZjcwN2Y4MDcwZDIwOGVmMDYzNWIwMDA1NjI5ZmQ4ZmQwZGI2MDkxZTJjMDE1ZWIyYWMyYWI1ZWNmNzFj",
+    "precio_usd": 38,
+    "pv": 22.5,
+    "descripcion": "La Lavanda es una flor aromática versátil que ha sido valorada durante siglos por sus propiedades calmantes y relajantes. Apoya un ambiente relajante y mantiene el bienestar emocional equilibrado. Promueve una sensación profunda de calma y tranquilidad. Apoya un descanso reparador cuando se utiliza antes de dormir. Perfecta para restaurar la paz emocional y crear espacios armoniosos.",
+    "beneficios": [
+      "Promueve un ambiente relajante y armónico",
+      "Apoya un descanso reparador y de calidad",
+      "Mantiene la calma emocional y el equilibrio",
+      "Apoya la salud y claridad de la piel",
+      "Promueve la relajación profunda",
+      "Favorece el bienestar durante momentos de estrés"
+    ],
+    "uso_aromatico": "Difundir 3-4 gotas en el difusor para crear un ambiente calmante durante 15-20 minutos. Ideal en la noche o cuando se necesita relajación profunda.",
+    "uso_topico": "Diluir 2-3 gotas con aceite portador y aplicar masajeando en las plantas de los pies, muñecas, nuca o sienes. Aplicar 2-3 veces al día según sea necesario.",
+    "uso_interno": "Agregar 1-2 gotas a agua tibia, té de hierbas o en cápsulas vegetales. Tomar 1-2 veces al día para apoyar el bienestar emocional.",
+    "sintomas_relacionados": [
+      "tension",
+      "inquietud",
+      "irritabilidad",
+      "dificultad_para_dormir",
+      "piel_sensible",
+      "estrés",
+      "nerviosismo",
+      "ansiedad",
+      "insomnio"
+    ],
+    "doterra_sku": "60202061",
+    "precio_mayoreo": 28.5
   },
   {
     "id": "peppermint",
     "nombre": "Menta Piperita",
     "nombre_en": "Peppermint",
     "tipo": "aceite_individual",
-    "categoria": ["digestion", "energia", "respiracion", "bienestar_cerebral"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/peppermint-oil.png",
-    "precio_usd": 32.25,
-    "pv": 26,
-    "descripcion": "La Menta Piperita es conocida por sus propiedades vigorizantes. Apoya la digestión saludable y mantiene la claridad mental. Promueve sensación de enfoque y energía. Puede usarse para apoyar la comodidad ocasional del sistema digestivo.",
-    "beneficios": ["Apoya la digestión saludable", "Promueve claridad y enfoque mental", "Brinda sensación de energía y vitalidad", "Apoya la comodidad ocasional del sistema digestivo", "Refresca el aliento"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover enfoque y energía mental",
-    "uso_topico": "Diluir con aceite portador y aplicar en sienes, nuca o sobre el abdomen",
-    "uso_interno": "Tomar 1 gota en agua o en cápsulas para apoyar la digestión",
-    "sintomas_relacionados": ["fatiga", "falta_de_enfoque", "malestar_digestivo", "tension_cerebral"],
-    "doterra_sku": "30110002"
+    "categoria": [
+      "digestion",
+      "energia",
+      "respiracion",
+      "bienestar_cerebral"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201649-peppermint-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDQ0NTR8aW1hZ2UvanBlZ3xpbWFnZXMvaGE3L2gxZC85ODg0NjA5MjE2NTQyLmpwZ3xiYTcxYzUwODMxZGZjNTczOTMzNTE3NTk2NzMwN2NhZGMzNTA0ZDEwYmE2MGYyODU0YWRkYWM5MDQzNDkyNzNk",
+    "precio_usd": 35.5,
+    "pv": 22,
+    "descripcion": "La Menta Piperita es conocida por sus propiedades vigorizantes y refrescantes. Apoya la digestión saludable y mantiene la claridad mental. Promueve una sensación de enfoque, energía y vitalidad. Puede usarse para apoyar la comodidad ocasional del sistema digestivo. Su aroma refrescante estimula la mente y revitaliza el cuerpo.",
+    "beneficios": [
+      "Apoya la digestión saludable y cómoda",
+      "Promueve claridad y enfoque mental agudo",
+      "Brinda sensación de energía y vitalidad",
+      "Apoya la comodidad del sistema digestivo",
+      "Refresca el aliento de manera natural",
+      "Estimula la concentración y el rendimiento"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover enfoque y energía mental. Ideal por las mañanas o durante momentos de fatiga. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador (1 gota de Menta Piperita por 4 gotas de portador) y aplicar en sienes, nuca o sobre el abdomen. Aplicar 2-3 veces al día.",
+    "uso_interno": "Tomar 1-2 gotas en agua o en cápsulas vegetales para apoyar la digestión saludable. Puede tomarse después de las comidas 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "fatiga",
+      "falta_de_enfoque",
+      "malestar_digestivo",
+      "tension_cerebral",
+      "indigestion",
+      "falta_de_concentracion",
+      "baja_energia"
+    ],
+    "doterra_sku": "60201567",
+    "precio_mayoreo": 26.5
   },
   {
     "id": "lemon",
     "nombre": "Limón",
     "nombre_en": "Lemon",
     "tipo": "aceite_individual",
-    "categoria": ["limpieza", "energia", "digestion", "bienestar_inmunologico"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/lemon-oil.png",
-    "precio_usd": 16.98,
-    "pv": 14,
-    "descripcion": "El aceite de Limón proporciona un aroma cítrico vivificante. Apoya la energía y el ánimo positivo. Puede usarse para apoyar la purificación y limpieza del hogar. Apoya la salud digestiva cuando se utiliza internamente.",
-    "beneficios": ["Promueve energía y ánimo positivo", "Apoya la purificación del hogar", "Mantiene la salud digestiva", "Apoya un sentido de claridad mental", "Vigoriza el ambiente"],
-    "uso_aromatico": "Difundir 3-4 gotas para crear un ambiente fresco y vigorizante",
-    "uso_topico": "Diluir con aceite portador antes de aplicar en la piel",
-    "uso_interno": "Agregar 1 gota a agua, bebidas o alimentos para apoyar la digestión",
-    "sintomas_relacionados": ["fatiga", "falta_de_energia", "malestar_digestivo", "ambiente_cargado"],
-    "doterra_sku": "30110003"
+    "categoria": [
+      "limpieza",
+      "energia",
+      "digestion",
+      "bienestar_inmunologico"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201520-lemon-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTA5MzV8aW1hZ2UvanBlZ3xpbWFnZXMvaDMxL2hkNy85ODc3NzAyNzcwNzE4LmpwZ3wwMmExNmM1YmVlNGFkMjQ0Zjk5M2ZjM2I3OTIxZWVhYmQ4NTRlYjkzOTgxNzM5NDEyNzAwM2I4NDdhZjM4Zjgw",
+    "precio_usd": 18,
+    "pv": 10.5,
+    "descripcion": "El aceite de Limón proporciona un aroma cítrico vivificante y energizante. Apoya la energía, el ánimo positivo y la claridad mental. Puede usarse para apoyar la purificación y limpieza del hogar de manera natural. Apoya la salud digestiva cuando se utiliza internamente. Promueve una actitud positiva y optimista.",
+    "beneficios": [
+      "Promueve energía y ánimo positivo",
+      "Apoya la purificación del hogar",
+      "Mantiene la salud digestiva",
+      "Apoya un sentido de claridad mental",
+      "Vigoriza el ambiente y levanta el ánimo",
+      "Apoya la limpieza interna del cuerpo"
+    ],
+    "uso_aromatico": "Difundir 3-4 gotas para crear un ambiente fresco y vigorizante. Ideal en la mañana o tarde. Usar por 15-20 minutos para máximo beneficio.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador antes de aplicar en la piel, especialmente en cara. NOTA: Evitar exposición al sol después de la aplicación (fotosensible). Aplicar 1-2 veces al día.",
+    "uso_interno": "Agregar 1-2 gotas a agua, bebidas frías, té o alimentos para apoyar la digestión saludable. Tomar 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "fatiga",
+      "falta_de_energia",
+      "malestar_digestivo",
+      "ambiente_cargado",
+      "baja_moral",
+      "falta_de_limpieza"
+    ],
+    "doterra_sku": "60201520",
+    "precio_mayoreo": 13.5
   },
   {
     "id": "melaleuca",
-    "nombre": "Árbol de Té",
+    "nombre": "Árbol de Té (Melaleuca)",
     "nombre_en": "Melaleuca / Tea Tree",
     "tipo": "aceite_individual",
-    "categoria": ["piel", "limpieza", "bienestar_inmunologico"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/melaleuca-oil.png",
-    "precio_usd": 26.45,
-    "pv": 21,
-    "descripcion": "El aceite de Árbol de Té es conocido por sus propiedades purificantes. Apoya la salud y claridad de la piel cuando se aplica tópicamente. Puede usarse para mantener un ambiente limpio y purificado. Apoya el bienestar inmunológico general.",
-    "beneficios": ["Apoya la purificación de la piel", "Mantiene la salud de la piel clara", "Apoya un ambiente limpio", "Promueve una piel de aspecto saludable", "Apoya el bienestar inmunológico"],
-    "uso_aromatico": "Difundir 2-3 gotas para purificar el ambiente",
-    "uso_topico": "Aplicar directamente sobre areas específicas de la piel o diluir según sea necesario",
-    "uso_interno": "Usar en cápsulas vegetales bajo supervisión",
-    "sintomas_relacionados": ["piel_problematica", "impurezas_cutaneas", "ambiente_contaminado"],
-    "doterra_sku": "30110004"
+    "categoria": [
+      "piel",
+      "limpieza",
+      "bienestar_inmunologico"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60211832-tea-tree-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDkwNTJ8aW1hZ2UvanBlZ3xpbWFnZXMvaDg2L2gyYi85OTMzNjUwOTE5NDU0LmpwZ3xlZDc1NjQ1OTM3MGIxMmM2YWJjMzJkNzlhMDBlMmZhZTRkNGNlNjYyODljMmVhMmRmMWQ5ZmViODBmMTU4MTE2",
+    "precio_usd": 33.5,
+    "pv": 20.5,
+    "descripcion": "El aceite de Árbol de Té (Melaleuca) es conocido por sus poderosas propiedades purificantes. Apoya la salud y claridad de la piel cuando se aplica tópicamente. Puede usarse para mantener un ambiente limpio y purificado. Apoya el bienestar inmunológico general. Es un aceite versátil perfecto para toda la familia.",
+    "beneficios": [
+      "Apoya la purificación profunda de la piel",
+      "Mantiene la salud de la piel clara y radiante",
+      "Apoya un ambiente limpio y purificado",
+      "Promueve una piel de aspecto saludable",
+      "Apoya el bienestar inmunológico",
+      "Propiedades desinfectantes naturales"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para purificar el ambiente. Ideal durante temporadas de cambios o para limpiar espacios. Usar por 15-20 minutos.",
+    "uso_topico": "Aplicar 1 gota directamente sobre áreas específicas de la piel o diluir 1 gota con 4 gotas de aceite portador según sea necesario. Aplicar 1-2 veces al día.",
+    "uso_interno": "Usar en cápsulas vegetales, tomar 1 cápsula con una comida 1-2 veces al día bajo supervisión. Máximo 3-5 días consecutivos.",
+    "sintomas_relacionados": [
+      "piel_problematica",
+      "impurezas_cutaneas",
+      "ambiente_contaminado",
+      "sistema_inmune_debil",
+      "inflamacion_cutanea"
+    ],
+    "doterra_sku": "60211832",
+    "precio_mayoreo": 25
   },
   {
     "id": "frankincense",
-    "nombre": "Incienso",
+    "nombre": "Incienso (Frankincense)",
     "nombre_en": "Frankincense",
     "tipo": "aceite_individual",
-    "categoria": ["salud_celular", "bienestar_inmunologico", "bienestar_emocional", "piel"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/frankincense-oil.png",
-    "precio_usd": 153.35,
-    "pv": 121,
-    "descripcion": "El Incienso es un aceite noble valorado por siglos. Apoya la salud celular y el bienestar emocional profundo. Promueve una sensación de paz y elevación espiritual. Apoya la salud y el aspecto juvenil de la piel.",
-    "beneficios": ["Apoya la salud celular", "Promueve bienestar emocional y paz", "Apoya la salud inmunológica", "Mantiene el aspecto juvenil de la piel", "Apoya la meditación y reflexión"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover paz y reflexión",
-    "uso_topico": "Aplicar en cara después de limpiar, o diluir para uso general",
-    "uso_interno": "Agregar 1-2 gotas en cápsulas vegetales o bebidas",
-    "sintomas_relacionados": ["envejecimiento_cutaneo", "estrés_emocional", "fatiga_celular"],
-    "doterra_sku": "30110005"
+    "categoria": [
+      "salud_celular",
+      "bienestar_inmunologico",
+      "bienestar_emocional",
+      "piel"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201569-frankincense-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDU4Njh8aW1hZ2UvanBlZ3xpbWFnZXMvaGRlL2hjMC85ODc3NzAzODg0ODMwLmpwZ3wzMzlhZGE4OGI4NmIxYzBlMzUwNWQ3MWU0YTNiNzQ5ZjFkMTU1ZjNlZWRmNDAxZGY1OGQwY2IwMWRjNGU0Yjlj",
+    "precio_usd": 122.5,
+    "pv": 73.5,
+    "descripcion": "El Incienso es un aceite noble y precioso valorado durante miles de años. Apoya la salud celular a nivel profundo y el bienestar emocional transformador. Promueve una sensación de paz, elevación espiritual y conexión interna. Apoya la salud y el aspecto juvenil de la piel. Es el aceite de la reflexión, la meditación y la elevación del espíritu.",
+    "beneficios": [
+      "Apoya la salud celular a nivel profundo",
+      "Promueve bienestar emocional y paz interior",
+      "Apoya la salud inmunológica robusta",
+      "Mantiene el aspecto juvenil y radiante de la piel",
+      "Apoya la meditación y reflexión profunda",
+      "Favorece la elevación espiritual y la conexión"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover paz, reflexión y elevación espiritual. Ideal para meditación. Usar por 20-30 minutos para máximo beneficio.",
+    "uso_topico": "Aplicar 1-2 gotas en la cara limpia, cuello y escote después de limpiar, o diluir 1 gota con 3 gotas de aceite portador para uso corporal general. Aplicar 1-2 veces al día.",
+    "uso_interno": "Agregar 1-2 gotas en cápsulas vegetales o bebidas, tomar 1-2 veces al día con alimentos. Máximo 2-3 semanas de uso continuo.",
+    "sintomas_relacionados": [
+      "envejecimiento_cutaneo",
+      "estrés_emocional",
+      "fatiga_celular",
+      "depresion",
+      "falta_de_esperanza",
+      "piel_cansada"
+    ],
+    "doterra_sku": "60201569",
+    "precio_mayoreo": 92
   },
   {
     "id": "oregano",
     "nombre": "Orégano",
     "nombre_en": "Oregano",
     "tipo": "aceite_individual",
-    "categoria": ["bienestar_inmunologico", "digestion", "limpieza"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/oregano-oil.png",
-    "precio_usd": 89.75,
-    "pv": 71,
-    "descripcion": "El Orégano es un aceite potente conocido por sus propiedades purificantes. Apoya el bienestar inmunológico general. Mantiene la salud digestiva y el bienestar gastrointestinal. Puede usarse para apoyar una respuesta defensiva saludable.",
-    "beneficios": ["Apoya el bienestar inmunológico", "Mantiene la salud digestiva", "Promueve purificación interna", "Apoya la respuesta defensiva natural", "Vigoriza el sistema"],
-    "uso_aromatico": "Difundir 2-3 gotas para fortalecer el bienestar",
-    "uso_topico": "Diluir siempre con aceite portador antes de aplicar",
-    "uso_interno": "Usar en cápsulas vegetales, 1-2 gotas según sea necesario",
-    "sintomas_relacionados": ["debilidad_inmunologica", "malestar_digestivo", "ambiente_cargado"],
-    "doterra_sku": "30110006"
+    "categoria": [
+      "bienestar_inmunologico",
+      "digestion",
+      "limpieza"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201572-oregano-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDYzMjR8aW1hZ2UvanBlZ3xpbWFnZXMvaGJhL2g3YS85ODc3NzAzMjk1NTE4LmpwZ3w2OTUzM2U0OTIzY2I5NGM3MWNkMGJjYjA4ZjEyNWQ3OGMyZWViMDBkZGQxNWExNjUwMTk2OWIwZjFkNzlmOTkz",
+    "precio_usd": 42,
+    "pv": 25.5,
+    "descripcion": "El Orégano es un aceite potente y muy concentrado conocido por sus poderosas propiedades purificantes. Apoya el bienestar inmunológico general durante todo el año. Mantiene la salud digestiva y el bienestar gastrointestinal. Puede usarse para apoyar una respuesta defensiva saludable del cuerpo. Requiere dilución antes del uso.",
+    "beneficios": [
+      "Apoya el bienestar inmunológico robusto",
+      "Mantiene la salud digestiva",
+      "Promueve purificación interna profunda",
+      "Apoya la respuesta defensiva natural del cuerpo",
+      "Vigoriza el sistema de manera poderosa",
+      "Fortalece las defensas naturales"
+    ],
+    "uso_aromatico": "Difundir 1-2 gotas en el difusor para fortalecer el bienestar inmunológico. MUY POTENTE - usar solo 1-2 gotas. Ideal por 10-15 minutos.",
+    "uso_topico": "SIEMPRE diluir - 1 gota con 8-10 gotas de aceite portador antes de aplicar en la piel. Aplicar en plantas de pies o áreas específicas. Máximo 1-2 veces al día.",
+    "uso_interno": "Usar en cápsulas vegetales, 1 gota por cápsula, tomar con una comida principal 1 vez al día. Máximo 5-7 días consecutivos.",
+    "sintomas_relacionados": [
+      "bienestar_inmune_debil",
+      "digestion_debil",
+      "inflamacion_general",
+      "falta_de_vitalidad"
+    ],
+    "doterra_sku": "60201572",
+    "precio_mayoreo": 31.5
   },
   {
     "id": "eucalyptus",
     "nombre": "Eucalipto",
     "nombre_en": "Eucalyptus",
     "tipo": "aceite_individual",
-    "categoria": ["respiracion", "energia", "limpieza"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/eucalyptus-oil.png",
-    "precio_usd": 24.38,
-    "pv": 19,
-    "descripcion": "El Eucalipto es conocido por promover una respiración clara y saludable. Apoya la función respiratoria ocasional. Brinda una sensación de claridad y frescura. Vigoriza el ambiente cuando se difunde.",
-    "beneficios": ["Apoya la respiración clara", "Promueve la claridad respiratoria", "Brinda sensación de frescura", "Apoya la función respiratoria saludable", "Vigoriza el ambiente"],
-    "uso_aromatico": "Difundir 3-4 gotas para promover respiración clara",
-    "uso_topico": "Diluir con aceite portador y aplicar en el pecho o espalda",
-    "uso_interno": "No se recomienda uso interno regular",
-    "sintomas_relacionados": ["congestión", "dificultad_respiratoria", "falta_de_claridad", "ambiente_viciado"],
-    "doterra_sku": "30110007"
+    "categoria": [
+      "respiracion",
+      "energia",
+      "limpieza"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60222234-eucalyptus-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDc3MzZ8aW1hZ2UvanBlZ3xpbWFnZXMvaDA3L2g0Ny85OTU4ODU3MDU2Mjg2LmpwZ3w5NWFkNzEyMzkyZDk3N2UzYTA3NjUxY2IwNjEzOThhNjNlMzE5MzRjN2ExN2ViZjNhMWQ0OGE1NzRiODVhYjRl",
+    "precio_usd": 34.5,
+    "pv": 22.5,
+    "descripcion": "El Eucalipto proporciona un aroma fresco, limpio y vigorizante. Apoya la respiración clara y saludable. Favorece la apertura de las vías respiratorias durante momentos de incomodidad estacional. Apoya la claridad mental y el enfoque. Perfecto para limpiar y refrescar espacios.",
+    "beneficios": [
+      "Apoya la respiración clara y abierta",
+      "Promueve vías respiratorias saludables",
+      "Favorece la apertura y claridad mental",
+      "Apoya la comodidad respiratoria estacional",
+      "Refresca y limpia el ambiente",
+      "Invigorante y vigorizante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para abrir vías respiratorias y refrescar el ambiente. Ideal durante cambios estacionales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en el pecho, cuello o plantas de pies. Puede aplicarse 2-3 veces al día según sea necesario.",
+    "uso_interno": "Tomar 1 gota en una cápsula vegetal o diluido en agua tibia, 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "congestion_nasal",
+      "dificultad_respiratoria",
+      "vias_respiratorias_inflamadas",
+      "baja_claridad_mental"
+    ],
+    "doterra_sku": "60222234",
+    "precio_mayoreo": 26
   },
   {
     "id": "rosemary",
     "nombre": "Romero",
     "nombre_en": "Rosemary",
     "tipo": "aceite_individual",
-    "categoria": ["enfoque", "respiracion", "digestion", "circulacion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/rosemary-oil.png",
-    "precio_usd": 23.22,
-    "pv": 18,
-    "descripcion": "El Romero es una hierba aromática que apoya la claridad mental y el enfoque. Promueve una sensación de vigor y energía. Apoya la salud digestiva y la circulación saludable. Mantiene la salud del cabello.",
-    "beneficios": ["Promueve claridad y enfoque mental", "Apoya la función cognitiva", "Brinda sensación de vigor", "Apoya la digestión saludable", "Mantiene la salud del cabello"],
-    "uso_aromatico": "Difundir 3-4 gotas para promover enfoque y concentración",
-    "uso_topico": "Aplicar diluido en el cuero cabelludo o frente para enfoque",
-    "uso_interno": "Agregar 1 gota a agua o alimentos para apoyar la digestión",
-    "sintomas_relacionados": ["falta_de_enfoque", "fatiga_mental", "malestar_digestivo", "cabello_debil"],
-    "doterra_sku": "30110008"
+    "categoria": [
+      "enfoque",
+      "respiracion",
+      "digestion",
+      "circulacion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201580-rosemary-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDI4NjV8aW1hZ2UvanBlZ3xpbWFnZXMvaDczL2hjOC85ODg0NjQ5NjEyMzE4LmpwZ3w5MjRlNmQxNzUyMjBjNTRlOTMyODY3OGZjZjg3NTZlNGJiYzRlMmUxMWI5MDQ3NjYzYTk5YjJjNzU1M2YyNzI0",
+    "precio_usd": 25.5,
+    "pv": 14.5,
+    "descripcion": "El Romero es un aceite vigoroso y estimulante que apoya el enfoque mental y la claridad cognitiva. Promueve sensación de energía y vitalidad. Apoya la salud del cuero cabelludo y cabello cuando se aplica tópicamente. Favorece la circulación y la actividad mental. Aroma herbáceo noble y reconfortante.",
+    "beneficios": [
+      "Apoya el enfoque y la claridad mental",
+      "Promueve energía y vitalidad",
+      "Apoya la salud del cuero cabelludo y cabello",
+      "Favorece la circulación saludable",
+      "Estimula la actividad y el rendimiento mental",
+      "Revitaliza y fortalece"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para estimular el enfoque y la claridad mental. Ideal por la mañana o durante trabajo intelectual. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y masajear en el cuero cabelludo después del lavado, o aplicar en sienes para claridad. 1-2 veces al día.",
+    "uso_interno": "Agregar 1 gota a agua tibia o cápsulas vegetales, tomar 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "falta_de_enfoque",
+      "cansancio_mental",
+      "perdida_de_cabello",
+      "fatiga",
+      "debilidad_circulatoria"
+    ],
+    "doterra_sku": "60201580",
+    "precio_mayoreo": 19
   },
   {
     "id": "wild_orange",
     "nombre": "Naranja Silvestre",
     "nombre_en": "Wild Orange",
     "tipo": "aceite_individual",
-    "categoria": ["animo", "energia", "bienestar_inmunologico", "digestion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/wild-orange-oil.png",
-    "precio_usd": 17.98,
-    "pv": 14,
-    "descripcion": "El aceite de Naranja Silvestre proporciona un aroma cítrico alegre y revitalizante. Apoya un ánimo positivo y una actitud optimista. Promueve la energía y vitalidad. Apoya la salud inmunológica general.",
-    "beneficios": ["Promueve ánimo positivo y alegre", "Brinda sensación de energía y vitalidad", "Apoya el bienestar inmunológico", "Estimula sentimientos de entusiasmo", "Vigoriza el ambiente"],
-    "uso_aromatico": "Difundir 3-4 gotas para elevar el ánimo y la energía",
-    "uso_topico": "Diluir con aceite portador antes de aplicar",
-    "uso_interno": "Agregar 1-2 gotas a agua o bebidas",
-    "sintomas_relacionados": ["ánimo_bajo", "fatiga", "falta_de_entusiasmo", "debilidad_inmunologica"],
-    "doterra_sku": "30110009"
+    "categoria": [
+      "animo",
+      "energia",
+      "bienestar_inmunologico",
+      "digestion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201574-wild-orange-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxMzkyMDJ8aW1hZ2UvanBlZ3xpbWFnZXMvaDgzL2g2My85ODg0NjA5MDIwNDQ2LmpwZ3w0ZTk5NmU0MDIzYjM3MjRhZWJlYzcyZWIzNjQ3NTkyMjVjOGJjZjNhY2M4MDc3NTAxMTU5ODg5M2M2NTk0OWI2",
+    "precio_usd": 16,
+    "pv": 8.5,
+    "descripcion": "La Naranja Silvestre proporciona un aroma cítrico dulce, cálido y vigorizante. Apoya el ánimo positivo, la alegría y el optimismo. Promueve sensación de energía y bienestar general. Puede usarse para limpiar superficies de manera natural. Favorece un ambiente cheerful y acogedor.",
+    "beneficios": [
+      "Apoya el ánimo positivo y la alegría",
+      "Promueve energía y entusiasmo",
+      "Apoya el bienestar emocional general",
+      "Favorece un ambiente acogedor y cálido",
+      "Apoya la limpieza natural del hogar",
+      "Levanta el espíritu y la moral"
+    ],
+    "uso_aromatico": "Difundir 3-4 gotas para crear un ambiente cálido, alegre y acogedor. Ideal en familia o espacios compartidos. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador antes de aplicar en la piel. NOTA: Evitar exposición solar directa (fotosensible). Aplicar 1-2 veces al día.",
+    "uso_interno": "Agregar 1-2 gotas a agua, bebidas, postres o cápsulas vegetales. Tomar 1-2 veces al día para apoyar el ánimo.",
+    "sintomas_relacionados": [
+      "baja_moral",
+      "tristeza_ocasional",
+      "falta_de_energia",
+      "ambiente_depresivo"
+    ],
+    "doterra_sku": "60201574",
+    "precio_mayoreo": 12
   },
   {
     "id": "copaiba",
     "nombre": "Copaiba",
     "nombre_en": "Copaiba",
     "tipo": "aceite_individual",
-    "categoria": ["sistema_nervioso", "digestion", "respiracion", "bienestar_inflamatorio"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/copaiba-oil.png",
-    "precio_usd": 42.50,
-    "pv": 34,
-    "descripcion": "El Copaiba es un aceite amazónico que apoya el bienestar del sistema nervioso. Promueve la relajación ocasional y el confort. Apoya la salud digestiva y respiratoria. Mantiene la salud de la piel.",
-    "beneficios": ["Apoya el bienestar del sistema nervioso", "Promueve relajación ocasional", "Apoya la comodidad gastrointestinal", "Mantiene la salud respiratoria saludable", "Apoya la salud de la piel"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover relajación nerviosa",
-    "uso_topico": "Aplicar diluido sobre el abdomen o espalda para comodidad",
-    "uso_interno": "Agregar 1-2 gotas en cápsulas vegetales",
-    "sintomas_relacionados": ["tension_nerviosa", "malestar_digestivo", "incomodidad_respiratoria"],
-    "doterra_sku": "30110010"
+    "categoria": [
+      "sistema_nervioso",
+      "digestion",
+      "respiracion",
+      "bienestar_inflamatorio"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60209655-copaiba-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTQ5NDV8aW1hZ2UvanBlZ3xpbWFnZXMvaDk3L2g4Ni85ODg0NjEwMDY0OTI2LmpwZ3wyYTVkM2ZjYzc3MDc5ZmE5YjkxOTEzYTMyMzIwNDRkMWExNWQwNDEzMzkyMTRmNDhkOTJkYmFhNGZkMTJlNjk5",
+    "precio_usd": 57,
+    "pv": 35.5,
+    "descripcion": "La Copaiba es un aceite único y precioso originario de la Amazonia. Apoya la salud de la piel y la circulación saludable cuando se aplica tópicamente. Favorece la relajación y el bienestar emocional. Puede usarse internamente para apoyar la respuesta inflamatoria saludable del cuerpo. Aroma cálido, leñoso y terroso.",
+    "beneficios": [
+      "Apoya la salud y claridad de la piel",
+      "Favorece la circulación saludable",
+      "Apoya la respuesta inflamatoria normal",
+      "Promueve relajación y calma",
+      "Apoya el bienestar emocional profundo",
+      "Propiedades reparadoras y restaurativas"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover relajación profunda y bienestar. Ideal en la noche o momentos de estrés. Usar por 15-20 minutos.",
+    "uso_topico": "Aplicar 1-2 gotas sobre la piel afectada o diluir con aceite portador. Masajear suavemente 2-3 veces al día para máximo beneficio.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales con alimentos, 1-2 veces al día. Apoya la respuesta inflamatoria saludable.",
+    "sintomas_relacionados": [
+      "piel_inflamada",
+      "circulacion_lenta",
+      "inflamacion_general",
+      "estrés_emocional"
+    ],
+    "doterra_sku": "60209655",
+    "precio_mayoreo": 42.5
   },
   {
     "id": "helichrysum",
-    "nombre": "Siempreviva",
+    "nombre": "Helicriso",
     "nombre_en": "Helichrysum",
     "tipo": "aceite_individual",
-    "categoria": ["piel", "salud_celular", "bienestar_emocional"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/helichrysum-oil.png",
-    "precio_usd": 127.67,
-    "pv": 101,
-    "descripcion": "La Siempreviva es un aceite aromático valioso que apoya la salud y la regeneración de la piel. Promueve un aspecto saludable y radioso. Apoya la salud celular general. Mantiene la elasticidad y vitalidad de la piel.",
-    "beneficios": ["Apoya la regeneración de la piel", "Promueve aspecto saludable y juvenil", "Mantiene la elasticidad cutánea", "Apoya la salud celular", "Favorece la cicatrización natural"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover bienestar emocional",
-    "uso_topico": "Aplicar en la piel limpia después del tónico, puro o diluido",
-    "uso_interno": "No recomendado para uso interno regular",
-    "sintomas_relacionados": ["piel_envejecida", "marcas_cutaneas", "falta_de_elasticidad"],
-    "doterra_sku": "30110011"
+    "categoria": [
+      "piel",
+      "salud_celular",
+      "bienestar_emocional"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-5ml-60206096-helichrysum-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxMDcyNjd8aW1hZ2UvanBlZ3xpbWFnZXMvaGIyL2g5NS85ODg0NjA0ODc5MzkwLmpwZ3xiZmIxMjFjNTliNjgwNTI3MmZlYWQzOGQ1NjJiOGI2NmU3ZWJjMDIwNzQ0MWMwYWI3MDRiMjA0MzI3YmY3NGVh",
+    "precio_usd": 127.5,
+    "pv": 79,
+    "descripcion": "El Helicriso es un aceite rarísimo y valioso conocido por sus propiedades rejuvenecedoras. Apoya la salud, elasticidad y apariencia juvenil de la piel. Favorece la sanación de cicatrices y marcas. Apoya la circulación saludable. Posee un aroma floral dulce, delicado y reconfortante.",
+    "beneficios": [
+      "Apoya la salud y elasticidad de la piel",
+      "Favorece la apariencia juvenil y radiante",
+      "Apoya la cicatrización saludable",
+      "Promueve circulación saludable",
+      "Apoya la reparación de la piel",
+      "Propiedades rejuvenecedoras y reparadoras"
+    ],
+    "uso_aromatico": "Difundir 1-2 gotas por su aroma delicado. Ideal en momentos especiales o de reflexión. Usar por 15 minutos.",
+    "uso_topico": "Aplicar 1 gota directamente en áreas afectadas o diluir 1 gota con 3 gotas de aceite portador. Aplicar 1-2 veces al día, especialmente en la noche.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "cicatrices",
+      "marcas_en_piel",
+      "envejecimiento_cutaneo",
+      "piel_dañada"
+    ],
+    "doterra_sku": "60206096",
+    "precio_mayoreo": 95.5
   },
   {
     "id": "clary_sage",
-    "nombre": "Salvia",
+    "nombre": "Salvia Esclarea",
     "nombre_en": "Clary Sage",
     "tipo": "aceite_individual",
-    "categoria": ["salud_femenina", "equilibrio_hormonal", "bienestar_emocional"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/clary-sage-oil.png",
-    "precio_usd": 43.45,
-    "pv": 34,
-    "descripcion": "La Salvia apoya el equilibrio hormonal y el bienestar femenino general. Promueve la comodidad ocasional durante ciclos naturales. Apoya la salud emocional y el equilibrio. Mantiene una sensación de control y bienestar.",
-    "beneficios": ["Apoya el equilibrio hormonal femenino", "Promueve bienestar durante ciclos naturales", "Apoya la estabilidad emocional", "Mantiene la sensación de control y equilibrio", "Promueve calma ocasional"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover equilibrio emocional",
-    "uso_topico": "Diluir y aplicar sobre el abdomen o muñecas",
-    "uso_interno": "Agregar 1 gota en bebidas o cápsulas durante ciclos naturales",
-    "sintomas_relacionados": ["desbalance_hormonal", "incomodidad_mensual", "inestabilidad_emocional"],
-    "doterra_sku": "30110012"
+    "categoria": [
+      "salud_femenina",
+      "equilibrio_hormonal",
+      "bienestar_emocional"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60205987-clary-sage-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTIzMTd8aW1hZ2UvanBlZ3xpbWFnZXMvaDQyL2hhOC85ODg0NjQ5MDYyNDMwLmpwZ3w5NzNjZjc2ZmViYmU5ZmQ2MzA1OTc1MWMwMjNlZGUyN2RiYWQxZTI1YjVkNGM3N2I5ZWZlYjNjN2EwN2FmOGUx",
+    "precio_usd": 61.5,
+    "pv": 39,
+    "descripcion": "La Salvia Esclarea es un aceite herbáceo y terroso que apoya el equilibrio hormonal femenino. Favorece la relajación y el bienestar emocional profundo. Apoya la salud de la piel cuando se aplica tópicamente. Promueve una sensación de equilibrio y estabilidad emocional.",
+    "beneficios": [
+      "Apoya el equilibrio hormonal",
+      "Favorece la relajación emocional",
+      "Apoya la salud y claridad de la piel",
+      "Promueve estabilidad emocional",
+      "Apoya el bienestar hormonal femenino",
+      "Calma y centrado emocional"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover relajación y equilibrio emocional. Ideal para mujeres en momentos especiales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en el abdomen bajo, cuello o nuca. Masajear suavemente 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1-2 veces al día con alimentos, por máximo 5-7 días.",
+    "sintomas_relacionados": [
+      "desequilibrio_hormonal",
+      "tension_emocional",
+      "piel_sensible",
+      "inestabilidad_emocional"
+    ],
+    "doterra_sku": "60205987",
+    "precio_mayoreo": 46
   },
   {
     "id": "ylang_ylang",
     "nombre": "Ylang Ylang",
     "nombre_en": "Ylang Ylang",
     "tipo": "aceite_individual",
-    "categoria": ["equilibrio_emocional", "piel", "bienestar_romantico"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/ylang-ylang-oil.png",
-    "precio_usd": 85.50,
-    "pv": 68,
-    "descripcion": "El Ylang Ylang es un aceite floral exótico que promueve equilibrio emocional y sensación de romance. Apoya la salud y belleza de la piel. Favorece sentimientos de amor y apreciación. Crea una atmósfera sensorial agradable.",
-    "beneficios": ["Promueve equilibrio emocional y paz", "Apoya la salud y belleza de la piel", "Estimula sentimientos de amor y romance", "Favorece la confianza en uno mismo", "Crea una atmósfera sensorial"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover romance y equilibrio",
-    "uso_topico": "Aplicar en el pulso o en la piel como perfume natural",
-    "uso_interno": "No recomendado para uso interno regular",
-    "sintomas_relacionados": ["baja_autoestima", "desconexion_emocional", "piel_opaca"],
-    "doterra_sku": "30110013"
+    "categoria": [
+      "equilibrio_emocional",
+      "piel",
+      "bienestar_romantico"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201582-ylang-ylang-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDQ2NTh8aW1hZ2UvanBlZ3xpbWFnZXMvaGU2L2g3Yi85ODg0NjQ5NjUxMjk0LmpwZ3xmYzQzZjdkMmVhYmI0YzFiNzc4YjdmMWVmZDE3OTA4NTIxNTQ3YmYwOTg3NGE0MWExNTYxOTBiZjlmYjU3M2Yy",
+    "precio_usd": 62,
+    "pv": 38,
+    "descripcion": "El Ylang Ylang es un aceite floral exótico y sensual con aroma dulce, cálido y romántico. Apoya el bienestar emocional y la confianza en uno mismo. Favorece la relajación profunda y el bienestar sensorial. Apoya la salud y belleza de la piel cuando se aplica tópicamente.",
+    "beneficios": [
+      "Apoya el bienestar emocional profundo",
+      "Favorece la confianza y autoestima",
+      "Promueve relajación sensorial",
+      "Apoya la salud y belleza de la piel",
+      "Crea un ambiente romántico y acogedor",
+      "Apoya el balance emocional"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para crear un ambiente romántico, sensual y relajante. Ideal en parejas o momentos especiales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1 gota con 4-5 gotas de aceite portador y aplicar en cuello, pecho o muñecas. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "baja_autoestima",
+      "depresion_leve",
+      "falta_de_romance",
+      "estrés_emocional"
+    ],
+    "doterra_sku": "60201582",
+    "precio_mayoreo": 46.5
   },
   {
     "id": "bergamot",
     "nombre": "Bergamota",
     "nombre_en": "Bergamot",
     "tipo": "aceite_individual",
-    "categoria": ["bienestar_emocional", "piel", "energia"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/bergamot-oil.png",
-    "precio_usd": 24.50,
-    "pv": 19,
-    "descripcion": "La Bergamota es un aceite cítrico que promueve ánimo positivo y equilibrio emocional. Apoya la salud de la piel ocasionalmente sensible. Brinda un aroma elevado y refrescante. Favorece sentimientos de alegría y optimismo.",
-    "beneficios": ["Promueve ánimo positivo y alegre", "Apoya la salud de la piel clara", "Favorece la elevación emocional", "Brinda sensación de optimismo", "Refresca el ambiente"],
-    "uso_aromatico": "Difundir 3-4 gotas para elevar el ánimo",
-    "uso_topico": "Diluir siempre con aceite portador antes de aplicar en la piel",
-    "uso_interno": "Agregar 1-2 gotas a agua o bebidas",
-    "sintomas_relacionados": ["ánimo_bajo", "piel_sensible", "falta_de_optimismo"],
-    "doterra_sku": "30110014"
+    "categoria": [
+      "bienestar_emocional",
+      "piel",
+      "energia"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60205979-bergamot-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDg3NzV8aW1hZ2UvanBlZ3xpbWFnZXMvaDA5L2g3OS85ODg0NjQ3ODE3MjQ2LmpwZ3xlYTdiYmEzZDk3NTdjOTQ3MjViNTY4YjM5YjI3YjYxODBiYTE3YWVlMjFhM2M3YzI2YzAxYzA4MDI5ZGYzNjY3",
+    "precio_usd": 49,
+    "pv": 29,
+    "descripcion": "La Bergamota es un cítrico único con aroma cálido, floral y ligeramente especiado. Apoya el bienestar emocional y el ánimo positivo. Favorece la relajación sin causar somnolencia. Apoya la salud de la piel cuando se aplica diluida. Promueve esperanza y optimismo.",
+    "beneficios": [
+      "Apoya el bienestar emocional",
+      "Promueve ánimo positivo y optimismo",
+      "Favorece la relajación equilibrada",
+      "Apoya la salud de la piel",
+      "Levanta el espíritu sin causar energía excesiva",
+      "Promueve esperanza y claridad"
+    ],
+    "uso_aromatico": "Difundir 3-4 gotas para promover bienestar emocional y ánimo positivo. Ideal cualquier momento del día. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador antes de aplicar en la piel. NOTA: Fotosensible - evitar sol directo. Aplicar 1-2 veces al día.",
+    "uso_interno": "Agregar 1-2 gotas a agua, té o cápsulas vegetales, tomar 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "ánimo_bajo",
+      "tristeza_ocasional",
+      "tension_emocional",
+      "falta_de_esperanza"
+    ],
+    "doterra_sku": "60205979",
+    "precio_mayoreo": 36.5
   },
   {
     "id": "black_pepper",
     "nombre": "Pimienta Negra",
     "nombre_en": "Black Pepper",
     "tipo": "aceite_individual",
-    "categoria": ["circulacion", "digestion", "energia"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/black-pepper-oil.png",
-    "precio_usd": 42.78,
-    "pv": 34,
-    "descripcion": "La Pimienta Negra es un aceite picante que apoya la circulación saludable. Promueve la digestión y el metabolismo. Brinda sensación de calidez y energía. Apoya la comodidad ocasional de articulaciones y músculos.",
-    "beneficios": ["Apoya la circulación saludable", "Promueve la digestión y metabolismo", "Brinda sensación de calidez", "Apoya la comodidad ocasional", "Estimula la energía"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover energía y calidez",
-    "uso_topico": "Diluir siempre y aplicar en areas de tensión ocasional",
-    "uso_interno": "Agregar 1 gota a alimentos o cápsulas para apoyar la digestión",
-    "sintomas_relacionados": ["mala_circulacion", "debilidad_digestiva", "fatiga", "rigidez_ocasional"],
-    "doterra_sku": "30110015"
+    "categoria": [
+      "circulacion",
+      "digestion",
+      "energia"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60110017-black-pepper-15ml-ec-es-web.jpg",
+    "precio_usd": 22.0,
+    "pv": 18,
+    "descripcion": "La Pimienta Negra es un aceite especiado y cálido que apoya la circulación saludable. Favorece la actividad digestiva normal. Apoya la vitalidad y el tono muscular cuando se aplica tópicamente. Promueve sensación de calidez y energía. Aroma picante, penetrante y estimulante.",
+    "beneficios": [
+      "Apoya la circulación saludable",
+      "Favorece la actividad digestiva",
+      "Apoya la vitalidad y tono muscular",
+      "Promueve sensación de calidez",
+      "Estimula el metabolismo",
+      "Energizante y estimulante"
+    ],
+    "uso_aromatico": "Difundir 1-2 gotas para estimular circulación y energía. Ideal en la mañana. Usar por 10-15 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en articulaciones, músculos o abdomen. Masajear 2-3 veces al día según sea necesario.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales con una comida, 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "circulacion_lenta",
+      "digestion_lenta",
+      "musculos_tensos",
+      "falta_de_calor_corporal"
+    ],
+    "doterra_sku": "60110017",
+    "precio_mayoreo": 16.5
   },
   {
     "id": "ginger",
     "nombre": "Jengibre",
     "nombre_en": "Ginger",
     "tipo": "aceite_individual",
-    "categoria": ["digestion", "circulacion", "energia"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/ginger-oil.png",
-    "precio_usd": 29.67,
-    "pv": 23,
-    "descripcion": "El Jengibre es un aceite aromático que apoya la digestión saludable y el confort gastrointestinal. Promueve la circulación y la calidez. Brinda sensación de bienestar general. Apoya la salud metabólica.",
-    "beneficios": ["Apoya la digestión saludable", "Promueve comodidad gastrointestinal", "Estimula la circulación", "Brinda sensación de calidez y confort", "Apoya el metabolismo saludable"],
-    "uso_aromatico": "Difundir 2-3 gotas antes de comer para apoyar la digestión",
-    "uso_topico": "Diluir y aplicar sobre el abdomen para comodidad",
-    "uso_interno": "Agregar 1-2 gotas a agua tibia o cápsulas",
-    "sintomas_relacionados": ["malestar_digestivo", "náuseas_ocasionales", "mala_circulacion"],
-    "doterra_sku": "30110016"
+    "categoria": [
+      "digestion",
+      "circulacion",
+      "energia"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60205993-ginger-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTIyODd8aW1hZ2UvanBlZ3xpbWFnZXMvaDdmL2gzMi85ODg0NjAzMzUyNjA2LmpwZ3w1ZWM1ZmNjYzQ5MTZiZjdiNDM5ZTgxM2M5Y2M3MWNhNDRkNmU3MTAxOTdmYjZhYjc2ZGExZjZiYTdlYjcyODU5",
+    "precio_usd": 67.5,
+    "pv": 42,
+    "descripcion": "El Jengibre es un aceite especiado, cálido y vigorizante que apoya la digestión saludable. Favorece el confort del sistema digestivo. Apoya la circulación saludable cuando se aplica tópicamente. Promueve sensación de calidez interna y vitalidad. Aroma picante, penetrante y reconfortante.",
+    "beneficios": [
+      "Apoya la digestión saludable",
+      "Favorece el confort gastrointestinal",
+      "Apoya la circulación saludable",
+      "Promueve sensación de calidez",
+      "Apoya el bienestar general",
+      "Estimulante y vigorizante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para apoyar la digestión y promover calidez. Ideal después de comidas. Usar por 10-15 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y masajear sobre el abdomen. Aplicar 1-3 veces al día, especialmente después de comer.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales con alimentos, 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "indigestion",
+      "malestar_digestivo",
+      "digestion_lenta",
+      "falta_de_calidez_corporal"
+    ],
+    "doterra_sku": "60205993",
+    "precio_mayoreo": 50.5
   },
   {
     "id": "turmeric",
     "nombre": "Cúrcuma",
     "nombre_en": "Turmeric",
     "tipo": "aceite_individual",
-    "categoria": ["salud_celular", "antioxidante", "bienestar_inflamatorio"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/turmeric-oil.png",
-    "precio_usd": 36.45,
-    "pv": 29,
-    "descripcion": "La Cúrcuma es un aceite que apoya la salud celular y proporciona propiedades antioxidantes. Promueve el bienestar general mediante apoyo a la respuesta inflamatoria saludable. Apoya la comodidad ocasional y el bienestar articular.",
-    "beneficios": ["Apoya la salud celular", "Proporciona apoyo antioxidante", "Apoya respuesta inflamatoria saludable", "Promueve bienestar articular ocasional", "Apoya el bienestar general"],
-    "uso_aromatico": "Difundir 2-3 gotas para apoyar el bienestar general",
-    "uso_topico": "Diluir y aplicar en áreas de enfoque",
-    "uso_interno": "Agregar 1-2 gotas en cápsulas vegetales o bebidas",
-    "sintomas_relacionados": ["envejecimiento_celular", "inflamacion_ocasional", "debilidad_articular"],
-    "doterra_sku": "30110017"
+    "categoria": [
+      "salud_celular",
+      "antioxidante",
+      "bienestar_inflamatorio"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60209660-tumeric-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDUzNjF8aW1hZ2UvanBlZ3xpbWFnZXMvaDRhL2gwNi85OTM5Nzk1ODA0MTkwLmpwZ3xmYzUxMjdkYWJkMGYxODU2YzdjYTM2NGZiMzEwNWRjMzM2MmI1OGU4ZGVjZDk5ZDA1NWQ1MGRiMDVhMjg4MzA1",
+    "precio_usd": 47.5,
+    "pv": 30,
+    "descripcion": "La Cúrcuma es un aceite terroso y cálido que apoya la respuesta inflamatoria normal del cuerpo. Favorece la circulación saludable cuando se aplica tópicamente. Apoya el bienestar general y la vitalidad. Promueve el confort articular y muscular. Aroma especiado, profundo y reconfortante.",
+    "beneficios": [
+      "Apoya la respuesta inflamatoria normal",
+      "Favorece la circulación saludable",
+      "Apoya el confort articular y muscular",
+      "Promueve bienestar general",
+      "Apoya la salud inmunológica",
+      "Reconfortante y revitalizante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para apoyar el bienestar general. Ideal cualquier momento. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar sobre articulaciones, músculos o área afectada. Masajear 2-3 veces al día.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales con alimentos, máximo 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "inflamacion_articular",
+      "tension_muscular",
+      "circulacion_lenta",
+      "falta_de_vitalidad"
+    ],
+    "doterra_sku": "60209660",
+    "precio_mayoreo": 35.5
   },
   {
     "id": "roman_chamomile",
     "nombre": "Manzanilla Romana",
     "nombre_en": "Roman Chamomile",
     "tipo": "aceite_individual",
-    "categoria": ["relajacion", "piel", "bienestar_digestivo"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/roman-chamomile-oil.png",
-    "precio_usd": 94.58,
-    "pv": 75,
-    "descripcion": "La Manzanilla Romana es conocida por sus propiedades calmantes. Apoya la relajación y el bienestar emocional. Promueve comodidad de la piel sensible. Apoya un sueño reparador y descanso profundo.",
-    "beneficios": ["Promueve relajación profunda", "Apoya el bienestar emocional", "Mantiene la salud de la piel sensible", "Apoya un sueño reparador", "Calma la irritabilidad ocasional"],
-    "uso_aromatico": "Difundir 3-4 gotas por la noche para promover relajación",
-    "uso_topico": "Aplicar diluido en la piel para calmar la irritabilidad",
-    "uso_interno": "Agregar 1-2 gotas en agua tibia antes de dormir",
-    "sintomas_relacionados": ["ansiedad_ocasional", "tension", "piel_irritada", "dificultad_para_dormir"],
-    "doterra_sku": "30110018"
+    "categoria": [
+      "relajacion",
+      "piel",
+      "bienestar_digestivo"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-5ml-60205994-roman-chamomile-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxMDcxMzl8aW1hZ2UvanBlZ3xpbWFnZXMvaDQ5L2g2NS85ODg0NjAzNTQ3Njc4LmpwZ3w2MjhjN2MyNDcyNmE3ZThkZGQ2YmVhY2ZiOTFmYTcxMzg3NGY2MjM5ZjU4OTljMmY0ZjMxNGI0M2E1ZTI1Njlh",
+    "precio_usd": 76,
+    "pv": 48.5,
+    "descripcion": "La Manzanilla Romana es un aceite floral suave, delicado y calmante. Apoya la relajación profunda y el descanso reparador. Favorece la calma emocional durante momentos de estrés. Apoya la salud de la piel sensible cuando se aplica tópicamente. Aroma floral dulce y reconfortante.",
+    "beneficios": [
+      "Apoya la relajación profunda",
+      "Favorece la calma emocional",
+      "Apoya el descanso reparador",
+      "Apoya la piel sensible",
+      "Promueve tranquilidad y paz",
+      "Suave y delicado"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover relajación profunda y calma. Ideal antes de dormir. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en el pecho, cuello o plantas de pies. Aplicar 1-3 veces al día según sea necesario.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales o agua tibia, máximo 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "ansiedad",
+      "tension_emocional",
+      "insomnio",
+      "piel_sensible"
+    ],
+    "doterra_sku": "60205994",
+    "precio_mayoreo": 57
   },
   {
     "id": "cedarwood",
     "nombre": "Cedro",
     "nombre_en": "Cedarwood",
     "tipo": "aceite_individual",
-    "categoria": ["piel", "relajacion", "grounding"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/cedarwood-oil.png",
-    "precio_usd": 22.50,
-    "pv": 18,
-    "descripcion": "El Cedro es un aceite de madera que promueve la relajación y el grounding emocional. Apoya la salud y claridad de la piel. Favorece una sensación de estabilidad y paz. Promueve un ambiente armonioso.",
-    "beneficios": ["Promueve relajación y estabilidad", "Apoya la salud de la piel clara", "Favorece grounding emocional", "Crea un ambiente armonioso", "Promueve sensación de paz"],
-    "uso_aromatico": "Difundir 3-4 gotas para crear un ambiente grounded y tranquilo",
-    "uso_topico": "Aplicar en el pecho o cuello para promover grounding",
-    "uso_interno": "No recomendado para uso interno regular",
-    "sintomas_relacionados": ["desconexion_emocional", "piel_problematica", "inquietud"],
-    "doterra_sku": "30110019"
+    "categoria": [
+      "piel",
+      "relajacion",
+      "grounding"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60208140-cedarwood-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDU4MTF8aW1hZ2UvanBlZ3xpbWFnZXMvaGQ1L2g1My85OTAyODY0NTY0MjU0LmpwZ3wyYWE5ODljODFiMTY5YjY3ODYwYzAyYTRjMDAxMDQ5OGRiOGE5OGFjZTg4NGQyYzM1Y2FiZjA5MTc1YTk0ZDNi",
+    "precio_usd": 21.5,
+    "pv": 12.5,
+    "descripcion": "El Cedro es un aceite leñoso, terroso y grounding que apoya la relajación profunda. Favorece un ambiente limpio y purificado. Apoya la circulación saludable cuando se aplica tópicamente. Promueve sensación de seguridad, confort y enraizamiento. Aroma cálido, leñoso y reconfortante.",
+    "beneficios": [
+      "Apoya la relajación profunda",
+      "Favorece un ambiente limpio",
+      "Apoya la circulación saludable",
+      "Promueve sensación de enraizamiento",
+      "Apoya la salud del cuero cabelludo",
+      "Calmante y centrador"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover relajación y crear ambiente cálido. Ideal en la noche. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en la nuca, plantas de pies o cuero cabelludo. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "ansiedad",
+      "falta_de_enraizamiento",
+      "insomnio",
+      "cuero_cabelludo_irritado"
+    ],
+    "doterra_sku": "60208140",
+    "precio_mayoreo": 16
   },
   {
     "id": "vetiver",
     "nombre": "Vetiver",
     "nombre_en": "Vetiver",
     "tipo": "aceite_individual",
-    "categoria": ["relajacion", "grounding", "sueño"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/vetiver-oil.png",
-    "precio_usd": 56.89,
-    "pv": 45,
-    "descripcion": "El Vetiver es un aceite que promueve grounding profundo y relajación. Apoya un sueño reparador y descanso de calidad. Favorece la estabilidad emocional y la sensación de enraizamiento. Crea una atmósfera calmante y segura.",
-    "beneficios": ["Promueve grounding profundo", "Apoya sueño reparador", "Favorece estabilidad emocional", "Brinda sensación de seguridad", "Promueve relajación profunda"],
-    "uso_aromatico": "Difundir 2-3 gotas al anochecer para preparar el sueño",
-    "uso_topico": "Aplicar en los pies o espalda antes de dormir",
-    "uso_interno": "Agregar 1 gota en bebidas o cápsulas",
-    "sintomas_relacionados": ["ansiedad_general", "falta_de_grounding", "insomnio", "inquietud_nocturna"],
-    "doterra_sku": "30110020"
+    "categoria": [
+      "relajacion",
+      "grounding",
+      "sueño"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60110022-vetiver-15ml-ec-es-web.jpg",
+    "precio_usd": 36.0,
+    "pv": 29,
+    "descripcion": "El Vetiver es un aceite terroso, cálido y profundamente grounding. Apoya la relajación profunda y el enraizamiento emocional. Favorece la calma bajo estrés. Apoya la circulación saludable cuando se aplica tópicamente. Promueve estabilidad y seguridad emocional. Aroma terroso, leñoso y sofisticado.",
+    "beneficios": [
+      "Apoya la relajación profunda",
+      "Favorece el enraizamiento emocional",
+      "Promueve calma bajo estrés",
+      "Apoya la circulación saludable",
+      "Promueve estabilidad emocional",
+      "Calmante y estabilizador"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover relajación y enraizamiento. Ideal en momentos de estrés. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en el pecho, plantas de pies o nuca. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "ansiedad",
+      "falta_de_enraizamiento",
+      "estrés_emocional",
+      "falta_de_estabilidad"
+    ],
+    "doterra_sku": "60110022",
+    "precio_mayoreo": 27.0
   },
   {
     "id": "doterra_on_guard",
-    "nombre": "doTERRA On Guard",
+    "nombre": "On Guard",
     "nombre_en": "doTERRA On Guard",
     "tipo": "mezcla",
-    "categoria": ["bienestar_inmunologico", "limpieza", "proteccion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/on-guard-oil.png",
-    "precio_usd": 36.38,
-    "pv": 29,
-    "descripcion": "doTERRA On Guard es una mezcla de aceites puros que apoya el bienestar inmunológico. Proporciona protección contra bacterias y patógenos comunes. Puede usarse para mantener un ambiente limpio y purificado. Apoya la respuesta defensiva natural del cuerpo.",
-    "beneficios": ["Apoya bienestar inmunológico", "Proporciona protección antimicrobiana", "Purifica el ambiente", "Apoya la respuesta defensiva natural", "Promueve salud general"],
-    "uso_aromatico": "Difundir 3-4 gotas para purificar y proteger el ambiente",
-    "uso_topico": "Diluir y aplicar en piel para protección antimicrobiana",
-    "uso_interno": "Agregar 1-2 gotas en cápsulas o agua",
-    "sintomas_relacionados": ["debilidad_inmunologica", "ambiente_contaminado", "exposicion_patogenos"],
-    "doterra_sku": "30110021"
+    "categoria": [
+      "bienestar_inmunologico",
+      "limpieza",
+      "proteccion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201680-on-guard-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTA3MDR8aW1hZ2UvanBlZ3xpbWFnZXMvaDkzL2gxOS85ODg0Nzk3MjQ0OTU4LmpwZ3w2NjY5YTI3MDRiMDhjM2I2MzkxNzRkMjM2N2UzZWZjMTU5MjBiNmFjYzEyMmJkZDQzZGU5ZWFhZGJkNzgyMGQ2",
+    "precio_usd": 53.5,
+    "pv": 34,
+    "descripcion": "On Guard es una poderosa mezcla protectora de aceites puros que apoya el bienestar inmunológico. Contiene Orégano, Tomillo, Limón, Eucalipto y Abeto. Apoya las defensas naturales del cuerpo. Puede usarse para limpiar superficies de manera natural.",
+    "beneficios": [
+      "Apoya el bienestar inmunológico robusto",
+      "Fortalece las defensas naturales",
+      "Apoya la purificación del ambiente",
+      "Promueve limpieza natural del hogar",
+      "Aroma protector y vigorizante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para fortalecer el bienestar inmunológico. Ideal durante cambios estacionales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir 1-2 gotas con aceite portador y aplicar en plantas de pies o pecho. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "bienestar_inmune_bajo",
+      "cambios_estacionales"
+    ],
+    "doterra_sku": "60201680",
+    "precio_mayoreo": 40
   },
   {
     "id": "digestzen",
     "nombre": "DigestZen",
     "nombre_en": "DigestZen",
     "tipo": "mezcla",
-    "categoria": ["digestion", "comodidad_digestiva", "bienestar_intestinal"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/digestzen-oil.png",
-    "precio_usd": 39.45,
-    "pv": 31,
-    "descripcion": "DigestZen es una mezcla sinérgica que apoya la digestión saludable y el confort gastrointestinal. Promueve comodidad ocasional del sistema digestivo. Apoya la salud intestinal general. Favorece la función digestiva óptima.",
-    "beneficios": ["Apoya la digestión saludable", "Promueve comodidad gastrointestinal", "Favorece la salud intestinal", "Apoya la función digestiva óptima", "Calma molestias ocasionales"],
-    "uso_aromatico": "Difundir 2-3 gotas antes de comer para apoyar la digestión",
-    "uso_topico": "Diluir y aplicar sobre el abdomen para comodidad",
-    "uso_interno": "Agregar 1-2 gotas a agua o cápsulas después de comer",
-    "sintomas_relacionados": ["malestar_digestivo", "hinchazón", "molestia_abdominal", "indigestion"],
-    "doterra_sku": "30110022"
+    "categoria": [
+      "digestion",
+      "comodidad_digestiva",
+      "bienestar_intestinal"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60200002-digestzen-ec-es-web.jpg",
+    "precio_usd": 42.0,
+    "pv": 34,
+    "descripcion": "DigestZen es una mezcla calmante diseñada para apoyar la digestión saludable. Contiene Jengibre, Menta Piperita, Fenol, Eneldo, Comino y Anís. Favorece el confort digestivo. Apoya el bienestar gastrointestinal general.",
+    "beneficios": [
+      "Apoya la digestión saludable",
+      "Favorece el confort gastrointestinal",
+      "Apoya la comodidad digestiva",
+      "Promueve bienestar del sistema digestivo",
+      "Aroma reconfortante y especiado"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas después de comidas para apoyar la digestión. Ideal después de cenas pesadas. Usar por 10-15 minutos.",
+    "uso_topico": "Diluir con aceite portador y masajear sobre el abdomen. Aplicar 1-2 veces al día después de comer.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales después de comidas, 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "indigestion",
+      "malestar_digestivo",
+      "inflamacion_abdominal"
+    ],
+    "doterra_sku": "60200002",
+    "precio_mayoreo": 31.5
   },
   {
     "id": "deep_blue",
     "nombre": "Deep Blue",
     "nombre_en": "Deep Blue",
     "tipo": "mezcla",
-    "categoria": ["comodidad_articular", "comodidad_muscular", "recuperacion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/deep-blue-oil.png",
-    "precio_usd": 37.23,
-    "pv": 29,
-    "descripcion": "Deep Blue es una mezcla cooling que apoya la comodidad de articulaciones y músculos ocasionalmente tensa. Promueve relajación muscular y recuperación después del ejercicio. Favorece comodidad ocasional y flexibilidad.",
-    "beneficios": ["Apoya comodidad articular y muscular", "Promueve recuperación después del ejercicio", "Favorece flexibilidad y movilidad", "Brinda sensación de enfriamiento", "Apoya la comodidad ocasional"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover recuperación",
-    "uso_topico": "Aplicar directamente sobre areas de enfoque con suave masaje",
-    "uso_interno": "No recomendado para uso interno",
-    "sintomas_relacionados": ["tension_muscular", "rigidez_articular", "fatiga_post_ejercicio", "molestia_ocasional"],
-    "doterra_sku": "30110023"
+    "categoria": [
+      "comodidad_articular",
+      "comodidad_muscular",
+      "recuperacion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-5ml-60201679-deep-blue-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxMDQxODl8aW1hZ2UvanBlZ3xpbWFnZXMvaGM2L2gxMi85ODg0Nzk3NjM5MTk4LmpwZ3xiOTBiNDBhMGNjNjQ4OWFlNTA5ZTMzMzU5ZWUxNDQ4NjFhMzU1NjZjYjFmMDBkNjlhMGQzMWI4ZTlmY2I1ZTBj",
+    "precio_usd": 52,
+    "pv": 32.5,
+    "descripcion": "Deep Blue es una mezcla calmante y refrescante diseñada para apoyar la comodidad muscular y articular. Contiene Wintergreen, Camphor, Peppermint, Helichrysum, Azurite. Favorece la relajación muscular profunda.",
+    "beneficios": [
+      "Apoya la comodidad muscular y articular",
+      "Favorece la relajación profunda",
+      "Promueve sensación de alivio",
+      "Apoya la circulación saludable",
+      "Reconfortante y refrescante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover relajación y alivio. Usar por 15-20 minutos.",
+    "uso_topico": "Aplicar directamente sobre áreas afectadas o diluir con aceite portador. Masajear 2-3 veces al día según sea necesario.",
+    "uso_interno": "NO se recomienda uso interno - mezcla solo para uso aromático y tópico.",
+    "sintomas_relacionados": [
+      "tension_muscular",
+      "dolor_articular",
+      "malestar_muscular"
+    ],
+    "doterra_sku": "60201679",
+    "precio_mayoreo": 39
   },
   {
     "id": "easy_air",
-    "nombre": "Respiración Fácil",
+    "nombre": "Easy Air",
     "nombre_en": "doTERRA Breathe / Easy Air",
     "tipo": "mezcla",
-    "categoria": ["respiracion", "respiro_claro", "bienestar_respiratorio"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/easy-air-oil.png",
-    "precio_usd": 35.12,
-    "pv": 28,
-    "descripcion": "Respiración Fácil es una mezcla que apoya la función respiratoria clara y saludable. Promueve respiro abierto y cómodo. Favorece la claridad respiratoria durante cambios estacionales. Apoya un ambiente fresco y puro.",
-    "beneficios": ["Apoya la respiración clara", "Promueve respiro abierto y cómodo", "Favorece claridad respiratoria", "Apoya bienestar respiratorio general", "Refresca el ambiente"],
-    "uso_aromatico": "Difundir 3-4 gotas para promover respiración clara",
-    "uso_topico": "Diluir y aplicar en el pecho, espalda o cuello",
-    "uso_interno": "No recomendado para uso interno regular",
-    "sintomas_relacionados": ["congestión", "dificultad_respiratoria", "falta_de_respiro", "cambios_estacionales"],
-    "doterra_sku": "30110024"
+    "categoria": [
+      "respiracion",
+      "respiro_claro",
+      "bienestar_respiratorio"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60200246-breathe-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDkwNzZ8aW1hZ2UvanBlZ3xpbWFnZXMvaDU1L2g4Mi85ODg0Nzk3NTAyNTk4LmpwZ3xiMjJjMjdiMzI5MTZhYjBiMjdlMWI4ZmE5MDkzODExMjEzZGU2OGY3MDJlZjUxMzE5MjQwNDU5YWViYmYyM2Vk",
+    "precio_usd": 36.5,
+    "pv": 22.5,
+    "descripcion": "Easy Air es una mezcla respiratoria diseñada para apoyar vías respiratorias claras y abiertas. Contiene Laurel Laurel, Eucalipto, Menta Piperita, Té Árbol y Lemongrass. Favorece la respiración saludable.",
+    "beneficios": [
+      "Apoya vías respiratorias claras",
+      "Favorece la respiración abierta y saludable",
+      "Apoya la comodidad respiratoria",
+      "Aroma fresco y vigorizante",
+      "Apoya momentos de incomodidad estacional"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para abrir vías respiratorias. Ideal durante cambios estacionales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en el pecho y garganta. Aplicar 1-3 veces al día según sea necesario.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "congestion_nasal",
+      "dificultad_respiratoria",
+      "vias_respiratorias_irritadas"
+    ],
+    "doterra_sku": "60200246",
+    "precio_mayoreo": 27.5
   },
   {
     "id": "serenity",
-    "nombre": "Serenidad",
+    "nombre": "Serenity",
     "nombre_en": "doTERRA Serenity",
     "tipo": "mezcla",
-    "categoria": ["sueño", "relajacion", "bienestar_emocional"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/serenity-oil.png",
-    "precio_usd": 40.25,
-    "pv": 32,
-    "descripcion": "Serenidad es una mezcla tranquilizante que apoya un sueño reparador y profundo. Promueve relajación y una sensación de paz. Favorece el descanso de calidad durante la noche. Apoya un ciclo de sueño saludable.",
-    "beneficios": ["Apoya sueño reparador", "Promueve relajación profunda", "Favorece sensación de paz y tranquilidad", "Apoya ciclo de sueño saludable", "Calma la mente"],
-    "uso_aromatico": "Difundir 3-4 gotas antes de dormir para promover sueño",
-    "uso_topico": "Aplicar en las plantas de los pies o almohada",
-    "uso_interno": "Agregar 1-2 gotas en bebidas tibia antes de dormir",
-    "sintomas_relacionados": ["insomnio", "inquietud_nocturna", "dificultad_para_dormir", "ansiedad_nocturna"],
-    "doterra_sku": "30110025"
+    "categoria": [
+      "sueño",
+      "relajacion",
+      "bienestar_emocional"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201734-serenity-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTA2Mjl8aW1hZ2UvanBlZ3xpbWFnZXMvaDk2L2hiMS85ODg0Nzk3Njk4MDc4LmpwZ3w3NGI0NTkyOGJiOTcwZDRhMjhkMTdkYjQ2ZWQwY2NlMWFhM2ZiNWUyZDU1NzVlZmY4ZTQ4ZDkwY2FjZjI0M2Rl",
+    "precio_usd": 54,
+    "pv": 33.5,
+    "descripcion": "Serenity es una mezcla calmante diseñada para apoyar el descanso reparador. Contiene Lavanda, Manzanilla Romana, Cedro, Incienso y Ylang Ylang. Favorece la relajación profunda y el sueño de calidad.",
+    "beneficios": [
+      "Apoya el descanso reparador",
+      "Favorece la relajación profunda",
+      "Promueve sueño de calidad",
+      "Apoya la calma emocional",
+      "Aroma calmante y reconfortante"
+    ],
+    "uso_aromatico": "Difundir 3-4 gotas antes de dormir para apoyar el descanso. Ideal en la noche. Usar por 20-30 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en el pecho, plantas de pies o nuca antes de dormir. Aplicar 1 vez en la noche.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales o agua tibia, máximo 1 vez antes de dormir.",
+    "sintomas_relacionados": [
+      "insomnio",
+      "dificultad_para_dormir",
+      "inquietud_nocturna",
+      "estrés_nocturno"
+    ],
+    "doterra_sku": "60220903",
+    "precio_mayoreo": 40.5
   },
   {
     "id": "balance",
     "nombre": "Balance",
     "nombre_en": "doTERRA Balance",
     "tipo": "mezcla",
-    "categoria": ["grounding", "equilibrio_emocional", "estabilidad"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/balance-oil.png",
-    "precio_usd": 40.38,
-    "pv": 32,
-    "descripcion": "Balance es una mezcla grounding que promueve estabilidad y equilibrio emocional. Apoya la sensación de calma y enraizamiento. Favorece el enfoque y la claridad mental. Crea una atmósfera armoniosa.",
-    "beneficios": ["Promueve grounding y estabilidad", "Apoya equilibrio emocional", "Favorece claridad mental", "Crea sensación de armonía", "Promueve enfoque"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover equilibrio y grounding",
-    "uso_topico": "Aplicar en el pecho o espalda para estabilidad",
-    "uso_interno": "Agregar 1-2 gotas en agua o cápsulas",
-    "sintomas_relacionados": ["desbalance_emocional", "falta_de_grounding", "ansiedad", "desconexion"],
-    "doterra_sku": "30110026"
+    "categoria": [
+      "grounding",
+      "equilibrio_emocional",
+      "estabilidad"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201682-balance-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDY2OTZ8aW1hZ2UvanBlZ3xpbWFnZXMvaDc5L2g3NS85ODg0Nzk3MzA5NDcwLmpwZ3w0OGJjMjdhYjZmYWM3YjU4NTI2YTQ1ODQ4Yjg3OTUwZTY1NGI2NjBkMjRhMmNjNmM5NjdhMWVlNjA3ZTcyZTgy",
+    "precio_usd": 35,
+    "pv": 21.5,
+    "descripcion": "Balance es una mezcla grounding y centrador diseñada para apoyar la estabilidad emocional. Contiene Spruce, Ho Wood, Frankincense, Blue Tansy y Osmanthus. Favorece el enraizamiento y la estabilidad.",
+    "beneficios": [
+      "Apoya la estabilidad emocional",
+      "Favorece el enraizamiento profundo",
+      "Promueve sensación de calma",
+      "Apoya el centrado emocional",
+      "Aroma cálido y reconfortante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover enraizamiento y estabilidad. Ideal durante momentos de cambio. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en el pecho o plantas de pies. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "falta_de_enraizamiento",
+      "estrés_emocional",
+      "inestabilidad_emocional"
+    ],
+    "doterra_sku": "60201682",
+    "precio_mayoreo": 26
   },
   {
     "id": "aromaouch",
     "nombre": "AromaTouch",
     "nombre_en": "AromaTouch",
     "tipo": "mezcla",
-    "categoria": ["masaje", "comodidad_muscular", "relajacion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/aromaouch-oil.png",
-    "precio_usd": 38.98,
-    "pv": 31,
-    "descripcion": "AromaTouch es una mezcla especializada para masaje que apoya la comodidad y la relajación. Promueve una experiencia de masaje enriquecida. Apoya la comodidad muscular ocasional. Favorece una sensación de calidez y bienestar.",
-    "beneficios": ["Apoya masaje relajante", "Promueve comodidad muscular", "Favorece calidez y bienestar", "Enriquece experiencia sensorial", "Apoya relajación profunda"],
-    "uso_aromatico": "Difundir 2-3 gotas mientras realiza masaje",
-    "uso_topico": "Aplicar diluido sobre músculos y articulaciones durante masaje",
-    "uso_interno": "No recomendado para uso interno",
-    "sintomas_relacionados": ["tension_muscular", "necesidad_de_masaje", "rigidez_ocasional"],
-    "doterra_sku": "30110027"
+    "categoria": [
+      "masaje",
+      "comodidad_muscular",
+      "relajacion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201747-aromatouch-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDk3NjR8aW1hZ2UvanBlZ3xpbWFnZXMvaGZhL2hiNS85ODg0Nzk3NTYxMjc4LmpwZ3w4OWM3MzYwODQzOGRkYjIxZjdjMTM2OWM3N2EwZmNjMjRkZGYxOWI5OGI2Y2M5ODRiZjNhYjkxNGFhZjdmOWFi",
+    "precio_usd": 44.5,
+    "pv": 28,
+    "descripcion": "AromaTouch es una mezcla de masaje diseñada para apoyar la relajación muscular profunda y el bienestar general. Contiene Cypress, Marjoram, Lavender, Peppermint e Helichrysum diluidos en aceite de Fractionated Coconut. Ideal para masajes terapéuticos.",
+    "beneficios": [
+      "Apoya la relajación muscular profunda",
+      "Favorece el bienestar general",
+      "Reconfortante durante masajes",
+      "Apoya la circulación saludable",
+      "Aroma calmante y terapéutico"
+    ],
+    "uso_aromatico": "Difundir directamente o usar como es en difusor. Ideal en espacios de bienestar.",
+    "uso_topico": "Aplicar directamente sobre la piel para masaje. Usar 5-10 gotas por sesión de masaje.",
+    "uso_interno": "NO recomendado para uso interno en esta formulación.",
+    "sintomas_relacionados": [
+      "tension_muscular",
+      "estres_general"
+    ],
+    "doterra_sku": "60201747",
+    "precio_mayoreo": 33.5
   },
   {
     "id": "citrus_bliss",
-    "nombre": "Dicha Cítrica",
+    "nombre": "Citrus Bliss",
     "nombre_en": "Citrus Bliss",
     "tipo": "mezcla",
-    "categoria": ["animo", "energia", "elevacion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/citrus-bliss-oil.png",
-    "precio_usd": 36.45,
-    "pv": 29,
-    "descripcion": "Dicha Cítrica es una mezcla elevadora que promueve ánimo positivo y energía. Apoya una actitud optimista y alegre. Favorece sentimientos de alegría y entusiasmo. Crea una atmósfera vibrante y positiva.",
-    "beneficios": ["Promueve ánimo positivo", "Brinda sensación de energía", "Favorece sentimientos de alegría", "Estimula entusiasmo", "Eleva el ambiente"],
-    "uso_aromatico": "Difundir 3-4 gotas para elevar el ánimo y la energía",
-    "uso_topico": "Aplicar en el pecho o pulsos para energía",
-    "uso_interno": "Agregar 1-2 gotas a agua o bebidas",
-    "sintomas_relacionados": ["ánimo_bajo", "falta_de_energia", "negatividad", "falta_de_entusiasmo"],
-    "doterra_sku": "30110028"
+    "categoria": [
+      "animo",
+      "energia",
+      "elevacion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201756-citrus-bliss-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTIxMjh8aW1hZ2UvanBlZ3xpbWFnZXMvaDljL2hhZi85ODg0Nzk4MDg3MTk4LmpwZ3xhZDE0MDVkODFhODM3NmVlYWNhYWQ3NWEwZjBlNTJmZjVmOTUyZmZkNDIwOGVkOTIyOWU3NTBmMmJmMjU0MzVh",
+    "precio_usd": 29,
+    "pv": 16,
+    "descripcion": "Citrus Bliss es una mezcla energizante de cítricos que apoya el ánimo positivo y la energía. Contiene Limón, Naranja Silvestre, Toronja, Tangerina, Bergamota y Black Pepper. Aroma cítrico vibrant y vigorizante.",
+    "beneficios": [
+      "Apoya el ánimo positivo",
+      "Promueve energía y vitalidad",
+      "Aroma cítrico vibrante",
+      "Levanta el espíritu",
+      "Promueve optimismo"
+    ],
+    "uso_aromatico": "Difundir 3-4 gotas para promover energía y positividad. Ideal por la mañana o tarde. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador antes de aplicar en la piel. NOTA: Fotosensible - evitar sol. Aplicar 1-2 veces al día.",
+    "uso_interno": "Agregar 1-2 gotas a agua o bebidas, máximo 1-2 veces al día.",
+    "sintomas_relacionados": [
+      "baja_moral",
+      "falta_de_energia",
+      "depresion_leve"
+    ],
+    "doterra_sku": "60201756",
+    "precio_mayoreo": 21.5
   },
   {
     "id": "pasttense",
     "nombre": "PastTense",
     "nombre_en": "PastTense",
     "tipo": "mezcla",
-    "categoria": ["tension_cerebral", "comodidad_ocasional", "relajacion_cervical"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/pasttense-oil.png",
-    "precio_usd": 39.87,
+    "categoria": [
+      "tension_cerebral",
+      "comodidad_ocasional",
+      "relajacion_cervical"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60300003-pasttense-ec-es-web.jpg",
+    "precio_usd": 40.0,
     "pv": 32,
-    "descripcion": "PastTense es una mezcla que apoya la comodidad ocasional de cabeza y cuello. Promueve relajación y alivio de la tensión. Favorece claridad mental y enfoque. Apoya una sensación de comodidad y bienestar.",
-    "beneficios": ["Apoya comodidad ocasional de cabeza", "Promueve relajación cervical", "Favorece claridad mental", "Apoya sensación de comodidad", "Facilita alivio ocasional"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover comodidad",
-    "uso_topico": "Aplicar en sienes, frente y nuca con suave masaje",
-    "uso_interno": "No recomendado para uso interno regular",
-    "sintomas_relacionados": ["tension_cabeza", "molestia_cervical", "tension_ocasional", "rigidez_cuello"],
-    "doterra_sku": "30110029"
+    "descripcion": "PastTense es una mezcla enfocada diseñada para apoyar la relajación y la concentración. Contiene Wintergreen, Lavender, Peppermint, Frankincense y Cypress. Favorece el alivio de la tensión.",
+    "beneficios": [
+      "Apoya la relajación profunda",
+      "Favorece el alivio de tensión",
+      "Apoya la concentración",
+      "Promueve claridad mental",
+      "Aroma refrescante y calmante"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para apoyar la relajación y concentración. Ideal durante trabajo intelectual. Usar por 15-20 minutos.",
+    "uso_topico": "Aplicar 1-2 gotas directamente en las sienes y la nuca, o diluir si es sensible. Aplicar 2-3 veces al día.",
+    "uso_interno": "NO recomendado para uso interno.",
+    "sintomas_relacionados": [
+      "tension_cerebral",
+      "falta_de_concentracion"
+    ],
+    "doterra_sku": "60300003",
+    "precio_mayoreo": 30.0
   },
   {
     "id": "claricalm",
-    "nombre": "ClaryCalm",
+    "nombre": "ClariFy",
     "nombre_en": "ClaryCalm",
     "tipo": "mezcla",
-    "categoria": ["salud_femenina", "comodidad_mensual", "equilibrio_hormonal"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/claricalm-oil.png",
-    "precio_usd": 41.50,
-    "pv": 33,
-    "descripcion": "ClaryCalm es una mezcla especialmente formulada para apoyar el confort durante ciclos menstruales. Promueve equilibrio hormonal y comodidad ocasional. Apoya la estabilidad emocional. Favorece el bienestar femenino general.",
-    "beneficios": ["Apoya comodidad mensual", "Promueve equilibrio hormonal", "Favorece estabilidad emocional", "Apoya bienestar femenino", "Mantiene sensación de confort"],
-    "uso_aromatico": "Difundir 2-3 gotas durante ciclos naturales",
-    "uso_topico": "Diluir y aplicar sobre el abdomen para comodidad",
-    "uso_interno": "Agregar 1-2 gotas en agua o cápsulas",
-    "sintomas_relacionados": ["incomodidad_mensual", "desbalance_hormonal", "irritabilidad_ciclica"],
-    "doterra_sku": "30110030"
+    "categoria": [
+      "salud_femenina",
+      "comodidad_mensual",
+      "equilibrio_hormonal"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60300004-clarify-ec-es-web.jpg",
+    "precio_usd": 38.0,
+    "pv": 30,
+    "descripcion": "ClariFy es una mezcla respiratoria diseñada para apoyar vías respiratorias claras y abiertas. Contiene Eucalipto, Limón, Menta Piperita, Cardamomo, Ravintsara y Spruce. Favorece la respiración clara.",
+    "beneficios": [
+      "Apoya vías respiratorias claras",
+      "Favorece la respiración abierta",
+      "Aroma fresco y vigorizante",
+      "Apoya la claridad mental",
+      "Promueve apertura respiratoria"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para abrir vías respiratorias. Ideal durante el día. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en pecho y garganta. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "congestion",
+      "dificultad_respiratoria"
+    ],
+    "doterra_sku": "60300004",
+    "precio_mayoreo": 28.5
   },
   {
     "id": "elevation",
     "nombre": "Elevation",
     "nombre_en": "Elevation",
     "tipo": "mezcla",
-    "categoria": ["animo_positivo", "bienestar_emocional", "elevacion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/elevation-oil.png",
-    "precio_usd": 42.25,
-    "pv": 33,
-    "descripcion": "Elevation es una mezcla de florest que promueve ánimo positivo y elevación emocional. Apoya una actitud alegre y esperanzadora. Favorece sentimientos de inspiración y determinación. Crea una atmósfera optimista.",
-    "beneficios": ["Promueve ánimo positivo y alegre", "Favorece sentimientos de inspiración", "Apoya elevación emocional", "Estimula determinación y esperanza", "Crea atmósfera optimista"],
-    "uso_aromatico": "Difundir 2-3 gotas para promover ánimo positivo",
-    "uso_topico": "Aplicar en el pecho para elevación emocional",
-    "uso_interno": "Agregar 1-2 gotas en bebidas",
-    "sintomas_relacionados": ["ánimo_bajo", "falta_de_esperanza", "negatividad", "falta_de_inspiracion"],
-    "doterra_sku": "30110031"
+    "categoria": [
+      "animo_positivo",
+      "bienestar_emocional",
+      "elevacion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201753-elevation-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDk4MDh8aW1hZ2UvanBlZ3xpbWFnZXMvaDFlL2hhYy85ODg0Nzk3ODI3NjE0LmpwZ3w2NjhjNjg0OGM5Y2FiODE3ZWJlYzc5NDQzYjA2NzA5ZWMzZDI1M2NmYjlhZjRlMjZlZDMxMWE5ZjllZTcxOWVi",
+    "precio_usd": 41.5,
+    "pv": 25,
+    "descripcion": "Elevation es una mezcla motivadora y elevadora diseñada para apoyar el ánimo y la actitud positiva. Contiene Tangerina, Frankincense, Ylang Ylang, Jasmín, Sándalo y Mejorana. Aroma elevador y transformador.",
+    "beneficios": [
+      "Apoya el ánimo y la actitud positiva",
+      "Promueve elevación emocional",
+      "Favorece la motivación",
+      "Aroma inspirador y elevador",
+      "Apoya la transformación positiva"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para elevar el ánimo y la motivación. Ideal para momentos especiales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en el pecho o muñecas. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "depresion",
+      "falta_de_motivacion",
+      "baja_moral"
+    ],
+    "doterra_sku": "60201753",
+    "precio_mayoreo": 31
   },
   {
     "id": "intune",
     "nombre": "InTune",
     "nombre_en": "InTune / Thinker",
     "tipo": "mezcla",
-    "categoria": ["enfoque", "claridad_mental", "concentracion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/intune-oil.png",
-    "precio_usd": 40.12,
-    "pv": 32,
-    "descripcion": "InTune es una mezcla que apoya la claridad mental y el enfoque. Promueve concentración y función cognitiva. Favorece la capacidad de atención y retención. Apoya el desempeño mental óptimo.",
-    "beneficios": ["Apoya claridad y enfoque mental", "Promueve concentración profunda", "Favorece función cognitiva", "Apoya la capacidad de atención", "Optimiza desempeño mental"],
-    "uso_aromatico": "Difundir 2-3 gotas durante trabajo o estudio",
-    "uso_topico": "Aplicar en la frente o sienes para enfoque",
-    "uso_interno": "Agregar 1-2 gotas en agua o cápsulas",
-    "sintomas_relacionados": ["falta_de_enfoque", "dificultad_concentracion", "confusión_mental", "falta_claridad"],
-    "doterra_sku": "30110032"
+    "categoria": [
+      "enfoque",
+      "claridad_mental",
+      "concentracion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60300006-intune-ec-es-web.jpg",
+    "precio_usd": 42.0,
+    "pv": 34,
+    "descripcion": "InTune es una mezcla enfocada diseñada para apoyar la concentración y el enfoque mental. Contiene Amyris, Frankincense, Lime, Ylang Ylang, Sandalwood y Roman Chamomile. Favorece la claridad mental profunda.",
+    "beneficios": [
+      "Apoya la concentración y el enfoque",
+      "Favorece la claridad mental profunda",
+      "Promueve el rendimiento cognitivo",
+      "Aroma centrador y aclarante",
+      "Apoya el aprendizaje y la memoria"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para promover concentración y enfoque. Ideal durante trabajo intelectual. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en las sienes. Aplicar 1-2 veces al día, especialmente por la mañana.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "falta_de_concentracion",
+      "baja_memoria",
+      "confusión_mental"
+    ],
+    "doterra_sku": "60300006",
+    "precio_mayoreo": 31.5
   },
   {
     "id": "purify",
     "nombre": "Purify",
     "nombre_en": "Purify",
     "tipo": "mezcla",
-    "categoria": ["limpieza_aire", "purificacion", "ambiente_fresco"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/purify-oil.png",
-    "precio_usd": 33.75,
-    "pv": 27,
-    "descripcion": "Purify es una mezcla purificadora que apoya un aire limpio y fresco. Elimina olores desagradables naturalmente. Promueve un ambiente saludable y puro. Favorece la sensación de frescura en el hogar.",
-    "beneficios": ["Purifica el aire naturalmente", "Elimina olores desagradables", "Apoya ambiente limpio y fresco", "Promueve aire saludable", "Refresca el hogar"],
-    "uso_aromatico": "Difundir 3-4 gotas para purificar el aire",
-    "uso_topico": "No recomendado para uso tópico",
-    "uso_interno": "No recomendado para uso interno",
-    "sintomas_relacionados": ["aire_viciado", "olores_desagradables", "ambiente_contaminado"],
-    "doterra_sku": "30110033"
+    "categoria": [
+      "limpieza_aire",
+      "purificacion",
+      "ambiente_fresco"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60300007-purify-ec-es-web.jpg",
+    "precio_usd": 38.0,
+    "pv": 30,
+    "descripcion": "Purify es una mezcla purificante diseñada para limpiar y purificar el ambiente. Contiene Lemongrass, Cilantro, Melaleuca, Limón y Oregano. Apoya la purificación del hogar de manera natural.",
+    "beneficios": [
+      "Apoya la purificación del ambiente",
+      "Favorece un hogar limpio",
+      "Aroma fresco y limpiador",
+      "Promueve purificación natural",
+      "Apoya la limpieza del hogar"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para purificar el ambiente. Ideal en diferentes espacios. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir bien con aceite portador antes de aplicar. Aplicar 1-2 veces al día si se desea.",
+    "uso_interno": "NO recomendado para uso interno en esta formulación.",
+    "sintomas_relacionados": [
+      "ambiente_contaminado",
+      "aire_impuro"
+    ],
+    "doterra_sku": "60300007",
+    "precio_mayoreo": 28.5
   },
   {
     "id": "terrashield",
     "nombre": "TerraShield",
     "nombre_en": "TerraShield",
     "tipo": "mezcla",
-    "categoria": ["proteccion_exterior", "defensa_natural", "aventura_al_aire"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/terrashield-oil.png",
-    "precio_usd": 33.45,
-    "pv": 26,
-    "descripcion": "TerraShield es una mezcla que apoya la protección durante actividades al aire libre. Proporciona defensa natural contra insectos comunes. Favorece la comodidad mientras se disfruta de la naturaleza. Apoya la protección general.",
-    "beneficios": ["Apoya protección al aire libre", "Proporciona defensa contra insectos", "Favorece comodidad exterior", "Apoya aventura al aire libre", "Proporciona defensa natural"],
-    "uso_aromatico": "Difundir antes de actividades al aire libre",
-    "uso_topico": "Diluir y aplicar en piel expuesta",
-    "uso_interno": "No recomendado para uso interno",
-    "sintomas_relacionados": ["exposicion_insectos", "actividades_al_aire", "incomodidad_exterior"],
-    "doterra_sku": "30110034"
+    "categoria": [
+      "proteccion_exterior",
+      "defensa_natural",
+      "aventura_al_aire"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201758-terrashield-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNDQ5MDB8aW1hZ2UvanBlZ3xpbWFnZXMvaGZkL2hjYy85ODg0Nzk4MjE4MjcwLmpwZ3w5MWI3MjdlMjk3OGQ1YjUzMjQ2N2ZiYWI3OGY3ZGY0OGQ3MWMxY2E5MjdhZTVhZWU0ZWMxMGI5ZDIwN2E3NWFl",
+    "precio_usd": 18,
+    "pv": 8.5,
+    "descripcion": "TerraShield es una mezcla protectora diseñada para fortalecer las defensas naturales del cuerpo. Contiene Geranium, Thyme, Lavender, Eucalipto y Menta Piperita. Aroma protector y vigorizante.",
+    "beneficios": [
+      "Fortalece las defensas naturales",
+      "Apoya el bienestar inmunológico",
+      "Protector y vigorizante",
+      "Aroma protector natural",
+      "Apoya la salud general"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para fortalecer defensas. Ideal durante cambios estacionales. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en el pecho o plantas de pies. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1 gota en cápsulas vegetales, máximo 1 vez al día con alimentos.",
+    "sintomas_relacionados": [
+      "sistema_inmune_debil"
+    ],
+    "doterra_sku": "60201758",
+    "precio_mayoreo": 13.5
   },
   {
     "id": "zendocrine",
     "nombre": "Zendocrine",
     "nombre_en": "Zendocrine",
     "tipo": "mezcla",
-    "categoria": ["limpieza_corporal", "desintoxicacion", "bienestar_general"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/zendocrine-oil.png",
-    "precio_usd": 43.28,
-    "pv": 34,
-    "descripcion": "Zendocrine es una mezcla que apoya la limpieza corporal natural y ocasional. Promueve la función de órganos depuradores. Favorece el bienestar general mediante apoyo desintoxicante. Apoya procesos de limpieza saludables.",
-    "beneficios": ["Apoya limpieza corporal natural", "Promueve función depuradora", "Favorece bienestar desintoxicante", "Apoya procesos de limpieza", "Mantiene bienestar general"],
-    "uso_aromatico": "Difundir 2-3 gotas diariamente",
-    "uso_topico": "Diluir y aplicar sobre áreas de enfoque",
-    "uso_interno": "Agregar 1-2 gotas en agua o cápsulas",
-    "sintomas_relacionados": ["acumulacion_toxinas", "fatiga", "necesidad_limpieza_corporal"],
-    "doterra_sku": "30110035"
+    "categoria": [
+      "limpieza_corporal",
+      "desintoxicacion",
+      "bienestar_general"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60201686-zendocrine-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTEzNzN8aW1hZ2UvanBlZ3xpbWFnZXMvaDE5L2hhZi85ODg0Nzk4NDc1ODA2LmpwZ3xlYTdhZDgzMjdhNjc5NmRkMGIzNzY3MDBlMTFhYzcxYzBjZGVkNTI5NGJjNWVjMTlhNjQ0ODRkOTMzZjg3ZmFh",
+    "precio_usd": 42,
+    "pv": 27,
+    "descripcion": "Zendocrine es una mezcla desintoxicante diseñada para apoyar la purificación interna. Contiene Geranium, Juniper Berry, Cilantro, Romero y Lemongrass. Favorece la limpieza interna natural.",
+    "beneficios": [
+      "Apoya la purificación interna",
+      "Favorece la limpieza natural del cuerpo",
+      "Apoya el bienestar general",
+      "Aroma desintoxicante",
+      "Promueve vitalidad"
+    ],
+    "uso_aromatico": "Difundir 2-3 gotas para apoyar la purificación. Ideal durante programas de limpieza. Usar por 15-20 minutos.",
+    "uso_topico": "Diluir con aceite portador y aplicar en el abdomen o plantas de pies. Aplicar 1-2 veces al día.",
+    "uso_interno": "Tomar 1-2 gotas en cápsulas vegetales, máximo 1-2 veces al día con alimentos.",
+    "sintomas_relacionados": [
+      "necesidad_de_desintoxicacion",
+      "energia_baja"
+    ],
+    "doterra_sku": "60201686",
+    "precio_mayoreo": 31.5
   },
   {
     "id": "lifelong_vitality_pack",
     "nombre": "Lifelong Vitality Pack",
     "nombre_en": "Lifelong Vitality Pack",
     "tipo": "suplemento",
-    "categoria": ["nutricion_fundamental", "bienestar_general", "salud_diaria"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/lifelong-vitality-pack.png",
-    "precio_usd": 89.95,
-    "pv": 72,
-    "descripcion": "El Lifelong Vitality Pack es un conjunto de suplementos nutritivos que apoya el bienestar fundamental. Proporciona antioxidantes esenciales y apoyo nutricional diario. Favorece la salud celular y la vitalidad general. Apoya un estilo de vida saludable.",
-    "beneficios": ["Apoya nutrición fundamental", "Proporciona antioxidantes esenciales", "Favorece vitalidad y energía diaria", "Apoya salud celular", "Mantiene bienestar general"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar según las indicaciones en el empaque diariamente",
-    "sintomas_relacionados": ["deficiencia_nutricional", "fatiga_general", "envejecimiento", "falta_vitalidad"],
-    "doterra_sku": "30110036"
+    "categoria": [
+      "nutricion_fundamental",
+      "bienestar_general",
+      "salud_diaria"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60400001-lifelong-vitality-pack-ec-es-web.jpg",
+    "precio_usd": 65.0,
+    "pv": 52,
+    "descripcion": "Lifelong Vitality Pack es un programa completo de suplementación nutricional que incluye cápsulas esenciales para apoyar la salud general, vitalidad y bienestar de por vida. Kit completo con 3 tipos de cápsulas.",
+    "beneficios": [
+      "Apoya la salud general",
+      "Promueve vitalidad de por vida",
+      "Apoya el bienestar inmunológico",
+      "Favorece la energía sostenida",
+      "Programa completo de nutrición"
+    ],
+    "uso_aromatico": "N/A - Este es un producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar según las indicaciones del empaque. Generalmente 3 cápsulas diferentes por día durante las comidas.",
+    "sintomas_relacionados": [
+      "falta_de_energia",
+      "sistema_inmune_debil",
+      "envejecimiento"
+    ],
+    "doterra_sku": "60400001",
+    "precio_mayoreo": 48.75
   },
   {
     "id": "digestzen_terrazyme",
     "nombre": "DigestZen TerraZyme",
     "nombre_en": "DigestZen TerraZyme",
     "tipo": "suplemento",
-    "categoria": ["enzimas_digestivas", "digestion", "asimilacion"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/digestzen-terrazyme.png",
-    "precio_usd": 29.95,
-    "pv": 24,
-    "descripcion": "DigestZen TerraZyme es un suplemento de enzimas digestivas que apoya la digestión saludable. Favorece la asimilación óptima de nutrientes. Promueve confort gastrointestinal ocasional. Apoya la función digestiva general.",
-    "beneficios": ["Apoya digestión saludable", "Favorece asimilación de nutrientes", "Promueve confort gastrointestinal", "Apoya función digestiva óptima", "Facilita descomposición de alimentos"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 1-2 cápsulas con cada comida principal",
-    "sintomas_relacionados": ["malestar_digestivo", "mala_digestion", "hinchazón", "indigestion"],
-    "doterra_sku": "30110037"
+    "categoria": [
+      "enzimas_digestivas",
+      "digestion",
+      "asimilacion"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60400002-digestzen-terrazyme-ec-es-web.jpg",
+    "precio_usd": 28.0,
+    "pv": 22,
+    "descripcion": "DigestZen TerraZyme es un complejo enzimático digestivo que apoya la digestión saludable y eficiente. Contiene enzimas digestivas y aceites esenciales de DigestZen.",
+    "beneficios": [
+      "Apoya la digestión saludable",
+      "Favorece la absorción de nutrientes",
+      "Apoya el confort digestivo",
+      "Promueve bienestar gastrointestinal",
+      "Enzimas naturales digestivas"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar 1-2 cápsulas con cada comida según sea necesario para apoyar la digestión.",
+    "sintomas_relacionados": [
+      "indigestion",
+      "malestar_digestivo",
+      "absorcion_lenta"
+    ],
+    "doterra_sku": "60400002",
+    "precio_mayoreo": 21.0
   },
   {
     "id": "pb_assist_plus",
     "nombre": "PB Assist+",
     "nombre_en": "PB Assist+",
     "tipo": "suplemento",
-    "categoria": ["probioticos", "salud_intestinal", "bienestar_digestivo"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/pb-assist-plus.png",
-    "precio_usd": 42.50,
-    "pv": 34,
-    "descripcion": "PB Assist+ es un suplemento de probióticos que apoya el equilibrio saludable de flora intestinal. Favorece la salud digestiva y la función intestinal. Promueve la inmunidad intestinal. Apoya el bienestar gastrointestinal general.",
-    "beneficios": ["Apoya flora intestinal saludable", "Favorece salud digestiva", "Promueve función intestinal", "Apoya inmunidad intestinal", "Mantiene bienestar gastrointestinal"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 1 cápsula diariamente con alimentos",
-    "sintomas_relacionados": ["flora_desequilibrada", "malestar_intestinal", "debilidad_digestiva"],
-    "doterra_sku": "30110038"
+    "categoria": [
+      "probioticos",
+      "salud_intestinal",
+      "bienestar_digestivo"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60400003-pb-assist-plus-ec-es-web.jpg",
+    "precio_usd": 35.0,
+    "pv": 28,
+    "descripcion": "PB Assist+ es un complejo probiótico que apoya la flora intestinal saludable y el equilibrio gastrointestinal. Contiene cepas probióticas y fibra prebiática.",
+    "beneficios": [
+      "Apoya la flora intestinal saludable",
+      "Favorece el equilibrio gastrointestinal",
+      "Apoya la digestión saludable",
+      "Promueve bienestar del sistema digestivo",
+      "Probióticos naturales"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar 1 cápsula 1-2 veces al día con alimentos para apoyar flora intestinal saludable.",
+    "sintomas_relacionados": [
+      "flora_intestinal_debil",
+      "digestion_lenta",
+      "bienestar_intestinal"
+    ],
+    "doterra_sku": "60400003",
+    "precio_mayoreo": 26.25
   },
   {
     "id": "deep_blue_polyphenol",
-    "nombre": "Deep Blue Polyphenol Complex",
+    "nombre": "Deep Blue Polyphenol",
     "nombre_en": "Deep Blue Polyphenol Complex",
     "tipo": "suplemento",
-    "categoria": ["comodidad_articular", "antioxidante", "movimiento"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/deep-blue-polyphenol.png",
-    "precio_usd": 39.95,
-    "pv": 32,
-    "descripcion": "Deep Blue Polyphenol Complex es un suplemento que apoya la comodidad articular y muscular. Proporciona polifenoles antioxidantes naturales. Favorece la movilidad y flexibilidad saludables. Apoya la función articular óptima.",
-    "beneficios": ["Apoya comodidad articular", "Proporciona apoyo antioxidante", "Favorece movilidad saludable", "Apoya flexibilidad", "Mantiene función articular"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 2 cápsulas diarias con alimentos",
-    "sintomas_relacionados": ["rigidez_articular", "molestia_articular", "limitacion_movimiento"],
-    "doterra_sku": "30110039"
+    "categoria": [
+      "comodidad_articular",
+      "antioxidante",
+      "movimiento"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60214930-deep-blue-polyphenol-complex-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNjc1MTh8aW1hZ2UvanBlZ3xpbWFnZXMvaGI0L2g5MS85OTI5Mjc2MjA0MDYyLmpwZ3xkOTE2MjQzYjFlOTkyNTRhNmI1ZjIwYjVhN2VlN2IyMWEwNTUwOGQxYTJkYTIzNzMwZjY3OGI3OWMxNDVhYjg3",
+    "precio_usd": 63,
+    "pv": 39,
+    "descripcion": "Deep Blue Polyphenol es un complejo antioxidante que apoya la respuesta inflamatoria normal. Contiene polifenoles naturales y extractos botánicos.",
+    "beneficios": [
+      "Apoya la respuesta inflamatoria normal",
+      "Proporciona antioxidantes potentes",
+      "Apoya la salud general",
+      "Favorece el bienestar",
+      "Polifenoles naturales"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar 2-3 cápsulas por día con alimentos según sea necesario.",
+    "sintomas_relacionados": [
+      "inflamacion_general",
+      "envejecimiento"
+    ],
+    "doterra_sku": "60214930",
+    "precio_mayoreo": 47
   },
   {
     "id": "on_guard_softgels",
-    "nombre": "doTERRA On Guard+ Softgels",
+    "nombre": "On Guard Softgels",
     "nombre_en": "doTERRA On Guard+ Softgels",
     "tipo": "suplemento",
-    "categoria": ["bienestar_inmunologico", "proteccion_diaria", "respuesta_defensiva"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/on-guard-softgels.png",
-    "precio_usd": 34.95,
-    "pv": 28,
-    "descripcion": "doTERRA On Guard+ Softgels es un suplemento que apoya el bienestar inmunológico diario. Proporciona protección mediante respuesta defensiva saludable. Favorece la salud inmunológica general. Apoya la vitalidad durante cambios estacionales.",
-    "beneficios": ["Apoya bienestar inmunológico", "Proporciona respuesta defensiva saludable", "Favorece protección diaria", "Apoya salud inmunológica general", "Mantiene vitalidad estacional"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 1-2 softgels diarios con alimentos",
-    "sintomas_relacionados": ["debilidad_inmunologica", "cambios_estacionales", "fatiga_inmunologica"],
-    "doterra_sku": "30110040"
+    "categoria": [
+      "bienestar_inmunologico",
+      "proteccion_diaria",
+      "respuesta_defensiva"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60400005-on-guard-softgels-ec-es-web.jpg",
+    "precio_usd": 32.0,
+    "pv": 25,
+    "descripcion": "On Guard Softgels son cápsulas blandas que contienen la mezcla On Guard en formato convenient para apoyo inmunológico diario.",
+    "beneficios": [
+      "Apoya el bienestar inmunológico",
+      "Formato cómodo en softgels",
+      "Apoyo inmunológico diario",
+      "Fácil de tomar",
+      "Mezcla On Guard en cápsula"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar 1-2 softgels diariamente con alimentos para apoyo inmunológico.",
+    "sintomas_relacionados": [
+      "bienestar_inmune_bajo"
+    ],
+    "doterra_sku": "60400005",
+    "precio_mayoreo": 24.0
   },
   {
     "id": "copaiba_softgels",
     "nombre": "Copaiba Softgels",
     "nombre_en": "Copaiba Softgels",
     "tipo": "suplemento",
-    "categoria": ["sistema_nervioso", "bienestar_general", "apoyo_diario"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/copaiba-softgels.png",
-    "precio_usd": 47.25,
-    "pv": 37,
-    "descripcion": "Copaiba Softgels es un suplemento que apoya el bienestar del sistema nervioso. Promueve relajación ocasional y confort general. Apoya el equilibrio emocional y la estabilidad. Favorece el bienestar integral.",
-    "beneficios": ["Apoya sistema nervioso saludable", "Promueve relajación ocasional", "Apoya equilibrio emocional", "Favorece bienestar general", "Mantiene confort integral"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 1-2 softgels diarios con alimentos",
-    "sintomas_relacionados": ["tension_nerviosa", "estrés", "desbalance_emocional"],
-    "doterra_sku": "30110041"
+    "categoria": [
+      "sistema_nervioso",
+      "bienestar_general",
+      "apoyo_diario"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60400006-copaiba-softgels-ec-es-web.jpg",
+    "precio_usd": 45.0,
+    "pv": 36,
+    "descripcion": "Copaiba Softgels son cápsulas blandas que contienen aceite de Copaiba puro para apoyo a la respuesta inflamatoria y circulación saludable.",
+    "beneficios": [
+      "Apoya la respuesta inflamatoria normal",
+      "Favorece la circulación saludable",
+      "Formato convenient en softgels",
+      "Aceite de Copaiba puro",
+      "Fácil de tomar"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar 1-2 softgels diariamente con alimentos para apoyo de circulación e inflamación.",
+    "sintomas_relacionados": [
+      "circulacion_lenta",
+      "inflamacion_general"
+    ],
+    "doterra_sku": "60400006",
+    "precio_mayoreo": 33.75
   },
   {
     "id": "turmeric_capsules",
-    "nombre": "Turmeric Dual Chamber Capsules",
+    "nombre": "Turmeric Capsules",
     "nombre_en": "Turmeric Dual Chamber Capsules",
     "tipo": "suplemento",
-    "categoria": ["salud_celular", "antioxidante", "bienestar_inflamatorio"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/turmeric-capsules.png",
-    "precio_usd": 38.95,
-    "pv": 31,
-    "descripcion": "Turmeric Dual Chamber Capsules es un suplemento que apoya la salud celular y proporciona protección antioxidante. Favorece la respuesta inflamatoria saludable ocasional. Apoya el bienestar general del cuerpo. Promueve longevidad y vitalidad.",
-    "beneficios": ["Apoya salud celular", "Proporciona protección antioxidante", "Favorece respuesta inflamatoria saludable", "Apoya bienestar general", "Promueve longevidad"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 1 cápsula diaria con alimentos",
-    "sintomas_relacionados": ["envejecimiento_celular", "inflamacion_ocasional", "debilidad_antioxidante"],
-    "doterra_sku": "30110042"
+    "categoria": [
+      "salud_celular",
+      "antioxidante",
+      "bienestar_inflamatorio"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60400007-turmeric-capsules-ec-es-web.jpg",
+    "precio_usd": 35.0,
+    "pv": 28,
+    "descripcion": "Turmeric Capsules contienen extracto de cúrcuma puro para apoyar la respuesta inflamatoria normal y el bienestar general.",
+    "beneficios": [
+      "Apoya la respuesta inflamatoria normal",
+      "Favorece la salud articular",
+      "Apoya el bienestar general",
+      "Extracto de cúrcuma puro",
+      "Fácil de tomar"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Tomar 1-2 cápsulas diariamente con alimentos para apoyo antinflamatorio.",
+    "sintomas_relacionados": [
+      "inflamacion_articular",
+      "tension_muscular"
+    ],
+    "doterra_sku": "60400007",
+    "precio_mayoreo": 26.25
   },
   {
     "id": "metapwr",
     "nombre": "MetaPWR",
     "nombre_en": "MetaPWR",
     "tipo": "suplemento",
-    "categoria": ["apoyo_metabolico", "energia", "composicion_corporal"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/metapwr.png",
-    "precio_usd": 45.95,
-    "pv": 36,
-    "descripcion": "MetaPWR es un suplemento que apoya la salud metabólica y la energía. Favorece una composición corporal saludable. Promueve saciedad y apoyo nutricional. Apoya objetivos de bienestar y vitalidad.",
-    "beneficios": ["Apoya salud metabólica", "Favorece composición corporal saludable", "Promueve energía sostenida", "Apoya saciedad", "Mantiene bienestar y vitalidad"],
-    "uso_aromatico": "N/A",
-    "uso_topico": "N/A",
-    "uso_interno": "Tomar 1-2 cápsulas diarias con agua",
-    "sintomas_relacionados": ["metabolismo_lento", "falta_energia", "composicion_corporal_desequilibrada"],
-    "doterra_sku": "30110043"
+    "categoria": [
+      "apoyo_metabolico",
+      "energia",
+      "composicion_corporal"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-15ml-60218781-metapwr-ec-es-web.jpg?context=bWFzdGVyfGltYWdlc3wxNTA3NTV8aW1hZ2UvanBlZ3xpbWFnZXMvaDQ5L2hiMi85OTUyNTg3MDIzMzkwLmpwZ3w4Y2IyOTMxMGIzMjcxN2YxN2U3MGQ3NjM3YmVjMjBmMGJmZDQ3YWMxYjNkMjdhOWIxMjA3MzI4MzIxZmQ3MTlk",
+    "precio_usd": 55,
+    "pv": 34,
+    "descripcion": "MetaPWR es un programa metabólico completo que apoya el metabolismo saludable, la energía y el peso corporal ideal.",
+    "beneficios": [
+      "Apoya el metabolismo saludable",
+      "Favorece la energía sostenida",
+      "Apoya el peso corporal ideal",
+      "Promueve vitalidad",
+      "Programa metabólico completo"
+    ],
+    "uso_aromatico": "N/A - Producto de suplementación",
+    "uso_topico": "N/A - Para uso interno únicamente",
+    "uso_interno": "Seguir las indicaciones del programa - generalmente 2-3 componentes diferentes al día.",
+    "sintomas_relacionados": [
+      "baja_energia",
+      "metabolismo_lento",
+      "peso_excesivo"
+    ],
+    "doterra_sku": "60218781",
+    "precio_mayoreo": 41
   },
   {
     "id": "healthy_start_kit",
     "nombre": "Healthy Start Kit",
     "nombre_en": "Healthy Start Kit",
     "tipo": "kit",
-    "categoria": ["inicio_wellness", "aceites_esenciales", "bienestar_fundamental"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/healthy-start-kit.png",
-    "precio_usd": 149.95,
+    "categoria": [
+      "inicio_wellness",
+      "aceites_esenciales",
+      "bienestar_fundamental"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60500001-healthy-start-kit-ec-es-web.jpg",
+    "precio_usd": 150.0,
     "pv": 120,
-    "descripcion": "Healthy Start Kit es un kit completo de inicio que incluye aceites esenciales clave y suplementos. Apoya el bienestar general mediante nutrición y aromaterapia. Proporciona todo lo necesario para empezar un estilo de vida saludable. Incluye difusor y guía de uso.",
-    "beneficios": ["Proporciona inicio de wellness", "Incluye aceites esenciales versátiles", "Apoya nutrición fundamental", "Facilita bienestar integral", "Incluye recursos educativos"],
-    "uso_aromatico": "Usar difusor con aceites incluidos",
-    "uso_topico": "Aplicar aceites diluidos según indicaciones",
-    "uso_interno": "Usar suplementos según indicaciones",
-    "sintomas_relacionados": ["inicio_wellness", "falta_conocimiento", "necesidad_variedad"],
-    "doterra_sku": "30110044"
+    "descripcion": "Healthy Start Kit es un kit de inicio completo para familias que desean comenzar con doTERRA. Incluye aceites esenciales básicos, difusor y guía de uso.",
+    "beneficios": [
+      "Kit completo para iniciarse en doTERRA",
+      "Incluye aceites esenciales básicos",
+      "Incluye difusor",
+      "Guía de uso incluida",
+      "Perfecto para familias"
+    ],
+    "uso_aromatico": "Usar los aceites incluidos con el difusor",
+    "uso_topico": "Seguir indicaciones según aceites incluidos",
+    "uso_interno": "Seguir indicaciones según aceites incluidos",
+    "sintomas_relacionados": [
+      "iniciarse_en_aromaterapia"
+    ],
+    "doterra_sku": "60500001",
+    "precio_mayoreo": 112.5
   },
   {
     "id": "home_essentials_kit",
     "nombre": "Home Essentials Kit",
     "nombre_en": "Home Essentials Kit",
     "tipo": "kit",
-    "categoria": ["hogar_saludable", "aceites_versatiles", "bienestar_familiar"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/home-essentials-kit.png",
-    "precio_usd": 179.95,
-    "pv": 144,
-    "descripcion": "Home Essentials Kit es un kit que proporciona aceites esenciales versátiles para toda la familia. Apoya el bienestar del hogar en múltiples aspectos. Favorece la salud integral del ambiente familiar. Incluye difusor y accesorios de aplicación.",
-    "beneficios": ["Proporciona aceites versátiles", "Apoya bienestar familiar integral", "Favorece ambiente saludable en el hogar", "Incluye múltiples opciones de uso", "Incluye difusor de calidad"],
-    "uso_aromatico": "Usar difusor para crear ambiente saludable",
-    "uso_topico": "Aplicar aceites según necesidades",
-    "uso_interno": "Usar internamente según indicaciones",
-    "sintomas_relacionados": ["bienestar_familiar", "ambiente_hogar", "necesidad_versatilidad"],
-    "doterra_sku": "30110045"
+    "categoria": [
+      "hogar_saludable",
+      "aceites_versatiles",
+      "bienestar_familiar"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60500002-home-essentials-kit-ec-es-web.jpg",
+    "precio_usd": 195.0,
+    "pv": 156,
+    "descripcion": "Home Essentials Kit es un kit completo de aceites esenciales para toda la familia. Incluye todos los aceites necesarios para bienestar del hogar.",
+    "beneficios": [
+      "Kit completo para el hogar",
+      "Todos los aceites esenciales de base",
+      "Difusor incluido",
+      "Amplio rango de beneficios",
+      "Soluciones para toda la familia"
+    ],
+    "uso_aromatico": "Usar aceites según necesidad",
+    "uso_topico": "Seguir indicaciones según aceites incluidos",
+    "uso_interno": "Seguir indicaciones según aceites incluidos",
+    "sintomas_relacionados": [
+      "bienestar_familiar"
+    ],
+    "doterra_sku": "60500002",
+    "precio_mayoreo": 146.25
   },
   {
     "id": "natural_solutions_kit",
     "nombre": "Natural Solutions Kit",
     "nombre_en": "Natural Solutions Kit",
     "tipo": "kit",
-    "categoria": ["soluciones_naturales", "bienestar_completo", "autocuidado"],
-    "imagen_url": "https://media.doterra.com/us/en/images/products/natural-solutions-kit.png",
-    "precio_usd": 199.95,
-    "pv": 160,
-    "descripcion": "Natural Solutions Kit es un kit premium que ofrece soluciones naturales completas. Apoya el bienestar en múltiples áreas de la salud. Favorece el autocuidado integral y la vitalidad. Incluye aceites, mezclas, suplementos y difusor.",
-    "beneficios": ["Proporciona soluciones naturales completas", "Apoya autocuidado integral", "Favorece bienestar multidimensional", "Incluye variedad de productos", "Promueve estilo de vida saludable"],
-    "uso_aromatico": "Usar difusor con múltiples opciones",
-    "uso_topico": "Aplicar aceites y mezclas según necesidades",
-    "uso_interno": "Usar suplementos según indicaciones",
-    "sintomas_relacionados": ["necesidad_wellness_integral", "autocuidado", "bienestar_completo"],
-    "doterra_sku": "30110046"
+    "categoria": [
+      "soluciones_naturales",
+      "bienestar_completo",
+      "autocuidado"
+    ],
+    "imagen_url": "https://www.doterra.com/medias/2x3-566x819-60500003-natural-solutions-kit-ec-es-web.jpg",
+    "precio_usd": 175.0,
+    "pv": 140,
+    "descripcion": "Natural Solutions Kit es un kit especializado con soluciones naturales para los desafíos de salud más comunes. Incluye mezclas especiales y aceites terapéuticos.",
+    "beneficios": [
+      "Soluciones naturales completas",
+      "Mezclas especializadas incluidas",
+      "Aborda desafíos de salud comunes",
+      "Enfoque natural y holístico",
+      "Kit muy versátil"
+    ],
+    "uso_aromatico": "Usar mezclas incluidas según necesidad",
+    "uso_topico": "Seguir indicaciones según productos incluidos",
+    "uso_interno": "Seguir indicaciones según productos incluidos",
+    "sintomas_relacionados": [
+      "desafios_de_salud_comunes"
+    ],
+    "doterra_sku": "60500003",
+    "precio_mayoreo": 131.25
   }
 ]

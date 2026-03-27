@@ -101,6 +101,12 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
     consult_msg = f"Hola Suzanna! Me interesa {product['nombre']} ({product.get('nombre_en', '')}). ¿Me puedes dar más información?"
     consult_link = whatsapp_link(consult_msg)
     icon = get_product_icon(product)
+    imagen_url = product.get('imagen_url', '')
+    # Use real product image if available, fallback to emoji icon
+    if imagen_url and 'doterra.com/medias/' in imagen_url:
+        image_html = f'<img src="{imagen_url}" alt="{product["nombre"]}" style="width: 80px; height: 80px; object-fit: contain; border-radius: 12px;" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\';"><div style="display:none;width:80px;height:80px;background:linear-gradient(135deg,#e8f0e4,#f0ead8);border-radius:12px;align-items:center;justify-content:center;font-size:34px;">{icon}</div>'
+    else:
+        image_html = f'<div style="width:80px;height:80px;background:linear-gradient(135deg,#e8f0e4,#f0ead8);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:34px;">{icon}</div>'
 
     # Rank label
     rank_labels = {1: '🥇 Mejor opción', 2: '🥈 Excelente alternativa', 3: '🥉 También recomendado'}
@@ -112,6 +118,10 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
         match_html = f'<span style="background: linear-gradient(135deg, var(--primary), var(--gold)); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">{match_percentage}%</span>'
 
     reason_html = f'<div style="background: rgba(124,144,112,0.08); color: var(--primary); padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 12px; border-left: 3px solid var(--primary);">{recommendation_reason}</div>' if recommendation_reason else ''
+
+    # Wholesale price display
+    precio_mayoreo = product.get('precio_mayoreo', '')
+    mayoreo_html = f'<span style="color: #999; font-size: 12px; text-decoration: line-through;">${precio_mayoreo}</span>' if precio_mayoreo else ''
 
     # Benefits (max 4)
     benefits = product.get('beneficios', [])[:4]
@@ -133,8 +143,8 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
     html = f"""
     <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 18px; box-shadow: 0 2px 12px rgba(60,50,41,0.07); border: 1px solid rgba(0,0,0,0.04);">
         <div style="display: flex; align-items: flex-start; gap: 18px; margin-bottom: 14px;">
-            <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #e8f0e4, #f0ead8); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0;">
-                {icon}
+            <div style="flex-shrink: 0;">
+                {image_html}
             </div>
             <div style="flex: 1; min-width: 0;">
                 {rank_html}
@@ -145,6 +155,7 @@ def create_product_card(product, match_percentage=None, recommendation_reason=No
                 </div>
                 <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 4px;">
                     <span style="font-size: 1.4rem; font-weight: 700; color: var(--terracotta);">{price_display}</span>
+                    {mayoreo_html}
                     <span style="color: #bbb; font-size: 12px;">PV: {pv_display}</span>
                 </div>
             </div>
@@ -811,12 +822,38 @@ def page_dashboard():
     st.markdown("---")
 
     st.markdown("<h3>Inventario de Productos</h3>", unsafe_allow_html=True)
-    st.dataframe(
-        [(p['nombre'], p['precio_usd'], p['pv'], ', '.join(p.get('categoria', [])))
-         for p in products_data],
-        columns=["Producto", "Precio USD", "PV", "Categorías"],
-        use_container_width=True
-    )
+
+    # Search/filter
+    search_term = st.text_input("🔍 Buscar producto:", placeholder="Escribe el nombre del producto...", key="dash_search")
+
+    filtered = products_data
+    if search_term:
+        term = search_term.lower()
+        filtered = [p for p in products_data if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower()]
+
+    st.markdown(f"<p style='color: #888; font-size: 14px;'>Mostrando {len(filtered)} de {len(products_data)} productos</p>", unsafe_allow_html=True)
+
+    # Product cards in dashboard
+    for p in filtered:
+        img_url = p.get('imagen_url', '')
+        img_tag = f'<img src="{img_url}" style="width:50px;height:50px;object-fit:contain;border-radius:8px;" onerror="this.style.display=\'none\'">' if img_url and 'doterra.com' in img_url else '📦'
+        mayoreo = p.get('precio_mayoreo', '')
+        mayoreo_str = f" | Mayoreo: ${mayoreo}" if mayoreo else ""
+        sku = p.get('doterra_sku', '')
+        cats = ', '.join(p.get('categoria', [])[:3])
+        st.markdown(f"""
+        <div style="display: flex; align-items: center; gap: 14px; padding: 12px 16px; background: white; border-radius: 10px; margin-bottom: 8px; border: 1px solid #eee;">
+            <div style="flex-shrink:0;">{img_tag}</div>
+            <div style="flex: 1; min-width: 0;">
+                <div style="font-weight: 600; color: #333;">{p['nombre']} <span style="color: #aaa; font-size: 12px;">{p.get('nombre_en', '')}</span></div>
+                <div style="font-size: 12px; color: #888;">SKU: {sku} | {cats}</div>
+            </div>
+            <div style="text-align: right; flex-shrink: 0;">
+                <div style="font-weight: 700; color: #B87333;">${p['precio_usd']}</div>
+                <div style="font-size: 11px; color: #aaa;">PV: {p['pv']}{mayoreo_str}</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.markdown("---")
     st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
