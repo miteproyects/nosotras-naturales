@@ -320,9 +320,9 @@ PAGE_TO_RADIO = {
 }
 
 def navigate_to(page_key):
-    """Navigate to a page and sync the radio nav widget."""
+    """Navigate to a page. Sets a pending nav so radio syncs before render."""
     st.session_state.page = page_key
-    st.session_state.top_nav_radio = PAGE_TO_RADIO.get(page_key, "🏠 Inicio")
+    st.session_state._pending_nav = PAGE_TO_RADIO.get(page_key, "🏠 Inicio")
     st.rerun()
 
 # ============================================
@@ -920,10 +920,12 @@ def on_nav_change():
             st.session_state.selected_tags = []
             st.session_state.question_history = []
 
-# Ensure radio value is synced with current page
-current_radio = PAGE_TO_RADIO.get(st.session_state.page, "🏠 Inicio")
-if 'top_nav_radio' not in st.session_state:
-    st.session_state.top_nav_radio = current_radio
+# Apply pending navigation (from navigate_to) BEFORE radio renders
+if '_pending_nav' in st.session_state:
+    st.session_state.top_nav_radio = st.session_state._pending_nav
+    del st.session_state._pending_nav
+elif 'top_nav_radio' not in st.session_state:
+    st.session_state.top_nav_radio = PAGE_TO_RADIO.get(st.session_state.page, "🏠 Inicio")
 
 st.radio(
     "nav",
