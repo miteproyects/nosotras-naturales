@@ -70,15 +70,34 @@ def whatsapp_link(message):
     encoded = urllib.parse.quote(message)
     return f"https://wa.me/{WHATSAPP_NUMBER}?text={encoded}"
 
-def create_product_card(product, match_percentage=None):
-    """Create HTML card for a product"""
+def create_product_card(product, match_percentage=None, recommendation_reason=None):
+    """Create comprehensive HTML card showing ALL product info like an expert would"""
     price_display = f"${product.get('precio_usd', 'N/A')}"
-    match_html = f'<div class="match-badge">{match_percentage}% Match</div>' if match_percentage else ''
+    pv_display = product.get('pv', '')
+    match_html = f'<div class="match-badge">{match_percentage}% Compatible</div>' if match_percentage else ''
+    reason_html = f'<div class="recommendation-reason">{recommendation_reason}</div>' if recommendation_reason else ''
     comprar_link = DOTERRA_SHOP_URL
-    consult_msg = f"Hola Suzanna! 👋 Me gustaría conocer más sobre {product['nombre']}. ¿Puedes ayudarme?"
+    consult_msg = f"Hola Suzanna! 👋 Me interesa {product['nombre']} ({product.get('nombre_en', '')}). ¿Me puedes dar más información y ayudarme a hacer mi pedido?"
     consult_link = whatsapp_link(consult_msg)
 
-    benefits_html = ''.join([f'<li>{b}</li>' for b in product.get('beneficios', [])[:3]])
+    # ALL benefits, not just 3
+    benefits_html = ''.join([f'<li>{b}</li>' for b in product.get('beneficios', [])])
+
+    # ALL three usage methods
+    uso_aromatico = product.get('uso_aromatico', '')
+    uso_topico = product.get('uso_topico', '')
+    uso_interno = product.get('uso_interno', '')
+
+    usage_sections = ''
+    if uso_aromatico:
+        usage_sections += f'<div class="usage-item"><span class="usage-icon">🌬️</span><strong>Aromático:</strong> {uso_aromatico}</div>'
+    if uso_topico:
+        usage_sections += f'<div class="usage-item"><span class="usage-icon">✋</span><strong>Tópico:</strong> {uso_topico}</div>'
+    if uso_interno:
+        usage_sections += f'<div class="usage-item"><span class="usage-icon">💧</span><strong>Interno:</strong> {uso_interno}</div>'
+
+    # Categories as badges
+    cat_badges = ''.join([f'<span class="cat-badge">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:4]])
 
     html = f"""
     <div class="product-card">
@@ -87,19 +106,25 @@ def create_product_card(product, match_percentage=None):
             <img src="{product['imagen_url']}" alt="{product['nombre']}">
         </div>
         <div class="product-info">
-            <h3>{product['nombre']}</h3>
-            <p class="product-price">{price_display}</p>
+            <h3>{product['nombre']} <span style="color: #999; font-size: 14px; font-weight: 400;">({product.get('nombre_en', '')})</span></h3>
+            {reason_html}
+            <div style="display: flex; align-items: baseline; gap: 15px; margin-bottom: 12px;">
+                <span class="product-price">{price_display}</span>
+                <span style="color: #999; font-size: 13px;">PV: {pv_display}</span>
+            </div>
+            <div class="cat-badges">{cat_badges}</div>
             <p class="product-description">{product['descripcion']}</p>
             <div class="product-benefits">
-                <strong>Beneficios:</strong>
+                <strong>Beneficios Clave:</strong>
                 <ul>{benefits_html}</ul>
             </div>
-            <div class="product-usage">
-                <p><strong>Uso Aromático:</strong> {product.get('uso_aromatico', 'N/A')}</p>
+            <div class="product-usage-section">
+                <strong style="color: var(--primary); display: block; margin-bottom: 8px;">Formas de Uso:</strong>
+                {usage_sections}
             </div>
             <div class="product-buttons">
-                <a href="{comprar_link}" class="btn-primary" target="_blank">Comprar</a>
-                <a href="{consult_link}" class="btn-whatsapp" target="_blank">Consultar con Suzanna</a>
+                <a href="{comprar_link}" class="btn-primary" target="_blank">🛒 Comprar en doTERRA</a>
+                <a href="{consult_link}" class="btn-whatsapp" target="_blank">💬 Consultar con Suzanna</a>
             </div>
         </div>
     </div>
@@ -115,24 +140,125 @@ def get_current_question(flow_data, category_id, question_id):
                     return question
     return None
 
-def calculate_product_matches(selected_tags, products):
-    """Calculate match scores for products based on tags"""
-    matches = {}
+def calculate_product_matches(selected_tags, products, category_id=None):
+    """
+    Expert-level product matching algorithm.
+    Uses ALL product data: sintomas_relacionados, categoria, beneficios, descripcion.
+    ALWAYS returns at least 3 products - never leaves the user without a recommendation.
+    """
+    scores = []
+    selected_set = set(selected_tags)
+
+    # Map symptom flow category IDs to product category keywords
+    category_to_product_cats = {
+        'digestivo': ['digestion', 'bienestar_digestivo', 'comodidad_digestiva', 'enzimas_digestivas', 'bienestar_intestinal', 'salud_intestinal', 'asimilacion'],
+        'sueno': ['sueño', 'relajacion', 'bienestar_emocional', 'sistema_nervioso', 'equilibrio_emocional'],
+        'tension': ['relajacion', 'bienestar_emocional', 'equilibrio_emocional', 'sistema_nervioso', 'grounding', 'estabilidad', 'masaje'],
+        'muscular': ['comodidad_muscular', 'comodidad_articular', 'comodidad_ocasional', 'masaje', 'movimiento', 'recuperacion', 'bienestar_inflamatorio'],
+        'respiratorio': ['respiracion', 'bienestar_respiratorio', 'respiro_claro', 'limpieza_aire', 'proteccion'],
+        'piel': ['piel', 'autocuidado', 'proteccion_exterior'],
+        'femenino': ['salud_femenina', 'comodidad_mensual', 'equilibrio_hormonal', 'bienestar_emocional'],
+        'energia': ['energia', 'enfoque', 'concentracion', 'claridad_mental', 'bienestar_cerebral', 'animo', 'animo_positivo', 'elevacion'],
+        'inmunitario': ['bienestar_inmunologico', 'defensa_natural', 'respuesta_defensiva', 'proteccion_diaria', 'proteccion', 'bienestar_completo'],
+    }
+
+    relevant_cats = set(category_to_product_cats.get(category_id, []))
 
     for product in products:
+        score = 0
+        reasons = []
+
+        # 1. Direct symptom tag matches (highest weight: 30 pts each)
         product_symptoms = set(product.get('sintomas_relacionados', []))
-        selected_tags_set = set(selected_tags)
-        common = product_symptoms.intersection(selected_tags_set)
+        symptom_matches = product_symptoms.intersection(selected_set)
+        if symptom_matches:
+            score += len(symptom_matches) * 30
+            reasons.append(f"Coincide con {len(symptom_matches)} de tus síntomas")
 
-        if common:
-            match_percentage = int((len(common) / max(len(selected_tags_set), len(product_symptoms))) * 100)
-            matches[product['id']] = {
+        # 2. Category match (15 pts each matching category)
+        product_cats = set(product.get('categoria', []))
+        cat_matches = product_cats.intersection(relevant_cats)
+        if cat_matches:
+            score += len(cat_matches) * 15
+            reasons.append(f"Especializado en {', '.join(cat_matches)}")
+
+        # 3. Keyword match in description & benefits (5 pts each)
+        desc_lower = product.get('descripcion', '').lower()
+        benefits_text = ' '.join(product.get('beneficios', [])).lower()
+        all_text = desc_lower + ' ' + benefits_text
+
+        keyword_groups = {
+            'digestivo': ['digestiv', 'estomac', 'intestin', 'abdomen', 'gastrointestinal'],
+            'sueno': ['sueño', 'dormir', 'descanso', 'reparador', 'nocturno', 'relajante'],
+            'tension': ['tensión', 'estrés', 'calma', 'relajación', 'tranquilidad', 'equilibrio emocional', 'ansiedad'],
+            'muscular': ['muscul', 'articul', 'dolor', 'masaje', 'movimiento', 'recuper', 'inflam'],
+            'respiratorio': ['respirat', 'pulmón', 'nasal', 'bronq', 'vías', 'pecho', 'despej'],
+            'piel': ['piel', 'cutáne', 'facial', 'arruga', 'juvenil', 'hidrat', 'impureza'],
+            'femenino': ['femenin', 'hormon', 'menstr', 'ciclo', 'mujer', 'mensual'],
+            'energia': ['energía', 'vitalidad', 'enfoque', 'mental', 'concentr', 'vigor', 'rendimiento'],
+            'inmunitario': ['inmun', 'defens', 'protec', 'purific', 'antioxid', 'resist'],
+        }
+
+        keywords = keyword_groups.get(category_id, [])
+        for kw in keywords:
+            if kw in all_text:
+                score += 5
+                break  # Only count once per product for keyword match
+
+        # 4. Bonus for versatile products (multi-use: aromatic + topical + internal)
+        uses_count = sum(1 for key in ['uso_aromatico', 'uso_topico', 'uso_interno'] if product.get(key))
+        if uses_count >= 3:
+            score += 3
+
+        if score > 0:
+            percentage = min(int((score / max(score, 60)) * 100), 98)  # Cap at 98%
+            scores.append({
                 'product': product,
-                'percentage': match_percentage
-            }
+                'score': score,
+                'percentage': percentage,
+                'reasons': reasons
+            })
 
-    sorted_matches = sorted(matches.items(), key=lambda x: x[1]['percentage'], reverse=True)
-    return sorted_matches[:3]
+    # Sort by score descending
+    scores.sort(key=lambda x: x['score'], reverse=True)
+
+    # ALWAYS return at least 3 products
+    if len(scores) < 3:
+        # Fill with best products from the category that weren't already matched
+        existing_ids = {s['product']['id'] for s in scores}
+        for product in products:
+            if product['id'] not in existing_ids:
+                product_cats = set(product.get('categoria', []))
+                if product_cats.intersection(relevant_cats):
+                    scores.append({
+                        'product': product,
+                        'score': 10,
+                        'percentage': 65,
+                        'reasons': ['Recomendado para esta categoría de bienestar']
+                    })
+                    existing_ids.add(product['id'])
+            if len(scores) >= 3:
+                break
+
+    # If STILL less than 3 (very unlikely), add top general products
+    if len(scores) < 3:
+        existing_ids = {s['product']['id'] for s in scores}
+        essentials = ['lavender', 'peppermint', 'lemon', 'frankincense', 'melaleuca', 'oregano']
+        for eid in essentials:
+            for product in products:
+                if product['id'] == eid and eid not in existing_ids:
+                    scores.append({
+                        'product': product,
+                        'score': 5,
+                        'percentage': 60,
+                        'reasons': ['Aceite esencial versátil recomendado por expertos']
+                    })
+                    existing_ids.add(eid)
+                    break
+            if len(scores) >= 3:
+                break
+
+    return scores[:3]
 
 def render_fda_disclaimer():
     """Render FDA compliance disclaimer"""
@@ -373,31 +499,114 @@ def page_guia_bienestar():
 
 
 def page_resultado_sintomas():
-    """Results page with recommended products"""
-    st.markdown("<h1>Tu Recomendación Personalizada</h1>", unsafe_allow_html=True)
+    """Expert results page with personalized product recommendations"""
+    # Get the category name for the header
+    category_name = ""
+    category_icon = "🌿"
+    for cat in symptom_flow['categories']:
+        if cat['id'] == st.session_state.current_category:
+            category_name = cat['nombre']
+            category_icon = cat.get('icono', '🌿')
+            break
 
-    top_products = calculate_product_matches(st.session_state.selected_tags, products_data)
+    st.markdown(f"""
+    <div class="hero" style="padding: 35px 20px; margin-bottom: 30px;">
+        <div class="hero-content">
+            <h1 style="font-size: 2.2rem;">Tu Plan de Bienestar Personalizado</h1>
+            <p>{category_icon} Basado en tu evaluación de <strong>{category_name}</strong></p>
+            <p class="subtitle" style="font-size: 14px;">Recomendaciones seleccionadas por nuestra experta en aceites esenciales</p>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
-    if top_products:
-        st.markdown("<h3 style='text-align: center; margin: 30px 0;'>Top 3 Productos Recomendados</h3>", unsafe_allow_html=True)
+    # Expert intro message
+    st.markdown(f"""
+    <div style="background: white; border-radius: 12px; padding: 20px; margin-bottom: 25px; border-left: 5px solid #7C9070; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <p style="font-size: 15px; color: #3D3229; margin: 0;">
+            <strong>👩‍⚕️ Recomendación de Suzanna:</strong> Basándome en tus respuestas, he seleccionado los 3 productos
+            doTERRA que mejor se adaptan a tus necesidades de <strong>{category_name.lower()}</strong>.
+            Cada producto ha sido cuidadosamente evaluado considerando su composición, beneficios específicos
+            y métodos de aplicación más efectivos para tu caso.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
-        for idx, (product_id, match_data) in enumerate(top_products, 1):
-            st.markdown(f"<h4>Recomendación #{idx}</h4>", unsafe_allow_html=True)
-            st.markdown(create_product_card(match_data['product'], match_data['percentage']), unsafe_allow_html=True)
-            st.markdown("---")
-    else:
-        st.info("No se encontraron productos que coincidan. Por favor, intenta de nuevo.")
+    # Calculate matches using the expert algorithm
+    top_products = calculate_product_matches(
+        st.session_state.selected_tags,
+        products_data,
+        st.session_state.current_category
+    )
+
+    # Display recommendations with expert ranking
+    rank_labels = ["🥇 Recomendación Principal", "🥈 Excelente Alternativa", "🥉 Complemento Ideal"]
+
+    for idx, match_data in enumerate(top_products):
+        rank_label = rank_labels[idx] if idx < len(rank_labels) else f"Recomendación #{idx+1}"
+        st.markdown(f"<h3 style='color: #7C9070; margin: 25px 0 10px;'>{rank_label}</h3>", unsafe_allow_html=True)
+
+        # Build recommendation reason
+        reasons = match_data.get('reasons', [])
+        reason_text = ' · '.join(reasons) if reasons else f'Recomendado para {category_name.lower()}'
+
+        st.markdown(
+            create_product_card(
+                match_data['product'],
+                match_data['percentage'],
+                reason_text
+            ),
+            unsafe_allow_html=True
+        )
+
+    # Expert tip section
+    st.markdown(f"""
+    <div style="background: linear-gradient(135deg, #F0E8D8, #FDF8F0); border-radius: 12px; padding: 25px; margin: 30px 0; border: 1px solid #D4C5A9;">
+        <h4 style="color: #3D3229; margin-top: 0;">💡 Consejo de Experta</h4>
+        <p style="color: #555; font-size: 14px; margin-bottom: 10px;">
+            Para mejores resultados, te recomiendo combinar el <strong>uso aromático</strong> (difusor) con la
+            <strong>aplicación tópica</strong> diluida. La constancia es clave — usa los aceites durante al menos
+            2-3 semanas para experimentar todos sus beneficios.
+        </p>
+        <p style="color: #555; font-size: 14px; margin: 0;">
+            ¿Tienes dudas sobre cuál elegir? Suzanna puede ayudarte a crear un plan personalizado
+            según tu presupuesto y necesidades específicas.
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # CTA to contact Suzanna
+    wa_msg = f"Hola Suzanna! 👋 Acabo de completar la guía de bienestar de {category_name} en Nosotras Naturales y me gustaría tu asesoría personalizada sobre los productos recomendados."
+    wa_link = whatsapp_link(wa_msg)
+    st.markdown(f"""
+    <div style="text-align: center; margin: 20px 0;">
+        <a href="{wa_link}" target="_blank" style="display: inline-block; background: #25D366; color: white;
+           padding: 15px 40px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 16px;
+           box-shadow: 0 4px 15px rgba(37,211,102,0.3); transition: all 0.3s;">
+            💬 Hablar con Suzanna sobre mi plan de bienestar
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
     render_fda_disclaimer()
 
-    col1, col2, col3 = st.columns(3)
-    with col2:
-        if st.button("🔄 Volver a Empezar", use_container_width=True, key="restart_symptom"):
+    # Action buttons
+    col1, col2, col3 = st.columns([1, 1, 1])
+    with col1:
+        if st.button("🔄 Nueva Evaluación", use_container_width=True, key="restart_symptom"):
             st.session_state.symptom_flow_started = False
             st.session_state.current_category = None
             st.session_state.current_question = None
             st.session_state.selected_tags = []
             st.session_state.question_history = []
+            st.session_state.page = 'guia_bienestar'
+            st.rerun()
+    with col2:
+        if st.button("📦 Ver Catálogo Completo", use_container_width=True, key="go_catalog"):
+            st.session_state.page = 'productos'
+            st.rerun()
+    with col3:
+        if st.button("🏠 Ir al Inicio", use_container_width=True, key="go_home"):
+            st.session_state.page = 'inicio'
             st.rerun()
 
 
