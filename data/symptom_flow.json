@@ -13,22 +13,30 @@
             {
               "texto": "Malestar estomacal ocasional después de comer",
               "siguiente": "dig_q2",
-              "tags": ["malestar_estomacal"]
+              "tags": [
+                "malestar_estomacal"
+              ]
             },
             {
               "texto": "Hinchazón o flatulencia ocasional",
               "siguiente": "dig_q2",
-              "tags": ["hinchazon"]
+              "tags": [
+                "hinchazon"
+              ]
             },
             {
               "texto": "Incomodidad digestiva general ocasional",
               "siguiente": "dig_q2",
-              "tags": ["incomodidad_general"]
+              "tags": [
+                "incomodidad_general"
+              ]
             },
             {
               "texto": "Irregularidad digestiva ocasional",
               "siguiente": "dig_q2",
-              "tags": ["irregularidad"]
+              "tags": [
+                "irregularidad"
+              ]
             }
           ]
         },
@@ -39,17 +47,23 @@
             {
               "texto": "Ocasionalmente, menos de 2 veces por semana",
               "siguiente": "dig_q3",
-              "tags": ["ocasional_leve"]
+              "tags": [
+                "ocasional_leve"
+              ]
             },
             {
               "texto": "Frecuentemente, varias veces por semana",
               "siguiente": "dig_q3",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             },
             {
               "texto": "Principalmente después de ciertos alimentos",
               "siguiente": "dig_q3",
-              "tags": ["sensibilidad_alimentos"]
+              "tags": [
+                "sensibilidad_alimentos"
+              ]
             }
           ]
         },
@@ -60,17 +74,23 @@
             {
               "texto": "Durante o inmediatamente después de comer",
               "siguiente": "dig_q4",
-              "tags": ["durante_comida"]
+              "tags": [
+                "durante_comida"
+              ]
             },
             {
               "texto": "Entre 1-3 horas después de comer",
               "siguiente": "dig_q4",
-              "tags": ["post_comida"]
+              "tags": [
+                "post_comida"
+              ]
             },
             {
               "texto": "Sin relación clara con las comidas",
               "siguiente": "dig_q4",
-              "tags": ["no_relacionado_comida"]
+              "tags": [
+                "no_relacionado_comida"
+              ]
             }
           ]
         },
@@ -80,18 +100,24 @@
           "opciones": [
             {
               "texto": "Sí, busco alivio rápido ocasional",
-              "siguiente": "resultado",
-              "tags": ["alivio_rapido"]
+              "siguiente": "dig_q5",
+              "tags": [
+                "alivio_rapido"
+              ]
             },
             {
               "texto": "Sí, con enfoque en apoyo a largo plazo",
-              "siguiente": "resultado",
-              "tags": ["soporte_continuo"]
+              "siguiente": "dig_q5",
+              "tags": [
+                "soporte_continuo"
+              ]
             },
             {
               "texto": "Sí, con opciones naturales y suplementos",
-              "siguiente": "resultado",
-              "tags": ["completo"]
+              "siguiente": "dig_q5",
+              "tags": [
+                "completo"
+              ]
             }
           ]
         },
@@ -102,54 +128,85 @@
             {
               "texto": "Alivio inmediato del malestar ocasional",
               "siguiente": "resultado",
-              "tags": ["inmediato"]
+              "tags": [
+                "inmediato"
+              ]
             },
             {
               "texto": "Mejorar la salud digestiva general",
               "siguiente": "resultado",
-              "tags": ["general"]
+              "tags": [
+                "general"
+              ]
             },
             {
               "texto": "Apoyar una mejor digestión después de comer",
               "siguiente": "resultado",
-              "tags": ["preventivo"]
+              "tags": [
+                "preventivo"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "malestar_estomacal+ocasional_leve+durante_comida": {
-          "productos_recomendados": ["digestzen", "peppermint"],
+          "productos_recomendados": [
+            "digestzen",
+            "peppermint"
+          ],
           "mensaje": "Basado en tus respuestas, estos productos pueden apoyar tu bienestar digestivo ocasional.",
           "consejo": "Considera usar estos aceites de manera oportuna durante tu rutina de bienestar diaria.",
           "whatsapp_cta": "Hola! 👋 Me gustaría saber más sobre los productos para mi bienestar digestivo ocasional. ¿Puedes ayudarme?"
         },
         "malestar_estomacal+frecuente+post_comida": {
-          "productos_recomendados": ["digestzen", "peppermint", "ginger", "terrazyem"],
+          "productos_recomendados": [
+            "digestzen",
+            "peppermint",
+            "ginger",
+            "terrazyem"
+          ],
           "mensaje": "Para un bienestar digestivo más completo, estos productos pueden ser de gran apoyo.",
           "consejo": "Incorpora estos aceites como parte de tu rutina diaria de bienestar para resultados óptimos.",
           "whatsapp_cta": "Hola! 👋 Me interesa conocer más sobre un plan completo para mi bienestar digestivo. ¿Qué recomiendas?"
         },
         "hinchazon+frecuente+soporte_continuo": {
-          "productos_recomendados": ["digestzen", "ginger", "pbassist", "peppermint"],
+          "productos_recomendados": [
+            "digestzen",
+            "ginger",
+            "pbassist",
+            "peppermint"
+          ],
           "mensaje": "Estos productos están formulados para apoyar la función digestiva y la comodidad.",
           "consejo": "El uso consistente de estos productos puede mejorar tu bienestar digestivo general.",
           "whatsapp_cta": "Hola! 👋 Tengo hinchazón ocasional y busco una solución de apoyo a largo plazo. ¿Qué me recomiendas?"
         },
         "irregularidad+frecuente+completo": {
-          "productos_recomendados": ["pbassist", "ginger", "digestzen", "terrazyem"],
+          "productos_recomendados": [
+            "pbassist",
+            "ginger",
+            "digestzen",
+            "terrazyem"
+          ],
           "mensaje": "Para apoyar la regularidad y salud digestiva, recomendamos este enfoque integral.",
           "consejo": "Combina estos productos naturales para optimizar tu función digestiva.",
           "whatsapp_cta": "Hola! 👋 Busco un apoyo natural completo para mi bienestar digestivo. ¿Cuál es tu recomendación?"
         },
         "sensibilidad_alimentos+alivio_rapido": {
-          "productos_recomendados": ["peppermint", "digestzen"],
+          "productos_recomendados": [
+            "peppermint",
+            "digestzen"
+          ],
           "mensaje": "Estos aceites esenciales pueden proporcionar confort rápido cuando lo necesites.",
           "consejo": "Ten estos productos a mano para usarlos según sea necesario.",
           "whatsapp_cta": "Hola! 👋 Tengo sensibilidad después de ciertos alimentos. ¿Qué puedo usar para alivio rápido?"
         },
         "incomodidad_general+general": {
-          "productos_recomendados": ["digestzen", "peppermint", "ginger"],
+          "productos_recomendados": [
+            "digestzen",
+            "peppermint",
+            "ginger"
+          ],
           "mensaje": "Estos productos pueden apoyar tu salud digestiva general y bienestar.",
           "consejo": "Incorpora estos aceites en tu rutina de bienestar diaria para mejores resultados.",
           "whatsapp_cta": "Hola! 👋 Tengo incomodidad digestiva general. ¿Qué productos me recomiendan?"
@@ -169,22 +226,30 @@
             {
               "texto": "Dificultad para conciliar el sueño ocasionalmente",
               "siguiente": "sue_q2",
-              "tags": ["conciliar_sueno"]
+              "tags": [
+                "conciliar_sueno"
+              ]
             },
             {
               "texto": "Despertares ocasionales durante la noche",
               "siguiente": "sue_q2",
-              "tags": ["despertares"]
+              "tags": [
+                "despertares"
+              ]
             },
             {
               "texto": "Inquietud ocasional o sueño ligero",
               "siguiente": "sue_q2",
-              "tags": ["inquietud_sueno"]
+              "tags": [
+                "inquietud_sueno"
+              ]
             },
             {
               "texto": "Sueño no reparador a pesar de dormir horas",
               "siguiente": "sue_q2",
-              "tags": ["calidad_sueno"]
+              "tags": [
+                "calidad_sueno"
+              ]
             }
           ]
         },
@@ -195,17 +260,23 @@
             {
               "texto": "Ocasionalmente, 1-2 noches por semana",
               "siguiente": "sue_q3",
-              "tags": ["ocasional"]
+              "tags": [
+                "ocasional"
+              ]
             },
             {
               "texto": "Frecuentemente, 3-4 noches por semana",
               "siguiente": "sue_q3",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             },
             {
               "texto": "Casi todas las noches",
               "siguiente": "sue_q3",
-              "tags": ["crónico"]
+              "tags": [
+                "crónico"
+              ]
             }
           ]
         },
@@ -216,17 +287,23 @@
             {
               "texto": "Al ir a la cama, cuesta conciliar el sueño",
               "siguiente": "sue_q4",
-              "tags": ["noche_temprana"]
+              "tags": [
+                "noche_temprana"
+              ]
             },
             {
               "texto": "Durante la noche, despierto varias veces",
               "siguiente": "sue_q4",
-              "tags": ["madrugada"]
+              "tags": [
+                "madrugada"
+              ]
             },
             {
               "texto": "Todo el ciclo de sueño es irregular",
               "siguiente": "sue_q4",
-              "tags": ["todo_dia"]
+              "tags": [
+                "todo_dia"
+              ]
             }
           ]
         },
@@ -237,17 +314,23 @@
             {
               "texto": "No, no tengo rutina establecida",
               "siguiente": "sue_q5",
-              "tags": ["sin_rutina"]
+              "tags": [
+                "sin_rutina"
+              ]
             },
             {
               "texto": "Sí, pero necesito potenciarla",
               "siguiente": "sue_q5",
-              "tags": ["mejorar_rutina"]
+              "tags": [
+                "mejorar_rutina"
+              ]
             },
             {
               "texto": "Sí, pero quiero opciones naturales adicionales",
               "siguiente": "resultado",
-              "tags": ["natural_adicional"]
+              "tags": [
+                "natural_adicional"
+              ]
             }
           ]
         },
@@ -258,54 +341,84 @@
             {
               "texto": "Apoyo aromático antes de dormir",
               "siguiente": "resultado",
-              "tags": ["aromaterapia"]
+              "tags": [
+                "aromaterapia"
+              ]
             },
             {
               "texto": "Suplemento para la calidad del sueño",
               "siguiente": "resultado",
-              "tags": ["suplemento"]
+              "tags": [
+                "suplemento"
+              ]
             },
             {
               "texto": "Combinación de ambos",
               "siguiente": "resultado",
-              "tags": ["combinado"]
+              "tags": [
+                "combinado"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "conciliar_sueno+ocasional+noche_temprana": {
-          "productos_recomendados": ["serenity", "lavender"],
+          "productos_recomendados": [
+            "serenity",
+            "lavender"
+          ],
           "mensaje": "Estos productos pueden apoyar la transición a un sueño tranquilo y reparador.",
           "consejo": "Utiliza estos aceites 30 minutos antes de acostarte como parte de tu rutina nocturna.",
           "whatsapp_cta": "Hola! 👋 Me cuesta conciliar el sueño ocasionalmente. ¿Qué productos me recomiendas para mejorar mi descanso?"
         },
         "conciliar_sueno+frecuente+aromaterapia": {
-          "productos_recomendados": ["serenity", "lavender", "vetiver"],
+          "productos_recomendados": [
+            "serenity",
+            "lavender",
+            "vetiver"
+          ],
           "mensaje": "Estos aceites esenciales pueden crear un ambiente propicio para el descanso profundo.",
           "consejo": "Difunde estos aromas en tu habitación antes de dormir para un efecto óptimo.",
           "whatsapp_cta": "Hola! 👋 Tengo dificultad frecuente para conciliar el sueño. ¿Cuál es tu recomendación aromática?"
         },
         "despertares+crónico+combinado": {
-          "productos_recomendados": ["serenity", "lavender", "vetiver", "chamomileromana"],
+          "productos_recomendados": [
+            "serenity",
+            "lavender",
+            "vetiver",
+            "chamomileromana"
+          ],
           "mensaje": "Este enfoque integral combina aromaterapia y apoyo nutricional para tu descanso.",
           "consejo": "La combinación de estos productos puede mejorar significativamente la calidad de tu sueño.",
           "whatsapp_cta": "Hola! 👋 Tengo despertares frecuentes. ¿Qué solución integral me recomiendas?"
         },
         "inquietud_sueno+frecuente+suplemento": {
-          "productos_recomendados": ["serenity", "lavender"],
+          "productos_recomendados": [
+            "serenity",
+            "lavender"
+          ],
           "mensaje": "Estos productos pueden apoyar una sensación de calma y tranquilidad.",
           "consejo": "Úsalos consistentemente para mejorar tu patrón de sueño.",
           "whatsapp_cta": "Hola! 👋 Tengo inquietud durante la noche. ¿Qué suplemento natural recomiendan?"
         },
         "calidad_sueno+mejorar_rutina": {
-          "productos_recomendados": ["lavender", "cedarwood", "serenity"],
+          "productos_recomendados": [
+            "lavender",
+            "cedarwood",
+            "serenity"
+          ],
           "mensaje": "Estos productos están diseñados para mejorar la calidad general de tu sueño.",
           "consejo": "Potencia tu rutina actual con estos apoyo naturales.",
           "whatsapp_cta": "Hola! 👋 Quiero mejorar la calidad de mi sueño. ¿Cómo augmento mi rutina actual?"
         },
         "todo_dia+sin_rutina+natural_adicional": {
-          "productos_recomendados": ["serenity", "lavender", "vetiver", "cedarwood"],
+          "productos_recomendados": [
+            "serenity",
+            "lavender",
+            "vetiver",
+            "cedarwood"
+          ],
           "mensaje": "Estos productos pueden ayudarte a establecer una rutina de sueño saludable y natural.",
           "consejo": "Comienza gradualmente con estos productos para crear nuevos hábitos positivos.",
           "whatsapp_cta": "Hola! 👋 Mi sueño es muy irregular. ¿Cómo establezco una rutina con productos naturales?"
@@ -325,22 +438,30 @@
             {
               "texto": "Tensión en la cabeza y cuello",
               "siguiente": "ten_q2",
-              "tags": ["cabeza_cuello"]
+              "tags": [
+                "cabeza_cuello"
+              ]
             },
             {
               "texto": "Tensión en hombros y espalda",
               "siguiente": "ten_q2",
-              "tags": ["hombros_espalda"]
+              "tags": [
+                "hombros_espalda"
+              ]
             },
             {
               "texto": "Inquietud ocasional general",
               "siguiente": "ten_q2",
-              "tags": ["inquietud_general"]
+              "tags": [
+                "inquietud_general"
+              ]
             },
             {
               "texto": "Sensación de abrumación ocasional",
               "siguiente": "ten_q2",
-              "tags": ["abrumacion"]
+              "tags": [
+                "abrumacion"
+              ]
             }
           ]
         },
@@ -351,17 +472,23 @@
             {
               "texto": "Ocasionalmente durante el día",
               "siguiente": "ten_q3",
-              "tags": ["ocasional"]
+              "tags": [
+                "ocasional"
+              ]
             },
             {
               "texto": "Frecuentemente, especialmente cuando estoy ocupado",
               "siguiente": "ten_q3",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             },
             {
               "texto": "Principalmente en ciertos momentos o situaciones",
               "siguiente": "ten_q3",
-              "tags": ["situacional"]
+              "tags": [
+                "situacional"
+              ]
             }
           ]
         },
@@ -372,22 +499,30 @@
             {
               "texto": "Situaciones de trabajo o responsabilidades",
               "siguiente": "ten_q4",
-              "tags": ["trabajo"]
+              "tags": [
+                "trabajo"
+              ]
             },
             {
               "texto": "Cambios en el ambiente o rutina",
               "siguiente": "ten_q4",
-              "tags": ["cambios"]
+              "tags": [
+                "cambios"
+              ]
             },
             {
               "texto": "Sobrecarga de tareas o decisiones",
               "siguiente": "ten_q4",
-              "tags": ["sobrecarga"]
+              "tags": [
+                "sobrecarga"
+              ]
             },
             {
               "texto": "No hay un patrón claro",
               "siguiente": "ten_q4",
-              "tags": ["sin_patron"]
+              "tags": [
+                "sin_patron"
+              ]
             }
           ]
         },
@@ -398,17 +533,23 @@
             {
               "texto": "Con apoyo aromático durante el día",
               "siguiente": "ten_q5",
-              "tags": ["aromaterapia"]
+              "tags": [
+                "aromaterapia"
+              ]
             },
             {
               "texto": "Con técnicas de relajación física",
               "siguiente": "ten_q5",
-              "tags": ["fisica"]
+              "tags": [
+                "fisica"
+              ]
             },
             {
               "texto": "Con una combinación integral",
               "siguiente": "resultado",
-              "tags": ["integral"]
+              "tags": [
+                "integral"
+              ]
             }
           ]
         },
@@ -419,54 +560,85 @@
             {
               "texto": "Principalmente equilibrio emocional",
               "siguiente": "resultado",
-              "tags": ["equilibrio"]
+              "tags": [
+                "equilibrio"
+              ]
             },
             {
               "texto": "Principalmente relajación física",
               "siguiente": "resultado",
-              "tags": ["relajacion"]
+              "tags": [
+                "relajacion"
+              ]
             },
             {
               "texto": "Una combinación de ambas",
               "siguiente": "resultado",
-              "tags": ["ambas"]
+              "tags": [
+                "ambas"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "cabeza_cuello+ocasional+trabajo": {
-          "productos_recomendados": ["pastense", "lavender"],
+          "productos_recomendados": [
+            "pastense",
+            "lavender"
+          ],
           "mensaje": "Estos productos pueden ayudarte a aliviar la tensión ocasional en la cabeza y cuello.",
           "consejo": "Aplica estos aceites tópicamente en las áreas de tensión según sea necesario.",
           "whatsapp_cta": "Hola! 👋 Tengo tensión ocasional en cabeza y cuello por el trabajo. ¿Qué me recomiendas?"
         },
         "hombros_espalda+frecuente+fisica": {
-          "productos_recomendados": ["aromatouch", "copaiba", "lavender"],
+          "productos_recomendados": [
+            "aromatouch",
+            "copaiba",
+            "lavender"
+          ],
           "mensaje": "Estos productos están diseñados para apoyar la relajación y el confort físico.",
           "consejo": "Usa técnicas de masaje con estos aceites para máximo beneficio.",
           "whatsapp_cta": "Hola! 👋 Tengo tensión frecuente en hombros y espalda. ¿Cuál es tu recomendación para relajación física?"
         },
         "inquietud_general+ocasional+aromaterapia": {
-          "productos_recomendados": ["balance", "bergamot", "lavender"],
+          "productos_recomendados": [
+            "balance",
+            "bergamot",
+            "lavender"
+          ],
           "mensaje": "Estos aromas pueden ayudarte a mantener el equilibrio emocional ocasional.",
           "consejo": "Difunde estos aceites o úsalos en tu pulso para sentir apoyo durante el día.",
           "whatsapp_cta": "Hola! 👋 Tengo inquietud general ocasional. ¿Qué aceites aromáticos me recomiendan?"
         },
         "abrumacion+situacional+equilibrio": {
-          "productos_recomendados": ["balance", "lavender", "bergamot"],
+          "productos_recomendados": [
+            "balance",
+            "lavender",
+            "bergamot"
+          ],
           "mensaje": "Estos productos pueden apoyar tu equilibrio emocional en momentos desafiantes.",
           "consejo": "Ten estos productos a mano para usarlos cuando los necesites.",
           "whatsapp_cta": "Hola! 👋 Me siento ocasionalmente abrumada en ciertas situaciones. ¿Qué puedo usar para equilibrio emocional?"
         },
         "sobrecarga+frecuente+integral": {
-          "productos_recomendados": ["balance", "lavender", "pastense", "aromatouch"],
+          "productos_recomendados": [
+            "balance",
+            "lavender",
+            "pastense",
+            "aromatouch"
+          ],
           "mensaje": "Este enfoque integral combina apoyo emocional y físico para tu bienestar completo.",
           "consejo": "Combina estos productos en tu rutina diaria para resultados óptimos.",
           "whatsapp_cta": "Hola! 👋 Tengo sobrecarga frecuente. ¿Cuál es una solución integral para mi bienestar?"
         },
         "cambios+frecuente+ambas": {
-          "productos_recomendados": ["balance", "copaiba", "lavender", "bergamot"],
+          "productos_recomendados": [
+            "balance",
+            "copaiba",
+            "lavender",
+            "bergamot"
+          ],
           "mensaje": "Estos productos pueden apoyar tanto tu equilibrio emocional como tu comodidad física.",
           "consejo": "Durante periodos de cambio, usa estos productos consistentemente.",
           "whatsapp_cta": "Hola! 👋 Los cambios me generan tensión. ¿Qué combinación de productos es mejor para mí?"
@@ -486,22 +658,30 @@
             {
               "texto": "Músculos después del ejercicio",
               "siguiente": "mus_q2",
-              "tags": ["post_ejercicio"]
+              "tags": [
+                "post_ejercicio"
+              ]
             },
             {
               "texto": "Articulaciones con actividad diaria",
               "siguiente": "mus_q2",
-              "tags": ["articulaciones"]
+              "tags": [
+                "articulaciones"
+              ]
             },
             {
               "texto": "Rigidez ocasional al despertar",
               "siguiente": "mus_q2",
-              "tags": ["rigidez"]
+              "tags": [
+                "rigidez"
+              ]
             },
             {
               "texto": "Incomodidad general en varias áreas",
               "siguiente": "mus_q2",
-              "tags": ["general"]
+              "tags": [
+                "general"
+              ]
             }
           ]
         },
@@ -512,17 +692,23 @@
             {
               "texto": "Solo después de ejercicio intenso",
               "siguiente": "mus_q3",
-              "tags": ["intenso"]
+              "tags": [
+                "intenso"
+              ]
             },
             {
               "texto": "Varias veces por semana",
               "siguiente": "mus_q3",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             },
             {
               "texto": "Casi todos los días",
               "siguiente": "mus_q3",
-              "tags": ["diario"]
+              "tags": [
+                "diario"
+              ]
             }
           ]
         },
@@ -533,17 +719,23 @@
             {
               "texto": "Sedentario, poco movimiento diario",
               "siguiente": "mus_q4",
-              "tags": ["sedentario"]
+              "tags": [
+                "sedentario"
+              ]
             },
             {
               "texto": "Moderado, actividad regular ocasional",
               "siguiente": "mus_q4",
-              "tags": ["moderado"]
+              "tags": [
+                "moderado"
+              ]
             },
             {
               "texto": "Activo, ejercicio frecuente o trabajo físico",
               "siguiente": "mus_q4",
-              "tags": ["activo"]
+              "tags": [
+                "activo"
+              ]
             }
           ]
         },
@@ -554,17 +746,23 @@
             {
               "texto": "Alivio tópico inmediato",
               "siguiente": "mus_q5",
-              "tags": ["topico"]
+              "tags": [
+                "topico"
+              ]
             },
             {
               "texto": "Apoyo nutricional interno",
               "siguiente": "mus_q5",
-              "tags": ["nutricional"]
+              "tags": [
+                "nutricional"
+              ]
             },
             {
               "texto": "Enfoque combinado e integral",
               "siguiente": "resultado",
-              "tags": ["integral"]
+              "tags": [
+                "integral"
+              ]
             }
           ]
         },
@@ -575,54 +773,83 @@
             {
               "texto": "Alivio rápido cuando siento incomodidad",
               "siguiente": "resultado",
-              "tags": ["alivio"]
+              "tags": [
+                "alivio"
+              ]
             },
             {
               "texto": "Prevención con uso regular",
               "siguiente": "resultado",
-              "tags": ["prevencion"]
+              "tags": [
+                "prevencion"
+              ]
             },
             {
               "texto": "Ambos, según la situación",
               "siguiente": "resultado",
-              "tags": ["ambos"]
+              "tags": [
+                "ambos"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "post_ejercicio+intenso+topico": {
-          "productos_recomendados": ["deepblue", "wintergreen"],
+          "productos_recomendados": [
+            "deepblue",
+            "wintergreen"
+          ],
           "mensaje": "Estos productos pueden proporcionar confort rápido después de tu ejercicio intenso.",
           "consejo": "Aplica tópicamente en músculos después de ejercitar para máximo beneficio.",
           "whatsapp_cta": "Hola! 👋 Tengo molestias musculares después del ejercicio. ¿Qué me recomiendas para alivio rápido?"
         },
         "post_ejercicio+activo+integral": {
-          "productos_recomendados": ["deepblue", "aromatouch", "copaiba", "blackpepper"],
+          "productos_recomendados": [
+            "deepblue",
+            "aromatouch",
+            "copaiba",
+            "blackpepper"
+          ],
           "mensaje": "Este enfoque integral puede apoyar tu recuperación y rendimiento físico.",
           "consejo": "Usa estos productos tanto tópicamente como como parte de tu rutina de autocuidado.",
           "whatsapp_cta": "Hola! 👋 Soy muy activo y necesito apoyo integral para mi recuperación. ¿Qué recomiendas?"
         },
         "articulaciones+frecuente+nutricional": {
-          "productos_recomendados": ["copaiba", "deepblue", "wintergreen"],
+          "productos_recomendados": [
+            "copaiba",
+            "deepblue",
+            "wintergreen"
+          ],
           "mensaje": "Estos productos pueden apoyar la comodidad y función articular con uso regular.",
           "consejo": "Incorpora estos productos en tu rutina diaria para máxima efectividad.",
           "whatsapp_cta": "Hola! 👋 Tengo incomodidad articular frecuente. ¿Qué apoyo nutricional me recomiendas?"
         },
         "rigidez+diario+ambos": {
-          "productos_recomendados": ["deepblue", "aromatouch", "copaiba"],
+          "productos_recomendados": [
+            "deepblue",
+            "aromatouch",
+            "copaiba"
+          ],
           "mensaje": "Estos productos pueden ayudarte con la rigidez ocasional y el confort general.",
           "consejo": "Usa estos productos cada mañana y después de actividad para mejores resultados.",
           "whatsapp_cta": "Hola! 👋 Tengo rigidez matutina casi todos los días. ¿Cuál es la mejor solución?"
         },
         "general+moderado+prevencion": {
-          "productos_recomendados": ["deepblue", "wintergreen", "copaiba"],
+          "productos_recomendados": [
+            "deepblue",
+            "wintergreen",
+            "copaiba"
+          ],
           "mensaje": "Estos productos pueden apoyar tu bienestar muscular y articular preventivamente.",
           "consejo": "Úsalos regularmente para mantener tu comodidad física.",
           "whatsapp_cta": "Hola! 👋 Quiero prevenir la incomodidad muscular. ¿Qué productos uso regularmente?"
         },
         "sedentario+frecuente+alivio": {
-          "productos_recomendados": ["deepblue", "aromatouch"],
+          "productos_recomendados": [
+            "deepblue",
+            "aromatouch"
+          ],
           "mensaje": "Estos productos pueden proporcionar alivio mientras mejoras tu actividad física.",
           "consejo": "Combinado con más movimiento diario, estos productos optimizarán tu bienestar.",
           "whatsapp_cta": "Hola! 👋 Soy sedentario y tengo incomodidad frecuente. ¿Qué puedo usar?"
@@ -642,22 +869,30 @@
             {
               "texto": "Congestión ocasional",
               "siguiente": "res_q2",
-              "tags": ["congestion"]
+              "tags": [
+                "congestion"
+              ]
             },
             {
               "texto": "Vías respiratorias no del todo claras",
               "siguiente": "res_q2",
-              "tags": ["vias_claras"]
+              "tags": [
+                "vias_claras"
+              ]
             },
             {
               "texto": "Desafíos respiratorios estacionales",
               "siguiente": "res_q2",
-              "tags": ["estacional"]
+              "tags": [
+                "estacional"
+              ]
             },
             {
               "texto": "Sensibilidad a factores ambientales",
               "siguiente": "res_q2",
-              "tags": ["ambiental"]
+              "tags": [
+                "ambiental"
+              ]
             }
           ]
         },
@@ -668,22 +903,30 @@
             {
               "texto": "Durante ciertas épocas del año",
               "siguiente": "res_q3",
-              "tags": ["estacional"]
+              "tags": [
+                "estacional"
+              ]
             },
             {
               "texto": "Cuando el ambiente es seco o con irritantes",
               "siguiente": "res_q3",
-              "tags": ["ambiental"]
+              "tags": [
+                "ambiental"
+              ]
             },
             {
               "texto": "Ocasionalmente durante todo el año",
               "siguiente": "res_q3",
-              "tags": ["ocasional"]
+              "tags": [
+                "ocasional"
+              ]
             },
             {
               "texto": "Frecuentemente",
               "siguiente": "res_q3",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             }
           ]
         },
@@ -694,17 +937,23 @@
             {
               "texto": "Mantener vías respiratorias claras",
               "siguiente": "res_q4",
-              "tags": ["mantener"]
+              "tags": [
+                "mantener"
+              ]
             },
             {
               "texto": "Alivio de desafíos ocasionales",
               "siguiente": "res_q4",
-              "tags": ["alivio"]
+              "tags": [
+                "alivio"
+              ]
             },
             {
               "texto": "Apoyo a largo plazo durante desafíos",
               "siguiente": "res_q4",
-              "tags": ["apoyo_largo"]
+              "tags": [
+                "apoyo_largo"
+              ]
             }
           ]
         },
@@ -715,17 +964,23 @@
             {
               "texto": "Con inhalación aromática",
               "siguiente": "res_q5",
-              "tags": ["inhalacion"]
+              "tags": [
+                "inhalacion"
+              ]
             },
             {
               "texto": "Con aplicación tópica",
               "siguiente": "res_q5",
-              "tags": ["topica"]
+              "tags": [
+                "topica"
+              ]
             },
             {
               "texto": "Con difusión ambiental",
               "siguiente": "resultado",
-              "tags": ["difusion"]
+              "tags": [
+                "difusion"
+              ]
             }
           ]
         },
@@ -736,54 +991,86 @@
             {
               "texto": "Apoyo inmediato cuando surge el desafío",
               "siguiente": "resultado",
-              "tags": ["inmediato"]
+              "tags": [
+                "inmediato"
+              ]
             },
             {
               "texto": "Apoyo preventivo regular",
               "siguiente": "resultado",
-              "tags": ["preventivo"]
+              "tags": [
+                "preventivo"
+              ]
             },
             {
               "texto": "Ambos según la situación",
               "siguiente": "resultado",
-              "tags": ["ambos"]
+              "tags": [
+                "ambos"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "congestion+estacional+inhalacion": {
-          "productos_recomendados": ["breathe", "eucalyptus", "peppermint"],
+          "productos_recomendados": [
+            "breathe",
+            "eucalyptus",
+            "peppermint"
+          ],
           "mensaje": "Estos productos pueden apoyar la claridad respiratoria durante los desafíos estacionales.",
           "consejo": "Inhala estos aromas directamente cuando sientas necesidad de apoyo.",
           "whatsapp_cta": "Hola! 👋 Tengo congestión estacional. ¿Qué aceites puedo inhalar para claridad respiratoria?"
         },
         "vias_claras+frecuente+topica": {
-          "productos_recomendados": ["breathe", "eucalyptus", "rosemary"],
+          "productos_recomendados": [
+            "breathe",
+            "eucalyptus",
+            "rosemary"
+          ],
           "mensaje": "Estos productos pueden ayudarte a mantener tus vías respiratorias claras.",
           "consejo": "Aplica tópicamente en el pecho y garganta para máximo apoyo.",
           "whatsapp_cta": "Hola! 👋 Mis vías respiratorias no están totalmente claras. ¿Qué puedo aplicar tópicamente?"
         },
         "estacional+apoyo_largo+difusion": {
-          "productos_recomendados": ["breathe", "eucalyptus", "peppermint", "onguard"],
+          "productos_recomendados": [
+            "breathe",
+            "eucalyptus",
+            "peppermint",
+            "onguard"
+          ],
           "mensaje": "Estos productos proporcionan apoyo continuo durante temporadas desafiantes.",
           "consejo": "Difunde estos aceites en tu ambiente durante el día para apoyo consistente.",
           "whatsapp_cta": "Hola! 👋 Necesito apoyo respiratorio durante la temporada de desafíos. ¿Qué recomiendas?"
         },
         "ambiental+ocasional+inhalacion": {
-          "productos_recomendados": ["breathe", "peppermint", "onguard"],
+          "productos_recomendados": [
+            "breathe",
+            "peppermint",
+            "onguard"
+          ],
           "mensaje": "Estos productos pueden proteger tu bienestar respiratorio ante factores ambientales.",
           "consejo": "Ten estos aceites a mano para inhalar cuando lo necesites.",
           "whatsapp_cta": "Hola! 👋 Tengo sensibilidad ambiental ocasional. ¿Qué puedo inhalar para apoyo?"
         },
         "vias_claras+mantener+ambos": {
-          "productos_recomendados": ["breathe", "eucalyptus", "rosemary", "peppermint"],
+          "productos_recomendados": [
+            "breathe",
+            "eucalyptus",
+            "rosemary",
+            "peppermint"
+          ],
           "mensaje": "Este enfoque combinado mantiene tu bienestar respiratorio en óptimas condiciones.",
           "consejo": "Usa estos productos tópicamente y con inhalación según sea necesario.",
           "whatsapp_cta": "Hola! 👋 Quiero mantener mis vías respiratorias claras siempre. ¿Qué es mejor?"
         },
         "congestion+ambiental+preventivo": {
-          "productos_recomendados": ["breathe", "eucalyptus", "onguard"],
+          "productos_recomendados": [
+            "breathe",
+            "eucalyptus",
+            "onguard"
+          ],
           "mensaje": "Estos productos ofrecen apoyo preventivo para mantener la claridad respiratoria.",
           "consejo": "Úsalos regularmente, especialmente antes de enfrentar desafíos ambientales.",
           "whatsapp_cta": "Hola! 👋 Quiero apoyo preventivo para mi bienestar respiratorio. ¿Qué uso regularmente?"
@@ -803,22 +1090,30 @@
             {
               "texto": "Piel grasa con tendencia a impurezas ocasionales",
               "siguiente": "piel_q2",
-              "tags": ["impurezas"]
+              "tags": [
+                "impurezas"
+              ]
             },
             {
               "texto": "Piel seca o deshidratada",
               "siguiente": "piel_q2",
-              "tags": ["seque"]
+              "tags": [
+                "seque"
+              ]
             },
             {
               "texto": "Piel sensible o reactiva",
               "siguiente": "piel_q2",
-              "tags": ["sensible"]
+              "tags": [
+                "sensible"
+              ]
             },
             {
               "texto": "Piel con signos de envejecimiento ocasional",
               "siguiente": "piel_q2",
-              "tags": ["envejecimiento"]
+              "tags": [
+                "envejecimiento"
+              ]
             }
           ]
         },
@@ -829,22 +1124,30 @@
             {
               "texto": "Piel normal a mixta",
               "siguiente": "piel_q3",
-              "tags": ["normal"]
+              "tags": [
+                "normal"
+              ]
             },
             {
               "texto": "Piel muy grasa",
               "siguiente": "piel_q3",
-              "tags": ["grasa"]
+              "tags": [
+                "grasa"
+              ]
             },
             {
               "texto": "Piel muy seca",
               "siguiente": "piel_q3",
-              "tags": ["seca"]
+              "tags": [
+                "seca"
+              ]
             },
             {
               "texto": "Piel sensible",
               "siguiente": "piel_q3",
-              "tags": ["sensible"]
+              "tags": [
+                "sensible"
+              ]
             }
           ]
         },
@@ -855,17 +1158,23 @@
             {
               "texto": "Ocasionalmente",
               "siguiente": "piel_q4",
-              "tags": ["ocasional"]
+              "tags": [
+                "ocasional"
+              ]
             },
             {
               "texto": "Frecuentemente",
               "siguiente": "piel_q4",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             },
             {
               "texto": "De manera crónica",
               "siguiente": "piel_q4",
-              "tags": ["cronico"]
+              "tags": [
+                "cronico"
+              ]
             }
           ]
         },
@@ -876,17 +1185,23 @@
             {
               "texto": "Productos naturales y puros",
               "siguiente": "piel_q5",
-              "tags": ["natural"]
+              "tags": [
+                "natural"
+              ]
             },
             {
               "texto": "Productos específicos por problema",
               "siguiente": "piel_q5",
-              "tags": ["especifico"]
+              "tags": [
+                "especifico"
+              ]
             },
             {
               "texto": "Routine completa de cuidado",
               "siguiente": "resultado",
-              "tags": ["routine"]
+              "tags": [
+                "routine"
+              ]
             }
           ]
         },
@@ -897,54 +1212,82 @@
             {
               "texto": "Mantener piel clara y saludable",
               "siguiente": "resultado",
-              "tags": ["mantener"]
+              "tags": [
+                "mantener"
+              ]
             },
             {
               "texto": "Aliviar desafíos específicos",
               "siguiente": "resultado",
-              "tags": ["aliviar"]
+              "tags": [
+                "aliviar"
+              ]
             },
             {
               "texto": "Rejuvenecimiento y luminosidad",
               "siguiente": "resultado",
-              "tags": ["rejuvenecimiento"]
+              "tags": [
+                "rejuvenecimiento"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "impurezas+normal+ocasional": {
-          "productos_recomendados": ["teatree", "lavender"],
+          "productos_recomendados": [
+            "teatree",
+            "lavender"
+          ],
           "mensaje": "Estos productos pueden apoyar la claridad y pureza de tu piel.",
           "consejo": "Aplica estos aceites directamente en áreas de preocupación para máximo beneficio.",
           "whatsapp_cta": "Hola! 👋 Tengo piel con impurezas ocasionales. ¿Qué productos naturales me recomiendas?"
         },
         "impurezas+grasa+frecuente": {
-          "productos_recomendados": ["teatree", "frankincense", "lavender"],
+          "productos_recomendados": [
+            "teatree",
+            "frankincense",
+            "lavender"
+          ],
           "mensaje": "Estos productos ayudan a mantener piel clara y equilibrada.",
           "consejo": "Incorpora estos aceites en tu rutina diaria para resultados consistentes.",
           "whatsapp_cta": "Hola! 👋 Tengo piel grasa con impurezas frecuentes. ¿Cuál es la mejor solución?"
         },
         "seque+seca+cronico": {
-          "productos_recomendados": ["frankincense", "helichrysum", "chamomileromana"],
+          "productos_recomendados": [
+            "frankincense",
+            "helichrysum",
+            "chamomileromana"
+          ],
           "mensaje": "Estos productos pueden profundamente hidratar y restaurar tu piel seca.",
           "consejo": "Úsalos como parte de tu routine de hidratación diaria.",
           "whatsapp_cta": "Hola! 👋 Tengo piel muy seca y necesito hidratación profunda. ¿Qué recomiendas?"
         },
         "sensible+sensible+ocasional": {
-          "productos_recomendados": ["chamomileromana", "lavender"],
+          "productos_recomendados": [
+            "chamomileromana",
+            "lavender"
+          ],
           "mensaje": "Estos productos gentiles pueden calmar y proteger tu piel sensible.",
           "consejo": "Haz una prueba de compatibilidad antes del uso completo.",
           "whatsapp_cta": "Hola! 👋 Tengo piel sensible. ¿Qué productos puedo usar sin irritar?"
         },
         "envejecimiento+natural+rejuvenecimiento": {
-          "productos_recomendados": ["frankincense", "helichrysum", "lavender"],
+          "productos_recomendados": [
+            "frankincense",
+            "helichrysum",
+            "lavender"
+          ],
           "mensaje": "Estos productos pueden ayudarte a mantener piel joven, radiante y luminosa.",
           "consejo": "Usa consistentemente para ver cambios visibles con el tiempo.",
           "whatsapp_cta": "Hola! 👋 Quiero productos naturales para rejuvenecimiento de piel. ¿Qué recomiendan?"
         },
         "impurezas+routine+mantener": {
-          "productos_recomendados": ["teatree", "lavender", "frankincense"],
+          "productos_recomendados": [
+            "teatree",
+            "lavender",
+            "frankincense"
+          ],
           "mensaje": "Esta routine integral mantiene tu piel clara y saludable.",
           "consejo": "Sigue esta routine completa cada mañana y noche para resultados óptimos.",
           "whatsapp_cta": "Hola! 👋 Quiero una routine completa para mantener mi piel clara. ¿Cuál es la ideal?"
@@ -964,22 +1307,30 @@
             {
               "texto": "Incomodidad ocasional durante el ciclo",
               "siguiente": "fem_q2",
-              "tags": ["ciclo"]
+              "tags": [
+                "ciclo"
+              ]
             },
             {
               "texto": "Fluctuaciones ocasionales del estado de ánimo",
               "siguiente": "fem_q2",
-              "tags": ["animo"]
+              "tags": [
+                "animo"
+              ]
             },
             {
               "texto": "Desafíos de transición hormonal",
               "siguiente": "fem_q2",
-              "tags": ["transicion"]
+              "tags": [
+                "transicion"
+              ]
             },
             {
               "texto": "Deseo de equilibrio hormonal general",
               "siguiente": "fem_q2",
-              "tags": ["equilibrio"]
+              "tags": [
+                "equilibrio"
+              ]
             }
           ]
         },
@@ -990,17 +1341,23 @@
             {
               "texto": "Ocasionalmente o levemente",
               "siguiente": "fem_q3",
-              "tags": ["leve"]
+              "tags": [
+                "leve"
+              ]
             },
             {
               "texto": "Moderadamente, afecta mi rutina",
               "siguiente": "fem_q3",
-              "tags": ["moderado"]
+              "tags": [
+                "moderado"
+              ]
             },
             {
               "texto": "Significativamente",
               "siguiente": "fem_q3",
-              "tags": ["significativo"]
+              "tags": [
+                "significativo"
+              ]
             }
           ]
         },
@@ -1011,17 +1368,23 @@
             {
               "texto": "Ciclo menstrual regular",
               "siguiente": "fem_q4",
-              "tags": ["ciclo_regular"]
+              "tags": [
+                "ciclo_regular"
+              ]
             },
             {
               "texto": "Transición o cambios hormonales",
               "siguiente": "fem_q4",
-              "tags": ["transicion_hormonal"]
+              "tags": [
+                "transicion_hormonal"
+              ]
             },
             {
               "texto": "Post-transición hormonal",
               "siguiente": "fem_q4",
-              "tags": ["post_cambios"]
+              "tags": [
+                "post_cambios"
+              ]
             }
           ]
         },
@@ -1032,17 +1395,23 @@
             {
               "texto": "Apoyo aromático para equilibrio",
               "siguiente": "fem_q5",
-              "tags": ["aromaterapia"]
+              "tags": [
+                "aromaterapia"
+              ]
             },
             {
               "texto": "Apoyo nutricional",
               "siguiente": "fem_q5",
-              "tags": ["nutricional"]
+              "tags": [
+                "nutricional"
+              ]
             },
             {
               "texto": "Enfoque integral combinado",
               "siguiente": "resultado",
-              "tags": ["integral"]
+              "tags": [
+                "integral"
+              ]
             }
           ]
         },
@@ -1053,54 +1422,82 @@
             {
               "texto": "Alivio cuando lo necesito",
               "siguiente": "resultado",
-              "tags": ["situacional"]
+              "tags": [
+                "situacional"
+              ]
             },
             {
               "texto": "Apoyo consistente a lo largo del mes",
               "siguiente": "resultado",
-              "tags": ["continuo"]
+              "tags": [
+                "continuo"
+              ]
             },
             {
               "texto": "Ambos según mis necesidades",
               "siguiente": "resultado",
-              "tags": ["ambos"]
+              "tags": [
+                "ambos"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "ciclo+leve+ciclo_regular": {
-          "productos_recomendados": ["clarysage", "lavender"],
+          "productos_recomendados": [
+            "clarysage",
+            "lavender"
+          ],
           "mensaje": "Estos productos pueden proporcionar confort ocasional durante tu ciclo.",
           "consejo": "Úsalos según sea necesario para máximo bienestar.",
           "whatsapp_cta": "Hola! 👋 Tengo incomodidad ocasional en mi ciclo. ¿Qué productos naturales me recomiendas?"
         },
         "ciclo+moderado+aromaterapia": {
-          "productos_recomendados": ["clarysage", "lavender", "ylangylang"],
+          "productos_recomendados": [
+            "clarysage",
+            "lavender",
+            "ylangylang"
+          ],
           "mensaje": "Estos aromas pueden ayudarte a mantener el equilibrio durante tu ciclo.",
           "consejo": "Difunde o inhala estos aceites para apoyo emocional y físico.",
           "whatsapp_cta": "Hola! 👋 Mi ciclo afecta mi rutina moderadamente. ¿Qué aromáticos me recomiendan?"
         },
         "animo+moderado+continuo": {
-          "productos_recomendados": ["balance", "clarysage", "lavender"],
+          "productos_recomendados": [
+            "balance",
+            "clarysage",
+            "lavender"
+          ],
           "mensaje": "Estos productos apoyan el equilibrio emocional a lo largo de tu ciclo.",
           "consejo": "Úsalos consistentemente para mantener tu bienestar emocional.",
           "whatsapp_cta": "Hola! 👋 Tengo fluctuaciones de ánimo en mi ciclo. ¿Cuál es el mejor apoyo continuo?"
         },
         "transicion+significativo+integral": {
-          "productos_recomendados": ["clarysage", "balance", "lavender", "ylangylang"],
+          "productos_recomendados": [
+            "clarysage",
+            "balance",
+            "lavender",
+            "ylangylang"
+          ],
           "mensaje": "Este enfoque integral apoya tu bienestar durante transiciones hormonales significativas.",
           "consejo": "Combina estos productos para máximo apoyo durante esta etapa.",
           "whatsapp_cta": "Hola! 👋 Tengo desafíos significativos con cambios hormonales. ¿Qué apoyo integral existe?"
         },
         "equilibrio+leve+aromaterapia": {
-          "productos_recomendados": ["balance", "clarysage"],
+          "productos_recomendados": [
+            "balance",
+            "clarysage"
+          ],
           "mensaje": "Estos productos te ayudan a mantener el equilibrio hormonal ocasional.",
           "consejo": "Úsalos como parte de tu rutina de autocuidado regular.",
           "whatsapp_cta": "Hola! 👋 Busco equilibrio hormonal general. ¿Qué aromáticos me recomiendan?"
         },
         "transicion+moderado+nutricional": {
-          "productos_recomendados": ["balance", "clarysage"],
+          "productos_recomendados": [
+            "balance",
+            "clarysage"
+          ],
           "mensaje": "Estos productos nutricionales apoyan tu transición hormonal de manera natural.",
           "consejo": "Incorpora estos productos en tu rutina diaria durante esta etapa.",
           "whatsapp_cta": "Hola! 👋 Tengo transición hormonal y busco apoyo nutricional. ¿Qué recomiendan?"
@@ -1120,22 +1517,30 @@
             {
               "texto": "Baja energía por la mañana",
               "siguiente": "ene_q2",
-              "tags": ["manana"]
+              "tags": [
+                "manana"
+              ]
             },
             {
               "texto": "Caída de energía en la tarde",
               "siguiente": "ene_q2",
-              "tags": ["tarde"]
+              "tags": [
+                "tarde"
+              ]
             },
             {
               "texto": "Falta de enfoque ocasional",
               "siguiente": "ene_q2",
-              "tags": ["enfoque"]
+              "tags": [
+                "enfoque"
+              ]
             },
             {
               "texto": "Cansancio general durante el día",
               "siguiente": "ene_q2",
-              "tags": ["cansancio"]
+              "tags": [
+                "cansancio"
+              ]
             }
           ]
         },
@@ -1146,17 +1551,23 @@
             {
               "texto": "Ocasionalmente",
               "siguiente": "ene_q3",
-              "tags": ["ocasional"]
+              "tags": [
+                "ocasional"
+              ]
             },
             {
               "texto": "Frecuentemente",
               "siguiente": "ene_q3",
-              "tags": ["frecuente"]
+              "tags": [
+                "frecuente"
+              ]
             },
             {
               "texto": "Casi todos los días",
               "siguiente": "ene_q3",
-              "tags": ["diario"]
+              "tags": [
+                "diario"
+              ]
             }
           ]
         },
@@ -1167,17 +1578,23 @@
             {
               "texto": "Buen sueño y actividad regular",
               "siguiente": "ene_q4",
-              "tags": ["saludable"]
+              "tags": [
+                "saludable"
+              ]
             },
             {
               "texto": "Sueño ocasionalmente interrumpido",
               "siguiente": "ene_q4",
-              "tags": ["sueno_irregular"]
+              "tags": [
+                "sueno_irregular"
+              ]
             },
             {
               "texto": "Poco ejercicio y sueño variable",
               "siguiente": "ene_q4",
-              "tags": ["sedentario"]
+              "tags": [
+                "sedentario"
+              ]
             }
           ]
         },
@@ -1188,17 +1605,23 @@
             {
               "texto": "Estimulante aromático natural",
               "siguiente": "ene_q5",
-              "tags": ["aromaterapia"]
+              "tags": [
+                "aromaterapia"
+              ]
             },
             {
               "texto": "Apoyo nutricional para energía",
               "siguiente": "ene_q5",
-              "tags": ["nutricional"]
+              "tags": [
+                "nutricional"
+              ]
             },
             {
               "texto": "Combinación de ambos",
               "siguiente": "resultado",
-              "tags": ["combinado"]
+              "tags": [
+                "combinado"
+              ]
             }
           ]
         },
@@ -1209,54 +1632,83 @@
             {
               "texto": "Energía rápida y activa",
               "siguiente": "resultado",
-              "tags": ["rapida"]
+              "tags": [
+                "rapida"
+              ]
             },
             {
               "texto": "Energía sostenida durante el día",
               "siguiente": "resultado",
-              "tags": ["sostenida"]
+              "tags": [
+                "sostenida"
+              ]
             },
             {
               "texto": "Ambas según el momento",
               "siguiente": "resultado",
-              "tags": ["ambas"]
+              "tags": [
+                "ambas"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "manana+ocasional+aromaterapia": {
-          "productos_recomendados": ["peppermint", "wildorange"],
+          "productos_recomendados": [
+            "peppermint",
+            "wildorange"
+          ],
           "mensaje": "Estos aromas pueden ayudarte a iniciar tu mañana con energía natural.",
           "consejo": "Inhala o difunde estos aceites al despertar para máximo efecto.",
           "whatsapp_cta": "Hola! 👋 Tengo baja energía por las mañanas ocasionalmente. ¿Qué aceites me recomiendan?"
         },
         "tarde+frecuente+nutricional": {
-          "productos_recomendados": ["peppermint", "rosemary", "intune"],
+          "productos_recomendados": [
+            "peppermint",
+            "rosemary",
+            "intune"
+          ],
           "mensaje": "Estos productos pueden sostener tu energía durante la tarde.",
           "consejo": "Úsalos a media tarde para evitar la caída energética.",
           "whatsapp_cta": "Hola! 👋 Tengo caída de energía frecuente por la tarde. ¿Qué puedo usar?"
         },
         "enfoque+ocasional+aromaterapia": {
-          "productos_recomendados": ["intune", "peppermint", "rosemary"],
+          "productos_recomendados": [
+            "intune",
+            "peppermint",
+            "rosemary"
+          ],
           "mensaje": "Estos productos pueden mejorar tu claridad mental y enfoque.",
           "consejo": "Difunde estos aceites en tu espacio de trabajo para máximo beneficio.",
           "whatsapp_cta": "Hola! 👋 Tengo falta de enfoque ocasional. ¿Qué aromáticos mejoran mi concentración?"
         },
         "cansancio+diario+combinado": {
-          "productos_recomendados": ["peppermint", "wildorange", "rosemary", "metapwr"],
+          "productos_recomendados": [
+            "peppermint",
+            "wildorange",
+            "rosemary",
+            "metapwr"
+          ],
           "mensaje": "Este enfoque combinado puede revitalizar tu energía durante todo el día.",
           "consejo": "Combina estos productos aromáticamente y nutricionalmente.",
           "whatsapp_cta": "Hola! 👋 Estoy cansado casi todos los días. ¿Cuál es la mejor solución combinada?"
         },
         "manana+diario+rapida": {
-          "productos_recomendados": ["peppermint", "wildorange"],
+          "productos_recomendados": [
+            "peppermint",
+            "wildorange"
+          ],
           "mensaje": "Estos productos proporcionan un boost de energía rápido por las mañanas.",
           "consejo": "Úsalos inmediatamente al despertar para activación máxima.",
           "whatsapp_cta": "Hola! 👋 Necesito energía rápida cada mañana. ¿Qué me recomiendan?"
         },
         "enfoque+frecuente+sostenida": {
-          "productos_recomendados": ["intune", "rosemary", "elevation"],
+          "productos_recomendados": [
+            "intune",
+            "rosemary",
+            "elevation"
+          ],
           "mensaje": "Estos productos sostienen tu enfoque y claridad mental a lo largo del día.",
           "consejo": "Usa estos aceites consistentemente para mejores resultados.",
           "whatsapp_cta": "Hola! 👋 Necesito enfoque sostenido durante el día. ¿Qué productos uso regularmente?"
@@ -1276,22 +1728,30 @@
             {
               "texto": "Desafíos estacionales frecuentes",
               "siguiente": "inm_q2",
-              "tags": ["estacional"]
+              "tags": [
+                "estacional"
+              ]
             },
             {
               "texto": "Exposición frecuente a entornos desafiantes",
               "siguiente": "inm_q2",
-              "tags": ["exposicion"]
+              "tags": [
+                "exposicion"
+              ]
             },
             {
               "texto": "Deseo de apoyo inmunitario preventivo",
               "siguiente": "inm_q2",
-              "tags": ["preventivo"]
+              "tags": [
+                "preventivo"
+              ]
             },
             {
               "texto": "Recuperación general después de desafíos",
               "siguiente": "inm_q2",
-              "tags": ["recuperacion"]
+              "tags": [
+                "recuperacion"
+              ]
             }
           ]
         },
@@ -1302,17 +1762,23 @@
             {
               "texto": "Solo durante épocas específicas del año",
               "siguiente": "inm_q3",
-              "tags": ["estacional"]
+              "tags": [
+                "estacional"
+              ]
             },
             {
               "texto": "Regularmente durante todo el año",
               "siguiente": "inm_q3",
-              "tags": ["regular"]
+              "tags": [
+                "regular"
+              ]
             },
             {
               "texto": "Ocasionalmente sin patrón claro",
               "siguiente": "inm_q3",
-              "tags": ["ocasional"]
+              "tags": [
+                "ocasional"
+              ]
             }
           ]
         },
@@ -1323,17 +1789,23 @@
             {
               "texto": "Activo con buen sueño y nutrición",
               "siguiente": "inm_q4",
-              "tags": ["saludable"]
+              "tags": [
+                "saludable"
+              ]
             },
             {
               "texto": "Moderadamente ocupado con desafíos ocasionales",
               "siguiente": "inm_q4",
-              "tags": ["moderado"]
+              "tags": [
+                "moderado"
+              ]
             },
             {
               "texto": "Muy ocupado, sueño o nutrición irregular",
               "siguiente": "inm_q4",
-              "tags": ["desafiante"]
+              "tags": [
+                "desafiante"
+              ]
             }
           ]
         },
@@ -1344,17 +1816,23 @@
             {
               "texto": "Apoyo aromático preventivo",
               "siguiente": "inm_q5",
-              "tags": ["aromaterapia"]
+              "tags": [
+                "aromaterapia"
+              ]
             },
             {
               "texto": "Apoyo nutricional interno",
               "siguiente": "inm_q5",
-              "tags": ["nutricional"]
+              "tags": [
+                "nutricional"
+              ]
             },
             {
               "texto": "Enfoque integral completo",
               "siguiente": "resultado",
-              "tags": ["integral"]
+              "tags": [
+                "integral"
+              ]
             }
           ]
         },
@@ -1365,54 +1843,85 @@
             {
               "texto": "Apoyo preventivo consistente",
               "siguiente": "resultado",
-              "tags": ["preventivo"]
+              "tags": [
+                "preventivo"
+              ]
             },
             {
               "texto": "Apoyo cuando surge necesidad",
               "siguiente": "resultado",
-              "tags": ["situacional"]
+              "tags": [
+                "situacional"
+              ]
             },
             {
               "texto": "Ambos para máxima protección",
               "siguiente": "resultado",
-              "tags": ["ambos"]
+              "tags": [
+                "ambos"
+              ]
             }
           ]
         }
       ],
       "resultados": {
         "estacional+estacional+aromaterapia": {
-          "productos_recomendados": ["onguard", "teatree", "lemon"],
+          "productos_recomendados": [
+            "onguard",
+            "teatree",
+            "lemon"
+          ],
           "mensaje": "Estos productos pueden apoyar tus defensas naturales durante épocas estacionales.",
           "consejo": "Comienza el apoyo dos semanas antes de la temporada de desafíos.",
           "whatsapp_cta": "Hola! 👋 Tengo desafíos estacionales frecuentes. ¿Qué aceites preventivos me recomiendas?"
         },
         "exposicion+regular+integral": {
-          "productos_recomendados": ["onguard", "oregano", "frankincense", "teatree"],
+          "productos_recomendados": [
+            "onguard",
+            "oregano",
+            "frankincense",
+            "teatree"
+          ],
           "mensaje": "Este enfoque integral apoya tu sistema inmunitario ante exposición frecuente.",
           "consejo": "Usa consistentemente para máxima protección durante todo el año.",
           "whatsapp_cta": "Hola! 👋 Estoy frecuentemente expuesto a entornos desafiantes. ¿Cuál es mi apoyo integral?"
         },
         "preventivo+ocasional+preventivo": {
-          "productos_recomendados": ["onguard", "lemon"],
+          "productos_recomendados": [
+            "onguard",
+            "lemon"
+          ],
           "mensaje": "Estos productos pueden mantener tus defensas fuertes preventivamente.",
           "consejo": "Úsalos diariamente como parte de tu rutina de bienestar.",
           "whatsapp_cta": "Hola! 👋 Busco apoyo inmunitario preventivo. ¿Qué uso diariamente?"
         },
         "recuperacion+regular+nutricional": {
-          "productos_recomendados": ["frankincense", "oregano", "lemon"],
+          "productos_recomendados": [
+            "frankincense",
+            "oregano",
+            "lemon"
+          ],
           "mensaje": "Estos productos pueden apoyar tu recuperación y resiliencia inmunitaria.",
           "consejo": "Aumenta el consumo de estos productos cuando necesites recuperación.",
           "whatsapp_cta": "Hola! 👋 Necesito apoyo para recuperación inmunitaria. ¿Qué productos me ayudan?"
         },
         "exposicion+desafiante+ambos": {
-          "productos_recomendados": ["onguard", "oregano", "frankincense", "teatree", "lemon"],
+          "productos_recomendados": [
+            "onguard",
+            "oregano",
+            "frankincense",
+            "teatree",
+            "lemon"
+          ],
           "mensaje": "Esta estrategia dual ofrece máxima protección ante desafíos intensos.",
           "consejo": "Mantén esta rutina durante periodos especialmente desafiantes.",
           "whatsapp_cta": "Hola! 👋 Tengo exposición constante y estilo de vida exigente. ¿Cómo protejo mi inmunidad?"
         },
         "estacional+saludable+situacional": {
-          "productos_recomendados": ["onguard", "teatree"],
+          "productos_recomendados": [
+            "onguard",
+            "teatree"
+          ],
           "mensaje": "Estos productos están listos para cuando surjan desafíos estacionales.",
           "consejo": "Ten estos productos a mano durante épocas de riesgo.",
           "whatsapp_cta": "Hola! 👋 Aunque soy saludable, tengo desafíos estacionales ocasionales. ¿Qué preparo?"
