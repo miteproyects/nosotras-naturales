@@ -830,34 +830,46 @@ def page_latam():
 # Hide the default Streamlit sidebar completely
 st.markdown("""
 <style>
-    /* ===== HIDE SIDEBAR COMPLETELY ===== */
+    /* ===== HIDE SIDEBAR & HEADER COMPLETELY ===== */
     [data-testid="stSidebar"],
     [data-testid="collapsedControl"],
-    button[kind="header"] {
+    button[kind="header"],
+    header[data-testid="stHeader"] {
         display: none !important;
         visibility: hidden !important;
         width: 0 !important;
+        height: 0 !important;
         min-width: 0 !important;
     }
-    /* Remove Streamlit's default header bar */
-    header[data-testid="stHeader"] {
-        display: none !important;
-    }
-    /* Main container — remove top padding, keep sides snug */
+    /* ===== KILL ALL PADDING from top to edges ===== */
     [data-testid="stAppViewContainer"] {
-        padding-top: 0 !important;
+        padding: 0 !important;
     }
     [data-testid="stAppViewBlockContainer"] {
         max-width: 100% !important;
-        padding-top: 0 !important;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding: 0 !important;
+    }
+    /* Streamlit nests content in stVerticalBlock → immediate children divs.
+       The first child is the radio nav — kill its padding & margin */
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] {
+        gap: 0 !important;
+    }
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:first-child,
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:nth-child(2) {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    /* Also target element-container wrappers around the radio */
+    [data-testid="stElementContainer"]:has([data-testid="stRadio"]) {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100% !important;
     }
     /* Content below nav gets centered padding */
     .main-content-wrapper {
         max-width: 1100px;
         margin: 0 auto;
-        padding: 0 1.5rem;
+        padding: 20px 1.5rem 0;
     }
 </style>
 """, unsafe_allow_html=True)
