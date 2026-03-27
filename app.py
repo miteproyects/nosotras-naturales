@@ -912,14 +912,21 @@ st.markdown("""
         max-width: 100% !important;
         padding: 0 !important;
     }
-    /* Vertical block children — no gap, no padding */
-    [data-testid="stVerticalBlock"] {
+    /* ONLY the top-level vertical block gets gap: 0 (for nav flush to top).
+       Inner vertical blocks keep normal spacing for content. */
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] {
         gap: 0 !important;
     }
-    /* Every wrapper div above the radio */
-    [data-testid="stVerticalBlock"] > div {
+    /* First few wrapper divs (style injection + radio) — no top space */
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:first-child,
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:nth-child(2),
+    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:nth-child(3) {
         padding-top: 0 !important;
         margin-top: 0 !important;
+    }
+    /* Restore normal spacing inside content areas */
+    .main-content-wrapper [data-testid="stVerticalBlock"] {
+        gap: 1rem !important;
     }
     /* Element container around radio */
     [data-testid="stElementContainer"]:has([data-testid="stRadio"]) {

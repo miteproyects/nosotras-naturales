@@ -725,6 +725,11 @@ a:hover {
     box-shadow: 0 4px 14px rgba(124, 144, 112, 0.25) !important;
 }
 
+/* Ensure buttons inside content have spacing between them */
+.main-content-wrapper .stButton {
+    margin-bottom: 8px !important;
+}
+
 /* Category card buttons — styled as tall cards */
 .stButton > button[kind="secondary"] p,
 .stButton > button p {
