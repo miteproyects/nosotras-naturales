@@ -1267,24 +1267,24 @@ def page_dashboard():
         st.session_state.dashboard_authenticated = False
         st.rerun()
 
+    # ---- Quick stats bar ----
+    active_count = sum(1 for p in products_data if p.get('active', True))
+    stripe_count = sum(1 for p in products_data if p.get('stripe_price_id'))
+    low_stock = sum(1 for p in products_data if p.get('stock', 99) < 10)
+
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         st.metric("Productos", len(products_data))
     with col2:
-        st.metric("Categorías", len(symptom_flow['categories']))
+        st.metric("Activos", f"{active_count}/{len(products_data)}")
     with col3:
-        st.metric("ID Advocada", ADVOCATE_ID)
+        st.metric("Stripe", stripe_count)
     with col4:
-        st.metric("Fecha", datetime.now().strftime("%d/%m/%Y"))
+        st.metric("Stock Bajo", low_stock, delta=None if low_stock == 0 else f"-{low_stock}", delta_color="inverse")
 
-    st.markdown("---")
-
-    # ---- Inventory ----
-    st.markdown("<h3>Inventario de Productos</h3>", unsafe_allow_html=True)
-
-    # Initialize session state
+    # ---- Initialize session state ----
     if 'dash_editing' not in st.session_state:
-        st.session_state.dash_editing = None  # product id being edited
+        st.session_state.dash_editing = None
     if 'dash_adding' not in st.session_state:
         st.session_state.dash_adding = False
     if 'dash_msg' not in st.session_state:
@@ -1299,149 +1299,250 @@ def page_dashboard():
             st.error(msg_text)
         st.session_state.dash_msg = None
 
-    # ---- Add New Product button ----
-    col_add, col_search = st.columns([1, 3])
-    with col_add:
-        if st.button("➕ Agregar Producto", key="add_new", type="primary"):
-            st.session_state.dash_adding = True
-            st.session_state.dash_editing = None
-    with col_search:
-        search_term = st.text_input("🔍 Buscar:", placeholder="Nombre del producto...", key="dash_search", label_visibility="collapsed")
+    # ============================================
+    # HORIZONTAL TAB BAR
+    # ============================================
+    tab_productos, tab_stripe, tab_config = st.tabs(["📦 Productos", "💳 Stripe", "⚙️ Configuración"])
 
-    # ---- Add New Product Form ----
-    if st.session_state.dash_adding:
-        st.markdown("---")
-        st.markdown('<div style="background:#f0f7ed;padding:4px 16px;border-radius:10px;border-left:4px solid #7C9070;margin-bottom:12px;"><span style="font-weight:700;color:#7C9070;font-size:1.1rem;">➕ Nuevo Producto</span></div>', unsafe_allow_html=True)
+    # ============================================
+    # TAB 1: PRODUCTOS
+    # ============================================
+    with tab_productos:
+        # ---- Add New Product button + Search ----
+        col_add, col_search = st.columns([1, 3])
+        with col_add:
+            if st.button("➕ Agregar Producto", key="add_new", type="primary"):
+                st.session_state.dash_adding = True
+                st.session_state.dash_editing = None
+        with col_search:
+            search_term = st.text_input("🔍 Buscar:", placeholder="Nombre del producto...", key="dash_search", label_visibility="collapsed")
 
-        new_product = _product_edit_form({}, "new", is_new=True)
+        # ---- Add New Product Form ----
+        if st.session_state.dash_adding:
+            st.markdown("---")
+            st.markdown('<div style="background:#f0f7ed;padding:4px 16px;border-radius:10px;border-left:4px solid #7C9070;margin-bottom:12px;"><span style="font-weight:700;color:#7C9070;font-size:1.1rem;">➕ Nuevo Producto</span></div>', unsafe_allow_html=True)
 
-        col_save, col_cancel = st.columns([1, 1])
-        with col_save:
-            if st.button("✅ Crear Producto", key="save_new", type="primary"):
-                if not new_product['id'] or not new_product['nombre']:
-                    st.error("ID y Nombre son obligatorios.")
-                elif any(p['id'] == new_product['id'] for p in products_data):
-                    st.error(f"Ya existe un producto con ID '{new_product['id']}'.")
-                else:
-                    products_data.append(new_product)
-                    save_products(products_data)
-                    load_products.clear()
-                    st.session_state.dash_adding = False
-                    st.session_state.dash_msg = ('success', f"✅ Producto '{new_product['nombre']}' creado exitosamente.")
-                    st.rerun()
-        with col_cancel:
-            if st.button("❌ Cancelar", key="cancel_new"):
-                st.session_state.dash_adding = False
-                st.rerun()
-        st.markdown("---")
-
-    # ---- Product list ----
-    filtered = products_data
-    if search_term:
-        term = search_term.lower()
-        filtered = [p for p in products_data if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower() or term in p.get('doterra_sku', '')]
-
-    st.caption(f"Mostrando {len(filtered)} de {len(products_data)} productos")
-
-    for p in filtered:
-        pid = p['id']
-        is_editing = st.session_state.dash_editing == pid
-
-        # ---- Product Card (view mode) ----
-        if not is_editing:
-            _render_dashboard_product_card(p)
-
-            # Action buttons below the card
-            col_edit, col_del, col_spacer = st.columns([1, 1, 4])
-            with col_edit:
-                if st.button(f"✏️ Editar", key=f"edit_{pid}"):
-                    st.session_state.dash_editing = pid
-                    st.session_state.dash_adding = False
-                    st.rerun()
-            with col_del:
-                if st.button(f"🗑️ Eliminar", key=f"del_{pid}"):
-                    st.session_state[f'confirm_del_{pid}'] = True
-                    st.rerun()
-
-            # Confirm delete
-            if st.session_state.get(f'confirm_del_{pid}'):
-                st.warning(f"¿Estás segura de eliminar **{p['nombre']}**? Esta acción no se puede deshacer.")
-                col_yes, col_no, _ = st.columns([1, 1, 4])
-                with col_yes:
-                    if st.button("Sí, eliminar", key=f"confirm_yes_{pid}", type="primary"):
-                        products_data[:] = [pr for pr in products_data if pr['id'] != pid]
-                        save_products(products_data)
-                        load_products.clear()
-                        st.session_state.pop(f'confirm_del_{pid}', None)
-                        st.session_state.dash_msg = ('success', f"✅ Producto '{p['nombre']}' eliminado.")
-                        st.rerun()
-                with col_no:
-                    if st.button("No, cancelar", key=f"confirm_no_{pid}"):
-                        st.session_state.pop(f'confirm_del_{pid}', None)
-                        st.rerun()
-
-        # ---- Edit mode ----
-        else:
-            st.markdown('<div style="background:#fff8ee;padding:4px 16px;border-radius:10px;border-left:4px solid #C67B4F;margin-bottom:12px;">'
-                        f'<span style="font-weight:700;color:#C67B4F;font-size:1.1rem;">✏️ Editando: {p["nombre"]}</span></div>', unsafe_allow_html=True)
-
-            updated = _product_edit_form(p, f"edit_{pid}")
+            new_product = _product_edit_form({}, "new", is_new=True)
 
             col_save, col_cancel = st.columns([1, 1])
             with col_save:
-                if st.button("💾 Guardar Cambios", key=f"save_edit_{pid}", type="primary"):
-                    # Update in-place
-                    for i, prod in enumerate(products_data):
-                        if prod['id'] == pid:
-                            products_data[i] = updated
-                            break
-                    save_products(products_data)
-                    load_products.clear()
-                    st.session_state.dash_editing = None
-                    st.session_state.dash_msg = ('success', f"✅ Producto '{updated['nombre']}' actualizado.")
-                    st.rerun()
+                if st.button("✅ Crear Producto", key="save_new", type="primary"):
+                    if not new_product['id'] or not new_product['nombre']:
+                        st.error("ID y Nombre son obligatorios.")
+                    elif any(p['id'] == new_product['id'] for p in products_data):
+                        st.error(f"Ya existe un producto con ID '{new_product['id']}'.")
+                    else:
+                        products_data.append(new_product)
+                        save_products(products_data)
+                        load_products.clear()
+                        st.session_state.dash_adding = False
+                        st.session_state.dash_msg = ('success', f"✅ Producto '{new_product['nombre']}' creado exitosamente.")
+                        st.rerun()
             with col_cancel:
-                if st.button("❌ Cancelar", key=f"cancel_edit_{pid}"):
-                    st.session_state.dash_editing = None
+                if st.button("❌ Cancelar", key="cancel_new"):
+                    st.session_state.dash_adding = False
                     st.rerun()
+            st.markdown("---")
 
-        st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
+        # ---- Product list ----
+        filtered = products_data
+        if search_term:
+            term = search_term.lower()
+            filtered = [p for p in products_data if term in p['nombre'].lower() or term in p.get('nombre_en', '').lower() or term in p.get('doterra_sku', '')]
 
-    # ---- Dashboard Stats ----
-    st.markdown("---")
-    active_count = sum(1 for p in products_data if p.get('active', True))
-    stripe_count = sum(1 for p in products_data if p.get('stripe_price_id'))
-    low_stock = sum(1 for p in products_data if p.get('stock', 99) < 10)
-    col_s1, col_s2, col_s3 = st.columns(3)
-    with col_s1:
-        st.metric("Productos Activos", f"{active_count}/{len(products_data)}")
-    with col_s2:
-        st.metric("Conectados a Stripe", stripe_count)
-    with col_s3:
-        st.metric("Stock Bajo", low_stock, delta=None if low_stock == 0 else f"-{low_stock}", delta_color="inverse")
+        st.caption(f"Mostrando {len(filtered)} de {len(products_data)} productos")
 
-    # ---- Configuration ----
-    st.markdown("---")
-    st.markdown("<h3>Configuración</h3>", unsafe_allow_html=True)
-    col1, col2 = st.columns(2)
-    with col1:
-        st.info(f"📱 **WhatsApp:** {WHATSAPP_NUMBER}")
-    with col2:
-        st.info(f"🎯 **ID Advocada:** {ADVOCATE_ID}")
+        for p in filtered:
+            pid = p['id']
+            is_editing = st.session_state.dash_editing == pid
 
-    # Stripe configuration placeholder
-    st.markdown("---")
-    st.markdown("<h3>Stripe (Pagos Online)</h3>", unsafe_allow_html=True)
-    st.markdown(
-        '<div style="background:#f5f0ff;padding:16px;border-radius:10px;border:1px solid #d1c4e9;">'
-        '<div style="font-weight:600;color:#5e35b1;margin-bottom:8px;">Integración con Stripe</div>'
-        '<div style="color:#666;font-size:14px;line-height:1.6;">'
-        'Cuando conectes Stripe, los productos con Stripe Price ID se podrán comprar directamente desde la web. '
-        'Los clientes podrán pagar con tarjeta de crédito, débito y otros métodos de pago.'
-        '</div>'
-        '</div>',
-        unsafe_allow_html=True
-    )
+            # ---- Product Card (view mode) ----
+            if not is_editing:
+                _render_dashboard_product_card(p)
+
+                # Action buttons below the card
+                col_edit, col_del, col_spacer = st.columns([1, 1, 4])
+                with col_edit:
+                    if st.button(f"✏️ Editar", key=f"edit_{pid}"):
+                        st.session_state.dash_editing = pid
+                        st.session_state.dash_adding = False
+                        st.rerun()
+                with col_del:
+                    if st.button(f"🗑️ Eliminar", key=f"del_{pid}"):
+                        st.session_state[f'confirm_del_{pid}'] = True
+                        st.rerun()
+
+                # Confirm delete
+                if st.session_state.get(f'confirm_del_{pid}'):
+                    st.warning(f"¿Estás segura de eliminar **{p['nombre']}**? Esta acción no se puede deshacer.")
+                    col_yes, col_no, _ = st.columns([1, 1, 4])
+                    with col_yes:
+                        if st.button("Sí, eliminar", key=f"confirm_yes_{pid}", type="primary"):
+                            products_data[:] = [pr for pr in products_data if pr['id'] != pid]
+                            save_products(products_data)
+                            load_products.clear()
+                            st.session_state.pop(f'confirm_del_{pid}', None)
+                            st.session_state.dash_msg = ('success', f"✅ Producto '{p['nombre']}' eliminado.")
+                            st.rerun()
+                    with col_no:
+                        if st.button("No, cancelar", key=f"confirm_no_{pid}"):
+                            st.session_state.pop(f'confirm_del_{pid}', None)
+                            st.rerun()
+
+            # ---- Edit mode ----
+            else:
+                st.markdown('<div style="background:#fff8ee;padding:4px 16px;border-radius:10px;border-left:4px solid #C67B4F;margin-bottom:12px;">'
+                            f'<span style="font-weight:700;color:#C67B4F;font-size:1.1rem;">✏️ Editando: {p["nombre"]}</span></div>', unsafe_allow_html=True)
+
+                updated = _product_edit_form(p, f"edit_{pid}")
+
+                col_save, col_cancel = st.columns([1, 1])
+                with col_save:
+                    if st.button("💾 Guardar Cambios", key=f"save_edit_{pid}", type="primary"):
+                        for i, prod in enumerate(products_data):
+                            if prod['id'] == pid:
+                                products_data[i] = updated
+                                break
+                        save_products(products_data)
+                        load_products.clear()
+                        st.session_state.dash_editing = None
+                        st.session_state.dash_msg = ('success', f"✅ Producto '{updated['nombre']}' actualizado.")
+                        st.rerun()
+                with col_cancel:
+                    if st.button("❌ Cancelar", key=f"cancel_edit_{pid}"):
+                        st.session_state.dash_editing = None
+                        st.rerun()
+
+            st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
+
+    # ============================================
+    # TAB 2: STRIPE
+    # ============================================
+    with tab_stripe:
+        st.markdown(
+            '<div style="background:#f5f0ff;padding:20px;border-radius:12px;border:1px solid #d1c4e9;margin-bottom:16px;">'
+            '<div style="font-weight:700;color:#5e35b1;font-size:1.2rem;margin-bottom:10px;">Integración con Stripe</div>'
+            '<div style="color:#555;font-size:14px;line-height:1.7;">'
+            'Conecta tu cuenta de Stripe para aceptar pagos directamente desde la web. '
+            'Los clientes podrán pagar con tarjeta de crédito, débito y otros métodos de pago.'
+            '</div></div>',
+            unsafe_allow_html=True
+        )
+
+        # Stripe connection status
+        st.markdown("##### Estado de Conexión")
+        stripe_key_set = bool(os.environ.get('STRIPE_SECRET_KEY', ''))
+        if stripe_key_set:
+            st.success("Stripe conectado correctamente")
+        else:
+            st.warning("Stripe no está conectado. Agrega tu clave secreta en los secretos de Streamlit Cloud.")
+            st.code("# En Streamlit Cloud > Settings > Secrets:\nSTRIPE_SECRET_KEY = \"sk_live_...\"", language="toml")
+
+        # Product sync overview
+        st.markdown("##### Productos y Stripe")
+        stripe_products = [p for p in products_data if p.get('stripe_price_id')]
+        no_stripe = [p for p in products_data if not p.get('stripe_price_id') and p.get('active', True)]
+
+        col_s1, col_s2 = st.columns(2)
+        with col_s1:
+            st.metric("Conectados a Stripe", len(stripe_products))
+        with col_s2:
+            st.metric("Activos sin Stripe", len(no_stripe))
+
+        if stripe_products:
+            st.markdown("**Productos con Stripe Price ID:**")
+            for sp in stripe_products:
+                st.markdown(
+                    f'<div style="padding:8px 12px;background:#f0fdf4;border-radius:8px;margin-bottom:6px;border-left:3px solid #22c55e;">'
+                    f'<span style="font-weight:600;">{sp["nombre"]}</span>'
+                    f'<span style="color:#888;margin-left:8px;font-size:13px;">SKU: {sp.get("doterra_sku", "—")} | Price ID: {sp.get("stripe_price_id", "—")}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+
+        if no_stripe:
+            st.markdown("**Productos activos sin Stripe (necesitan Price ID):**")
+            for np_item in no_stripe[:10]:
+                st.markdown(
+                    f'<div style="padding:8px 12px;background:#fff7ed;border-radius:8px;margin-bottom:6px;border-left:3px solid #f59e0b;">'
+                    f'<span style="font-weight:600;">{np_item["nombre"]}</span>'
+                    f'<span style="color:#888;margin-left:8px;font-size:13px;">SKU: {np_item.get("doterra_sku", "—")} | ${np_item.get("precio_usd", 0):.2f}</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+            if len(no_stripe) > 10:
+                st.caption(f"... y {len(no_stripe) - 10} productos más")
+
+        # Checkout settings
+        st.markdown("---")
+        st.markdown("##### Configuración de Checkout")
+        st.markdown(
+            '<div style="background:#f8f9fa;padding:16px;border-radius:10px;border:1px solid #dee2e6;margin-top:8px;">'
+            '<div style="color:#555;font-size:14px;line-height:1.7;">'
+            '<div style="margin-bottom:8px;"><span style="font-weight:600;">Moneda:</span> USD</div>'
+            '<div style="margin-bottom:8px;"><span style="font-weight:600;">Método de envío:</span> Entrega local en Ecuador</div>'
+            '<div><span style="font-weight:600;">URL de éxito:</span> Se configurará automáticamente al conectar Stripe</div>'
+            '</div></div>',
+            unsafe_allow_html=True
+        )
+
+    # ============================================
+    # TAB 3: CONFIGURACIÓN
+    # ============================================
+    with tab_config:
+        st.markdown("##### Información de la Advocada")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.info(f"📱 **WhatsApp:** {WHATSAPP_NUMBER}")
+        with col2:
+            st.info(f"🎯 **ID Advocada:** {ADVOCATE_ID}")
+
+        st.markdown("---")
+        st.markdown("##### Datos del Sitio")
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.metric("Total Productos", len(products_data))
+            st.metric("Categorías", len(symptom_flow['categories']))
+        with col_b:
+            st.metric("Fecha", datetime.now().strftime("%d/%m/%Y"))
+            st.metric("Productos Activos", f"{active_count}/{len(products_data)}")
+
+        st.markdown("---")
+        st.markdown("##### Exportar Datos")
+        col_exp1, col_exp2 = st.columns(2)
+        with col_exp1:
+            products_json = json.dumps(products_data, ensure_ascii=False, indent=2)
+            st.download_button(
+                label="📥 Descargar products.json",
+                data=products_json,
+                file_name="products.json",
+                mime="application/json",
+                key="export_products"
+            )
+        with col_exp2:
+            try:
+                import pandas as pd
+                df = pd.DataFrame(products_data)
+                csv_data = df.to_csv(index=False)
+                st.download_button(
+                    label="📥 Descargar CSV",
+                    data=csv_data,
+                    file_name="productos.csv",
+                    mime="text/csv",
+                    key="export_csv"
+                )
+            except Exception:
+                st.caption("Instala pandas para exportar CSV")
+
+        st.markdown("---")
+        st.markdown("##### Seguridad")
+        st.markdown(
+            '<div style="background:#fff8f0;padding:16px;border-radius:10px;border:1px solid #fed7aa;">'
+            '<div style="color:#9a3412;font-size:14px;line-height:1.7;">'
+            'Para cambiar la contraseña del dashboard, edita <code>DASHBOARD_PASSWORD</code> en el código fuente de app.py.'
+            '</div></div>',
+            unsafe_allow_html=True
+        )
 
 def page_latam():
     """doTERRA Latinoamérica page"""
