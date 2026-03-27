@@ -134,9 +134,17 @@ a:hover {
     color: rgba(255, 255, 255, 0.95) !important;
 }
 
-/* Hide the actual radio circle */
-[data-testid="stRadio"] [role="radiogroup"] input[type="radio"] {
+/* Hide the radio circle / dot indicator completely */
+[data-testid="stRadio"] [role="radiogroup"] input[type="radio"],
+[data-testid="stRadio"] [role="radiogroup"] label > div:first-child,
+[data-testid="stRadio"] [role="radiogroup"] label svg,
+[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child,
+[data-testid="stRadio"] [role="radiogroup"] [data-testid="stMarkdownContainer"] + div {
     display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    position: absolute !important;
 }
 
 /* Active tab — bottom accent line */

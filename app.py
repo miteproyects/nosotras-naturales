@@ -830,36 +830,43 @@ def page_latam():
 # Hide the default Streamlit sidebar completely
 st.markdown("""
 <style>
-    /* ===== HIDE SIDEBAR & HEADER COMPLETELY ===== */
+    /* ===== HIDE SIDEBAR, HEADER, DEPLOY BUTTON ===== */
     [data-testid="stSidebar"],
     [data-testid="collapsedControl"],
     button[kind="header"],
-    header[data-testid="stHeader"] {
+    header[data-testid="stHeader"],
+    .stDeployButton,
+    #MainMenu {
         display: none !important;
         visibility: hidden !important;
-        width: 0 !important;
         height: 0 !important;
-        min-width: 0 !important;
+        width: 0 !important;
+        overflow: hidden !important;
+        position: absolute !important;
     }
-    /* ===== KILL ALL PADDING from top to edges ===== */
-    [data-testid="stAppViewContainer"] {
-        padding: 0 !important;
+
+    /* ===== NUKE ALL TOP SPACING — every Streamlit wrapper ===== */
+    html, body, [data-testid="stAppViewContainer"],
+    .stApp, [data-testid="stAppViewBlockContainer"],
+    .main, .block-container, section[data-testid="stMain"],
+    section[data-testid="stMain"] > div {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
     [data-testid="stAppViewBlockContainer"] {
         max-width: 100% !important;
         padding: 0 !important;
     }
-    /* Streamlit nests content in stVerticalBlock → immediate children divs.
-       The first child is the radio nav — kill its padding & margin */
-    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] {
+    /* Vertical block children — no gap, no padding */
+    [data-testid="stVerticalBlock"] {
         gap: 0 !important;
     }
-    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:first-child,
-    [data-testid="stAppViewBlockContainer"] > [data-testid="stVerticalBlock"] > div:nth-child(2) {
-        padding: 0 !important;
-        margin: 0 !important;
+    /* Every wrapper div above the radio */
+    [data-testid="stVerticalBlock"] > div {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
     }
-    /* Also target element-container wrappers around the radio */
+    /* Element container around radio */
     [data-testid="stElementContainer"]:has([data-testid="stRadio"]) {
         padding: 0 !important;
         margin: 0 !important;
