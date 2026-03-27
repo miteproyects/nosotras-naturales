@@ -310,28 +310,20 @@ if 'dashboard_authenticated' not in st.session_state:
 def page_inicio():
     """Home page — Guía de Bienestar is front and center"""
 
-    # Compact hero with direct CTA
+    # Combined hero banner with CTA
     st.markdown("""
-    <div class="hero" style="padding: 40px 20px; margin-bottom: 25px;">
+    <div class="hero" style="padding: 48px 20px 40px; margin-bottom: 28px;">
         <div class="hero-content">
-            <h1 style="font-size: 2.5rem; margin-bottom: 8px;">🌿 Nosotras Naturales</h1>
-            <p style="font-size: 1.1rem;">Tu guía personalizada de bienestar con aceites esenciales doTERRA</p>
+            <h1 style="font-size: 2.4rem; margin-bottom: 20px; letter-spacing: -0.5px;">🌿 Nosotras Naturales</h1>
+            <div style="width: 50px; height: 3px; background: rgba(255,255,255,0.5); border-radius: 2px; margin: 0 auto 22px;"></div>
+            <h2 style="color: white; font-size: 1.65rem; margin-bottom: 10px; font-weight: 700; text-shadow: 0 1px 8px rgba(0,0,0,0.10);">
+                Cuéntanos, ¿cómo te sientes hoy?
+            </h2>
+            <p style="color: rgba(255,255,255,0.92); font-size: 1.05rem; max-width: 500px; margin: 0 auto; line-height: 1.7;">
+                Toca el área que quieres mejorar. En <strong style="color: #fff; background: rgba(255,255,255,0.18); padding: 1px 8px; border-radius: 10px;">menos de 2 minutos</strong>
+                descubrirás los aceites esenciales ideales para ti.
+            </p>
         </div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ==========================================
-    # GUÍA DE BIENESTAR — DIRECTLY ON HOMEPAGE
-    # ==========================================
-    st.markdown("""
-    <div style="text-align: center; margin: 5px 0 20px;">
-        <h2 style="color: #3D3229; font-size: 2rem; margin-bottom: 8px; font-weight: 700;">
-            Cuéntanos, ¿cómo te sientes hoy?
-        </h2>
-        <p style="color: #666; font-size: 16px; max-width: 550px; margin: 0 auto; line-height: 1.7;">
-            Toca el área que quieres mejorar. En <strong style="color: #7C9070;">menos de 2 minutos</strong>
-            descubrirás los aceites esenciales ideales para ti.
-        </p>
     </div>
     """, unsafe_allow_html=True)
 
