@@ -963,6 +963,46 @@ svg[data-testid="stHeaderNoBadge"] {
 .uso-D { background: #EF4444; }
 .uso-S { background: #F59E0B; }
 
+/* ============================================
+   DASHBOARD FILTER BAR
+   ============================================ */
+
+/* Style the dashboard filter expander */
+[data-testid="stExpander"] details {
+    border: 1px solid #e2ddd5 !important;
+    border-radius: 12px !important;
+    background: white !important;
+    box-shadow: 0 1px 4px rgba(60,50,41,0.06) !important;
+}
+[data-testid="stExpander"] summary {
+    font-weight: 600 !important;
+    color: #3D3229 !important;
+    padding: 10px 16px !important;
+}
+[data-testid="stExpander"] summary:hover {
+    color: #7C9070 !important;
+}
+
+/* Override selectbox and text_input inside dashboard for cleaner look */
+[data-testid="stExpander"] [data-testid="stSelectbox"] label,
+[data-testid="stExpander"] [data-testid="stMultiSelect"] label,
+[data-testid="stExpander"] [data-testid="stTextInput"] label {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #7C9070 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    margin-bottom: 2px !important;
+}
+
+[data-testid="stExpander"] [data-baseweb="select"] {
+    border-radius: 8px !important;
+}
+
+[data-testid="stExpander"] [data-baseweb="input"] {
+    border-radius: 8px !important;
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;

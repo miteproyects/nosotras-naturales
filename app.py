@@ -1386,33 +1386,36 @@ def page_dashboard():
                 st.session_state.dash_adding = True
                 st.session_state.dash_editing = None
 
-        # ---- Filter bar (collapsible) ----
+        # ---- Filter bar ----
         with st.expander("🔍 Filtros y Búsqueda", expanded=True):
+            # Row 1: Search (full width)
+            search_term = st.text_input("Buscar", placeholder="Escribe nombre, SKU, beneficio o palabra clave...", key="dash_search")
+
+            # Row 2: Type + Status + Country
             fc1, fc2, fc3 = st.columns(3)
             with fc1:
-                search_term = st.text_input("Buscar:", placeholder="Nombre, SKU, o palabra clave...", key="dash_search", label_visibility="collapsed")
+                tipo_labels = {"Todos": "— Todos los tipos —", "aceite_individual": "🫧 Aceites Individuales", "mezcla": "🌸 Mezclas", "suplemento": "💊 Suplementos", "kit": "📦 Kits"}
+                filter_tipo = st.selectbox("Tipo de Producto", list(tipo_labels.keys()), format_func=lambda x: tipo_labels[x], key="dash_filter_tipo")
             with fc2:
-                tipo_labels = {"Todos": "Todos", "aceite_individual": "Aceites Individuales", "mezcla": "Mezclas", "suplemento": "Suplementos", "kit": "Kits"}
-                filter_tipo = st.selectbox("Tipo:", list(tipo_labels.keys()), format_func=lambda x: tipo_labels[x], key="dash_filter_tipo")
+                status_options = {"Todos": "— Todos —", "Activos": "✅ Activos", "Inactivos": "⏸️ Inactivos", "Con Precio": "💰 Con Precio", "Sin Precio": "🚫 Sin Precio", "Con Imagen": "🖼️ Con Imagen", "Sin Imagen": "📷 Sin Imagen", "Stripe Conectado": "💳 Stripe ✓", "Stripe Pendiente": "💳 Stripe Pendiente"}
+                filter_status = st.selectbox("Estado", list(status_options.keys()), format_func=lambda x: status_options[x], key="dash_filter_status")
             with fc3:
-                status_options = ["Todos", "Activos", "Inactivos", "Con Precio", "Sin Precio", "Con Imagen", "Sin Imagen", "Stripe Conectado", "Stripe Pendiente"]
-                filter_status = st.selectbox("Estado:", status_options, key="dash_filter_status")
+                country_options = {"Todos": "🌎 Todos los países"}
+                for code, info in DOTERRA_COUNTRIES.items():
+                    if code in COUNTRY_PRODUCTS and len(COUNTRY_PRODUCTS[code]) > 1:
+                        count_c = len(COUNTRY_PRODUCTS[code])
+                        country_options[code] = f"{info['flag']} {info['name']} ({count_c})"
+                filter_country = st.selectbox("País doTERRA", list(country_options.keys()), format_func=lambda x: country_options[x], key="dash_filter_country")
 
-            # Second row: categories + country + sort
-            fc4, fc5, fc6 = st.columns([2, 1, 1])
+            # Row 3: Categories + Sort
+            fc4, fc5 = st.columns([3, 1])
             with fc4:
                 all_cats = sorted(set(c for p in products_data for c in p.get('categoria', [])))
                 cat_labels = {c: c.replace('_', ' ').title() for c in all_cats}
-                filter_cats = st.multiselect("Categorías:", all_cats, format_func=lambda x: cat_labels.get(x, x), key="dash_filter_cats")
+                filter_cats = st.multiselect("Categorías", all_cats, format_func=lambda x: cat_labels.get(x, x), key="dash_filter_cats")
             with fc5:
-                country_options = {"Todos": "Todos los países"}
-                for code, info in DOTERRA_COUNTRIES.items():
-                    if code in COUNTRY_PRODUCTS and len(COUNTRY_PRODUCTS[code]) > 1:
-                        country_options[code] = f"{info['flag']} {info['name']}"
-                filter_country = st.selectbox("País doTERRA:", list(country_options.keys()), format_func=lambda x: country_options[x], key="dash_filter_country")
-            with fc6:
-                sort_options = {"nombre": "Nombre A-Z", "nombre_desc": "Nombre Z-A", "precio_asc": "Precio ↑", "precio_desc": "Precio ↓", "tipo": "Tipo"}
-                filter_sort = st.selectbox("Ordenar:", list(sort_options.keys()), format_func=lambda x: sort_options[x], key="dash_filter_sort")
+                sort_options = {"nombre": "Nombre A-Z", "nombre_desc": "Nombre Z-A", "precio_asc": "Precio ↑", "precio_desc": "Precio ↓", "tipo": "Por Tipo"}
+                filter_sort = st.selectbox("Ordenar por", list(sort_options.keys()), format_func=lambda x: sort_options[x], key="dash_filter_sort")
 
         # ---- Apply filters ----
         filtered = list(products_data)
