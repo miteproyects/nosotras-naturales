@@ -844,50 +844,67 @@ def page_latam():
 
 
 # ============================================
-# SIDEBAR NAVIGATION
+# HORIZONTAL TOP NAV BAR
 # ============================================
 
-with st.sidebar:
-    st.markdown("""
-    <div style="text-align: center; padding: 15px 0;">
-        <h2 style="color: white; margin: 0;">🌿 Nosotras Naturales</h2>
-        <p style="color: rgba(255,255,255,0.8); font-size: 13px; margin: 5px 0;">Bienestar Natural con doTERRA</p>
-    </div>
-    """, unsafe_allow_html=True)
+# Hide the default Streamlit sidebar completely
+st.markdown("""
+<style>
+    /* ===== HIDE SIDEBAR COMPLETELY ===== */
+    [data-testid="stSidebar"],
+    [data-testid="collapsedControl"],
+    button[kind="header"] {
+        display: none !important;
+        visibility: hidden !important;
+        width: 0 !important;
+        min-width: 0 !important;
+    }
+    /* Make main content full-width */
+    [data-testid="stAppViewBlockContainer"] {
+        max-width: 1100px;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-    st.markdown("---")
+nav_options = {
+    "🏠 Inicio": "inicio",
+    "🌿 Guía": "guia_bienestar",
+    "📦 Productos": "productos",
+    "🌎 Latinoamérica": "latam",
+    "💼 Únete": "unete_al_equipo",
+    "🌸 Nosotras": "sobre_nosotras",
+    "👩‍💼 Dashboard": "dashboard",
+}
 
-    nav_items = [
-        ("🏠 Inicio", "inicio"),
-        ("🌿 Guía de Bienestar", "guia_bienestar"),
-        ("📦 Productos", "productos"),
-        ("🌎 doTERRA Latinoamérica", "latam"),
-        ("💼 Únete al Equipo", "unete_al_equipo"),
-        ("🌸 Sobre Nosotras", "sobre_nosotras"),
-        ("👩‍💼 Dashboard", "dashboard"),
-    ]
+# Reverse map to find the label for the current page
+page_to_label = {v: k for k, v in nav_options.items()}
+# Pages not in nav (resultado_sintomas) default to Guía highlight
+current_label = page_to_label.get(st.session_state.page, "🌿 Guía")
 
-    for label, page_key in nav_items:
-        if st.button(label, key=f"nav_{page_key}", use_container_width=True):
-            st.session_state.page = page_key
-            # Reset symptom flow when navigating away
-            if page_key != 'guia_bienestar' and page_key != 'resultado_sintomas':
-                st.session_state.symptom_flow_started = False
-                st.session_state.current_category = None
-                st.session_state.current_question = None
-                st.session_state.selected_tags = []
-                st.session_state.question_history = []
-            st.rerun()
+selected_label = st.radio(
+    "nav",
+    options=list(nav_options.keys()),
+    index=list(nav_options.keys()).index(current_label) if current_label in nav_options else 0,
+    horizontal=True,
+    label_visibility="collapsed",
+    key="top_nav_radio"
+)
 
-    st.markdown("---")
-    wa_link = whatsapp_link("Hola Suzanna! Me interesa saber más sobre doTERRA.")
-    st.markdown(f"""
-    <a href="{wa_link}" target="_blank" style="display: block; text-align: center; background: #25D366;
-       color: white; padding: 10px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 14px;">
-       💬 WhatsApp Suzanna
-    </a>
-    """, unsafe_allow_html=True)
-
+# Navigate when selection changes (only if user explicitly clicked a different tab)
+selected_page = nav_options[selected_label]
+if selected_page != st.session_state.page and selected_page != page_to_label.get(st.session_state.page, ""):
+    # Don't redirect if current page is resultado_sintomas and Guía is highlighted
+    if not (st.session_state.page == 'resultado_sintomas' and selected_page == 'guia_bienestar'):
+        st.session_state.page = selected_page
+        if selected_page not in ('guia_bienestar', 'resultado_sintomas'):
+            st.session_state.symptom_flow_started = False
+            st.session_state.current_category = None
+            st.session_state.current_question = None
+            st.session_state.selected_tags = []
+            st.session_state.question_history = []
+        st.rerun()
 
 # ============================================
 # MAIN APP LOGIC

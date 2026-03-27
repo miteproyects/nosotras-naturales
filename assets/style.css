@@ -72,6 +72,86 @@ a:hover {
 }
 
 /* ============================================
+   HORIZONTAL NAV BAR (replaces sidebar)
+   ============================================ */
+
+/* Horizontal radio nav bar — style the st.radio as a menu bar */
+[data-testid="stRadio"] > div {
+    background: linear-gradient(135deg, #4a6741 0%, #5a7a50 50%, #7C9070 100%);
+    padding: 8px 14px;
+    border-radius: 14px;
+    margin-bottom: 16px;
+    box-shadow: 0 3px 15px rgba(74, 103, 65, 0.18);
+    gap: 2px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* Radio option labels */
+[data-testid="stRadio"] [role="radiogroup"] {
+    gap: 4px !important;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+[data-testid="stRadio"] [role="radiogroup"] label {
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.85) !important;
+    border: none !important;
+    border-radius: 9px !important;
+    font-size: 13.5px !important;
+    font-weight: 500 !important;
+    padding: 7px 13px !important;
+    cursor: pointer;
+    transition: all 0.2s ease !important;
+    white-space: nowrap;
+    margin: 0 !important;
+}
+
+[data-testid="stRadio"] [role="radiogroup"] label:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+    color: #fff !important;
+}
+
+/* Hide the actual radio circle */
+[data-testid="stRadio"] [role="radiogroup"] input[type="radio"] {
+    display: none !important;
+}
+
+/* Checked / active state */
+[data-testid="stRadio"] [role="radiogroup"] label[data-checked="true"],
+[data-testid="stRadio"] [role="radiogroup"] label:has(input:checked) {
+    background: rgba(255, 255, 255, 0.22) !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+}
+
+/* Label text color override */
+[data-testid="stRadio"] [role="radiogroup"] label p,
+[data-testid="stRadio"] [role="radiogroup"] label span,
+[data-testid="stRadio"] [role="radiogroup"] label div {
+    color: inherit !important;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    [data-testid="stRadio"] > div {
+        padding: 6px 8px;
+    }
+    [data-testid="stRadio"] [role="radiogroup"] label {
+        font-size: 12px !important;
+        padding: 6px 9px !important;
+    }
+}
+
+@media (max-width: 480px) {
+    [data-testid="stRadio"] [role="radiogroup"] label {
+        font-size: 11px !important;
+        padding: 5px 7px !important;
+    }
+}
+
+/* ============================================
    HERO SECTION
    ============================================ */
 
