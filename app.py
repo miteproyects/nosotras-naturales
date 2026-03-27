@@ -70,62 +70,103 @@ def whatsapp_link(message):
     encoded = urllib.parse.quote(message)
     return f"https://wa.me/{WHATSAPP_NUMBER}?text={encoded}"
 
-def create_product_card(product, match_percentage=None, recommendation_reason=None):
-    """Create comprehensive HTML card showing ALL product info like an expert would"""
+def get_product_icon(product):
+    """Return an emoji icon based on product type/category."""
+    tipo = product.get('tipo', '').lower()
+    nombre = product.get('nombre', '').lower()
+    cats = ' '.join(product.get('categoria', []))
+    if 'blend' in tipo or 'mezcla' in tipo:
+        return '🌸'
+    if 'roll-on' in tipo or 'rollon' in nombre:
+        return '🫧'
+    if any(x in cats for x in ['digestion', 'digestiv']):
+        return '🍃'
+    if any(x in cats for x in ['respiracion', 'respirat']):
+        return '💨'
+    if any(x in cats for x in ['sueño', 'relajacion']):
+        return '🌙'
+    if any(x in cats for x in ['energia', 'enfoque']):
+        return '⚡'
+    if any(x in cats for x in ['piel', 'autocuidado']):
+        return '✨'
+    if any(x in cats for x in ['inmunolog', 'defensa', 'proteccion']):
+        return '🛡️'
+    return '🌿'
+
+def create_product_card(product, match_percentage=None, recommendation_reason=None, rank=None):
+    """Create a clean, compact product card with all essential info."""
     price_display = f"${product.get('precio_usd', 'N/A')}"
     pv_display = product.get('pv', '')
-    match_html = f'<div class="match-badge">{match_percentage}% Compatible</div>' if match_percentage else ''
-    reason_html = f'<div class="recommendation-reason">{recommendation_reason}</div>' if recommendation_reason else ''
     comprar_link = DOTERRA_SHOP_URL
-    consult_msg = f"Hola Suzanna! 👋 Me interesa {product['nombre']} ({product.get('nombre_en', '')}). ¿Me puedes dar más información y ayudarme a hacer mi pedido?"
+    consult_msg = f"Hola Suzanna! Me interesa {product['nombre']} ({product.get('nombre_en', '')}). ¿Me puedes dar más información?"
     consult_link = whatsapp_link(consult_msg)
+    icon = get_product_icon(product)
 
-    # ALL benefits, not just 3
-    benefits_html = ''.join([f'<li>{b}</li>' for b in product.get('beneficios', [])])
+    # Rank label
+    rank_labels = {1: '🥇 Mejor opción', 2: '🥈 Excelente alternativa', 3: '🥉 También recomendado'}
+    rank_html = f'<div style="font-size: 12px; font-weight: 700; color: var(--primary); margin-bottom: 6px;">{rank_labels.get(rank, "")}</div>' if rank else ''
 
-    # ALL three usage methods
-    uso_aromatico = product.get('uso_aromatico', '')
-    uso_topico = product.get('uso_topico', '')
-    uso_interno = product.get('uso_interno', '')
+    # Match badge
+    match_html = ''
+    if match_percentage:
+        match_html = f'<span style="background: linear-gradient(135deg, var(--primary), var(--gold)); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">{match_percentage}%</span>'
 
-    usage_sections = ''
-    if uso_aromatico:
-        usage_sections += f'<div class="usage-item"><span class="usage-icon">🌬️</span><strong>Aromático:</strong> {uso_aromatico}</div>'
-    if uso_topico:
-        usage_sections += f'<div class="usage-item"><span class="usage-icon">✋</span><strong>Tópico:</strong> {uso_topico}</div>'
-    if uso_interno:
-        usage_sections += f'<div class="usage-item"><span class="usage-icon">💧</span><strong>Interno:</strong> {uso_interno}</div>'
+    reason_html = f'<div style="background: rgba(124,144,112,0.08); color: var(--primary); padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 12px; border-left: 3px solid var(--primary);">{recommendation_reason}</div>' if recommendation_reason else ''
 
-    # Categories as badges
-    cat_badges = ''.join([f'<span class="cat-badge">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:4]])
+    # Benefits (max 4)
+    benefits = product.get('beneficios', [])[:4]
+    benefits_html = ''.join([f'<li style="color: #666; font-size: 13px; padding: 2px 0;">{b}</li>' for b in benefits])
+
+    # Usage methods inline
+    usos = []
+    if product.get('uso_aromatico'):
+        usos.append(f'<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #777; background: #f5f0e6; padding: 4px 10px; border-radius: 6px;">🌬️ Aromático</span>')
+    if product.get('uso_topico'):
+        usos.append(f'<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #777; background: #f5f0e6; padding: 4px 10px; border-radius: 6px;">✋ Tópico</span>')
+    if product.get('uso_interno'):
+        usos.append(f'<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #777; background: #f5f0e6; padding: 4px 10px; border-radius: 6px;">💧 Interno</span>')
+    usos_html = f'<div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">{"".join(usos)}</div>' if usos else ''
+
+    # Categories as tiny badges
+    cat_badges = ''.join([f'<span style="background: #eee; color: #888; padding: 2px 8px; border-radius: 10px; font-size: 11px;">{cat.replace("_", " ").title()}</span>' for cat in product.get('categoria', [])[:3]])
 
     html = f"""
-    <div class="product-card">
-        {match_html}
-        <div class="product-image">
-            <img src="{product['imagen_url']}" alt="{product['nombre']}">
+    <div style="background: white; border-radius: 16px; padding: 24px; margin-bottom: 18px; box-shadow: 0 2px 12px rgba(60,50,41,0.07); border: 1px solid rgba(0,0,0,0.04);">
+        <div style="display: flex; align-items: flex-start; gap: 18px; margin-bottom: 14px;">
+            <div style="width: 64px; height: 64px; background: linear-gradient(135deg, #e8f0e4, #f0ead8); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 30px; flex-shrink: 0;">
+                {icon}
+            </div>
+            <div style="flex: 1; min-width: 0;">
+                {rank_html}
+                <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                    <h3 style="margin: 0; font-size: 1.15rem; color: var(--text);">{product['nombre']}</h3>
+                    <span style="color: #aaa; font-size: 13px;">{product.get('nombre_en', '')}</span>
+                    {match_html}
+                </div>
+                <div style="display: flex; align-items: baseline; gap: 12px; margin-top: 4px;">
+                    <span style="font-size: 1.4rem; font-weight: 700; color: var(--terracotta);">{price_display}</span>
+                    <span style="color: #bbb; font-size: 12px;">PV: {pv_display}</span>
+                </div>
+            </div>
         </div>
-        <div class="product-info">
-            <h3>{product['nombre']} <span style="color: #999; font-size: 14px; font-weight: 400;">({product.get('nombre_en', '')})</span></h3>
-            {reason_html}
-            <div style="display: flex; align-items: baseline; gap: 15px; margin-bottom: 12px;">
-                <span class="product-price">{price_display}</span>
-                <span style="color: #999; font-size: 13px;">PV: {pv_display}</span>
+        {reason_html}
+        <p style="color: #666; font-size: 14px; line-height: 1.6; margin-bottom: 12px;">{product['descripcion']}</p>
+        {usos_html}
+        <div style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">{cat_badges}</div>
+        <details style="margin-bottom: 14px;">
+            <summary style="cursor: pointer; color: var(--primary); font-weight: 600; font-size: 14px; padding: 6px 0;">Ver beneficios y usos detallados</summary>
+            <div style="padding: 10px 0 0;">
+                <ul style="list-style: none; margin: 0; padding: 0;">{benefits_html}</ul>
+                <div style="margin-top: 10px; font-size: 13px; color: #666; line-height: 1.7;">
+                    {'<p><strong style="color: var(--primary);">🌬️ Aromático:</strong> ' + product.get('uso_aromatico', '') + '</p>' if product.get('uso_aromatico') else ''}
+                    {'<p><strong style="color: var(--primary);">✋ Tópico:</strong> ' + product.get('uso_topico', '') + '</p>' if product.get('uso_topico') else ''}
+                    {'<p><strong style="color: var(--primary);">💧 Interno:</strong> ' + product.get('uso_interno', '') + '</p>' if product.get('uso_interno') else ''}
+                </div>
             </div>
-            <div class="cat-badges">{cat_badges}</div>
-            <p class="product-description">{product['descripcion']}</p>
-            <div class="product-benefits">
-                <strong>Beneficios Clave:</strong>
-                <ul>{benefits_html}</ul>
-            </div>
-            <div class="product-usage-section">
-                <strong style="color: var(--primary); display: block; margin-bottom: 8px;">Formas de Uso:</strong>
-                {usage_sections}
-            </div>
-            <div class="product-buttons">
-                <a href="{comprar_link}" class="btn-primary" target="_blank">🛒 Comprar en doTERRA</a>
-                <a href="{consult_link}" class="btn-whatsapp" target="_blank">💬 Consultar con Suzanna</a>
-            </div>
+        </details>
+        <div style="display: flex; gap: 10px;">
+            <a href="{comprar_link}" target="_blank" style="flex: 1; text-align: center; padding: 11px 16px; background: linear-gradient(135deg, var(--primary), var(--gold)); color: white; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none;">🛒 Comprar</a>
+            <a href="{consult_link}" target="_blank" style="flex: 1; text-align: center; padding: 11px 16px; background: #25D366; color: white; border-radius: 10px; font-weight: 600; font-size: 14px; text-decoration: none;">💬 Consultar</a>
         </div>
     </div>
     """
@@ -537,9 +578,6 @@ def page_resultado_sintomas():
     rank_labels = ["🥇 Recomendación Principal", "🥈 Excelente Alternativa", "🥉 Complemento Ideal"]
 
     for idx, match_data in enumerate(top_products):
-        rank_label = rank_labels[idx] if idx < len(rank_labels) else f"Recomendación #{idx+1}"
-        st.markdown(f"<h3 style='color: #7C9070; margin: 25px 0 10px;'>{rank_label}</h3>", unsafe_allow_html=True)
-
         # Build recommendation reason
         reasons = match_data.get('reasons', [])
         reason_text = ' · '.join(reasons) if reasons else f'Recomendado para {category_name.lower()}'
@@ -548,7 +586,8 @@ def page_resultado_sintomas():
             create_product_card(
                 match_data['product'],
                 match_data['percentage'],
-                reason_text
+                reason_text,
+                rank=idx + 1
             ),
             unsafe_allow_html=True
         )
