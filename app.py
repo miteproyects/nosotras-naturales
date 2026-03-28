@@ -77,26 +77,148 @@ def get_product_country_url(slug, country_code):
 
 # Product ID → doTERRA slug mapping (products.json uses short IDs, doTERRA uses slugs)
 PRODUCT_SLUG_MAP = {
-    'lavender': 'lavender-oil', 'peppermint': 'peppermint-oil', 'lemon': 'lemon-oil',
-    'melaleuca': 'tea-tree-oil', 'frankincense': 'frankincense-oil', 'oregano': 'oregano-oil',
-    'eucalyptus': 'eucalyptus-oil', 'bergamot': 'bergamot-oil', 'cedarwood': 'cedarwood-oil',
-    'copaiba': 'copaiba-oil', 'ginger': 'ginger-oil', 'helichrysum': 'helichrysum-oil',
-    'rosemary': 'rosemary-oil', 'vetiver': 'vetiver-oil', 'wild_orange': 'wild-orange-oil',
-    'ylang_ylang': 'ylang-ylang-oil', 'clary_sage': 'clary-sage-oil', 'roman_chamomile': 'roman-chamomile-oil',
-    'turmeric': 'turmeric-oil', 'black_pepper': 'black-pepper-oil',
-    'balance': 'doterra-balance-oil', 'serenity': 'serenity-oil', 'elevation': 'elevation-oil',
-    'citrus_bliss': 'citrus-bliss-oil', 'purify': 'purify-oil', 'terrashield': 'terrashield-oil',
-    'deep_blue': 'deep-blue-oil', 'easy_air': 'breathe-oil', 'digestzen': 'zengest-oil',
-    'doterra_on_guard': 'on-guard-oil', 'intune': 'intune-oil', 'pasttense': 'past-tense-oil',
-    'claricalm': 'clary-calm-roll-on', 'zendocrine': 'zendocrine-oil',
-    'aromaouch': 'aromatouch-oil', 'metapwr': 'metapwr-oil',
+    'adaptiv_blend': 'adaptiv-oil',
+    'air_x': 'air-x-oil',
+    'alpha_crs': 'alpha-crs',
+    'amber_bottles': 'amber-dram-bottles-12-pack',
+    'aromatouch_blend': 'aromatouch-oil',
+    'aromatouch_kit': 'aromatouch-technique-kit',
+    'athletes_kit': 'athletes-kit',
+    'balance_blend': 'doterra-balance-oil',
+    'basil': 'basil-oil',
+    'beginners_trio': 'beginners-trio-kit',
+    'bergamot': 'bergamot-oil',
+    'black_pepper': 'black-pepper-oil',
+    'black_spruce': 'black-spruce-oil',
+    'body_butter': 'spa-replenishing-body-butter',
+    'body_mist': 'hydrating-body-mist-with-beautiful-blend',
+    'brave_kids': 'doterra-brave-oil',
+    'breathe_blend': 'breathe-oil',
+    'breathe_drops': 'breathe-drops',
+    'breathe_stick': 'breathe-stick',
+    'brevi_marble_diffuser': 'brevi-marble-diffuser',
+    'cap_stickers': 'storage-essential-oil-cap-stickers',
+    'cardamom': 'cardamom-oil',
+    'cassia': 'cassia-oil',
+    'cedarwood': 'cedarwood-oil',
+    'celery_seed': 'celery-seed-oil',
+    'cheer_blend': 'cheer-oil',
+    'cilantro': 'cilantro-oil',
+    'cinnamon': 'cinnamon-oil',
+    'citronella': 'citronella-oil',
+    'citrus_bliss': 'citrus-bliss-oil',
+    'citrus_bliss_bath_bar': 'citrus-bliss-invigorating-bath-bar',
+    'citrus_bliss_hand_lotion': 'spa-citrus-bliss-hand-lotion',
+    'clary_sage': 'clary-sage-oil',
+    'clarycalm_blend': 'clary-calm-roll-on',
+    'clove': 'clove-oil',
+    'console_blend': 'console-oil',
+    'copaiba': 'copaiba-oil',
+    'copaiba_softgels': 'copaiba-softgels',
+    'coriander': 'coriander-oil',
+    'correct_x': 'correct-x',
+    'cypress': 'cypress-oil',
+    'daily_nutrient_pack': 'supplements-daily-vitality-daily-nutrient-pack',
+    'davana': 'davana-touch-oil',
+    'deep_blue': 'deep-blue-oil',
     'deep_blue_polyphenol': 'deep-blue-polyphenol-complex',
-    'copaiba_softgels': 'copaiba-softgels', 'on_guard_softgels': 'on-guard-softgels',
-    'digestzen_terrazyme': 'terrazyme', 'pb_assist_plus': 'pb-assist-plus',
-    'turmeric_capsules': 'turmeric-dual-chamber-capsules',
-    'lifelong_vitality_pack': 'lifelong-vitality-pack',
-    'healthy_start_kit': 'healthy-start-kit', 'home_essentials_kit': 'home-essentials-kit',
-    'natural_solutions_kit': 'natural-solutions-kit',
+    'deep_blue_rub': 'deep-blue-rub',
+    'deep_blue_stick': 'deep-blue-stick',
+    'digestzen': 'zengest-oil',
+    'digestzen_terrazyme': 'digestzen-terrazyme',
+    'doterra_on_guard': 'on-guard-oil',
+    'elevation_blend': 'elevation-oil',
+    'emotional_aromatherapy_kit': 'emotional-aromatherapy-kit',
+    'eucalyptus': 'eucalyptus-oil',
+    'family_essentials_kit': 'family-essentials-kit',
+    'felt_oil_bag': 'felt-oil-bag',
+    'forgive_blend': 'forgive-oil',
+    'fractionated_coconut': 'fractionated-coconut-oil',
+    'fractionated_coconut_carrier': 'fractionated-coconut-oil',
+    'frankincense': 'frankincense-oil',
+    'geranium': 'geranium-oil',
+    'ginger': 'ginger-oil',
+    'grapefruit': 'grapefruit-oil',
+    'guaiacwood': 'guaiacwood-oil',
+    'hair_conditioner': 'hair-care-daily-conditioner',
+    'hair_leave_in': 'hair-care-leave-in-conditioner',
+    'hair_shampoo': 'hair-care-protecting-shampoo',
+    'hand_wash_dispenser': 'amber-foaming-hand-wash-dispenser',
+    'hd_clear': 'hd-clear-oil',
+    'helichrysum': 'helichrysum-oil',
+    'home_essentials_kit': 'home-essentials-enrollment-kit',
+    'introductory_kit': 'introductory-kit',
+    'intune_blend': 'intune-oil-roll-on',
+    'island_rock_diffuser': 'island-rock-diffuser-2pk',
+    'jasmine': 'jasmine-touch',
+    'juniper_berry': 'juniper-berry-oil',
+    'keychain_8_vial': 'storage-gray-8-vial-keychain',
+    'kids_collection': 'kids-collection',
+    'koala_diffuser': 'koala-diffuser',
+    'lavender': 'lavender-oil',
+    'lemon': 'lemon-oil',
+    'lemon_eucalyptus': 'lemon-eucalyptus-oil',
+    'lemongrass': 'lemongrass-oil',
+    'lifelong_vitality_pack': 'life-long-vitality-pack',
+    'lime': 'lime-oil',
+    'lotus_display': 'lotus-wood-display',
+    'madagascar_vanilla': 'madagascar-vanilla-oil',
+    'marjoram': 'marjoram-oil',
+    'melaleuca': 'melaleuca-oil',
+    'meo_pal': 'meo-pal',
+    'metapwr_advantage': 'metapwr-advantage',
+    'metapwr_blend': 'metapwr-oil',
+    'motivate_blend': 'motivate-oil',
+    'myrrh': 'myrrh-oil',
+    'natural_deodorant': 'natural-deodorant-with-doterra-balance',
+    'on_guard_beadlets': 'on-guard-beadlets',
+    'on_guard_foaming_wash': 'on-guard-foaming-hand-wash',
+    'on_guard_softgels': 'on-guard-softgels',
+    'on_guard_toothpaste': 'on-guard-natural-whitening-toothpaste',
+    'oregano': 'oregano-oil',
+    'osmanthus': 'osmanthus-touch-oil',
+    'passion_blend': 'passion-oil',
+    'pasttense_blend': 'pasttense-oil-roll-on',
+    'patchouli': 'patchouli-oil',
+    'pb_assist_plus': 'pb-assist',
+    'peace_blend': 'peace-oil',
+    'peppermint': 'peppermint-oil',
+    'petal_diffuser': 'petal-diffuser',
+    'petitgrain': 'petitgrain-oil',
+    'purify_blend': 'purify-oil',
+    'pursue_blend': 'pursue-oil',
+    'roll_on_stand': 'ready-roll-on-stand',
+    'roman_chamomile': 'roman-chamomile-oil',
+    'rosemary': 'rosemary-oil',
+    'serenity_blend': 'serenity-oil',
+    'shinrin_yoku': 'shinrin-yoku-oil',
+    'siberian_fir': 'siberian-fir-oil',
+    'skin_care_kit': 'essential-skin-care-kit',
+    'skin_facial_cleanser': 'essential-skin-care-facial-cleanser',
+    'skin_hydrating_cream': 'essential-skin-care-hydrating-cream',
+    'skin_moisturizer': 'essential-skin-care-moisturizer',
+    'skin_scrub': 'essential-skin-care-invigorating-scrub',
+    'skin_serum': 'essential-skin-care-tightening-serum',
+    'skin_toner': 'essential-skin-care-pore-reducing-toner',
+    'spa_body_wash': 'spa-body-wash',
+    'spa_hand_lotion': 'spa-hand-and-body-lotion',
+    'spanish_sage': 'spanish-sage-oil',
+    'spearmint': 'spearmint-oil',
+    'stronger_kids': 'doterra-stronger-oil',
+    'supermint_toothpaste': 'supermint-toothpaste',
+    'tangerine': 'tangerine-oil',
+    'terrashield_blend': 'terrashield-oil',
+    'thyme': 'thyme-oil',
+    'toppers_10': 'toppers-10-ml',
+    'toppers_5_15': 'toppers-5-and-15-ml',
+    'turmeric': 'turmeric-oil',
+    'turmeric_capsules': 'turmeric-duo-caps',
+    'veggie_caps': 'usage-internal-veggie-caps',
+    'vetiver': 'vetiver-oil',
+    'wild_orange': 'wild-orange-oil',
+    'wintergreen': 'wintergreen-oil',
+    'ylang_ylang': 'ylang-ylang-oil',
+    'zendocrine_blend': 'zendocrine-oil',
 }
 
 def _get_product_slug(product):
@@ -132,11 +254,11 @@ COUNTRY_CATEGORIES = {
 # This map defines known aliases: primary_slug → set of alternative slugs seen in other countries
 SLUG_ALIASES = {
     'adaptiv-oil': {'doterra-adaptiv-oil'},
-    'breathe-oil': {'doterra-breathe-oil'},
+    'breathe-oil': {'doterra-breathe-oil', 'easy-air-oil', 'doterra-breathe-touch-oil'},
     'citrus-bliss-oil': {'doterra-citrus-bliss-oil'},
     'deep-blue-oil': {'doterra-deep-blue-oil'},
     'elevation-oil': {'doterra-elevation-oil'},
-    'serenity-oil': {'doterra-serenity-oil', 'lavender-peace-oil', 'serenity-blend-oil'},
+    'serenity-oil': {'doterra-serenity-oil', 'lavender-peace-oil', 'serenity-blend-oil', 'doterra-serenity-oil'},
     'doterra-balance-oil': {'balance-oil'},
     'aromatouch-oil': {'aromatouch-oil-blend'},
     'zengest-oil': {'digestzen-oil', 'doterra-zengest-oil'},
@@ -145,16 +267,45 @@ SLUG_ALIASES = {
     'deep-blue-polyphenol-complex': {'deep-blue-polyphenol'},
     'zendocrine-oil': {'zedocrine-oil'},
     'on-guard-oil': {'onguard-oil'},
-    'intune-oil': {'intune-roll-on-oil'},
-    'past-tense-oil': {'pasttense-oil', 'pasttense-oil-roll-on'},
-    'tea-tree-oil': {'melaleuca-oil', 'melaleuca-tea-tree-oil'},
-    'lifelong-vitality-pack': {'life-long-vitality-pack', 'lifelong-vitality-pack-llv'},
-    'home-essentials-kit': {'home-essentials-enrollment-kit', 'home-essentials-pebble', 'home-essentials-petal'},
-    'copaiba-softgels': {'copaiba-softgels'},
-    'terrazyme': {'digestzen-terrazyme', 'supplements-digestzen-terrazyme'},
-    'pb-assist-plus': {'pb-assist', 'pb-core-caps'},
+    'intune-oil-roll-on': {'intune-oil', 'intune-roll-on-oil', 'intune-roll-on', 'in-tune-oil'},
+    'pasttense-oil-roll-on': {'pasttense-oil', 'pasttense-roll-on', 'pasttense-roll-on-oil', 'past-tense-oil'},
+    'melaleuca-oil': {'tea-tree-oil', 'melaleuca-tea-tree-oil', 'tea-tree-oil-5ml'},
+    'life-long-vitality-pack': {'lifelong-vitality-pack', 'lifelong-vitality-pack-llv'},
+    'home-essentials-enrollment-kit': {'home-essentials-kit', 'home-essentials-pebble', 'home-essentials-petal'},
+    'copaiba-softgels': set(),
+    'digestzen-terrazyme': {'supplements-digestzen-terrazyme', 'terrazyme'},
+    'pb-assist': {'pb-assist-jr', 'pb-core-caps'},
     'on-guard-softgels': {'on-guard-protective-blend-softgel', 'onguard-softgels'},
-    'easy-air-oil': {'breathe-oil'},
+    'cheer-oil': {'doterra-cheer-oil', 'doterra-cheer-5ml'},
+    'console-oil': {'doterra-console-oil'},
+    'forgive-oil': {'doterra-forgive-oil'},
+    'motivate-oil': {'doterra-motivate-oil'},
+    'peace-oil': {'doterra-peace-oil'},
+    'passion-oil': {'doterra-passion-oil'},
+    'purify-oil': {'purify-oil'},
+    'terrashield-oil': {'terrashield-spray', 'terrashield-spray-oil', 'terrashield-oil-spray'},
+    'deep-blue-rub': {'doterra-deep-blue-rub', 'doterra-deep-blue-rub-travel-size'},
+    'deep-blue-stick': {'doterra-deep-blue-stick'},
+    'breathe-stick': {'breathe-vapor-stick', 'doterra-breathe-balm-stick', 'easy-air-stick', 'easy-air-vapor-stick'},
+    'on-guard-foaming-hand-wash': {'doterra-on-guard-foaming-hand-wash-2pk', 'on-guard-hand-wash-concetrate', 'onguard-foaming-hand-wash-two-pack'},
+    'on-guard-natural-whitening-toothpaste': {'on-guard-toothpaste'},
+    'spa-hand-and-body-lotion': {'hand-and-body-lotion', 'doterra-spa-hand-and-body-lotion'},
+    'spa-replenishing-body-butter': {'doterra-spa-replenishing-body-butter', 'spa-body-butter', 'doterra-spa-body-butter'},
+    'correct-x': set(),
+    'supermint-toothpaste': {'doterra-supermint-toothpaste', 'mightymint-toothpaste'},
+    'natural-deodorant-with-doterra-balance': {'natural-deodorant-infused-with-doterra-balance-essential-oil', 'balance-deodorant'},
+    'doterra-brave-oil': {'doterra-brave-oil-5ml', 'doterra-braver-oil'},
+    'doterra-stronger-oil': {'doterra-stronger-oil-5ml'},
+    'alpha-crs': {'supplements-alpha-crs'},
+    'metapwr-advantage': {'metapwr-advantage-2-pack'},
+    'on-guard-beadlets': {'on-guard-beadlet', 'on-guard-oil-beadlets', 'on-guard-oil-beadlet'},
+    'breathe-drops': {'breathe-respiratory-drops', 'easy-air-drops'},
+    'hair-care-protecting-shampoo': {'protecting-shampoo', 'salon-essentials-protecting-shampoo'},
+    'hair-care-daily-conditioner': {'daily-conditioner', 'salon-essentials-smoothing-conditioner'},
+    'hair-care-leave-in-conditioner': {'leave-in-conditioner', 'salon-essentials-leave-in-conditioner'},
+    'spa-citrus-bliss-hand-lotion': {'citrus-bliss-hand-lotion', 'doterra-spa-citrus-bliss-hand-lotion'},
+    'spa-body-wash': {'doterra-spa-body-wash', 'doterra-spa-refreshing-body-wash'},
+    'hydrating-body-mist-with-beautiful-blend': {'spa-hydrating-body-mist'},
 }
 
 def _product_available_in(product, country_code):
@@ -1590,11 +1741,119 @@ def page_dashboard():
         with st.expander("🔍 Verificador de Disponibilidad por País", expanded=False):
             st.markdown(
                 '<div style="font-size:13px;color:#666;line-height:1.6;margin-bottom:12px;">'
-                'Verifica en tiempo real si los productos están disponibles en cada país haciendo '
-                'consultas directas a doTERRA.com. Compara los datos guardados con la realidad actual.'
+                'Verifica en tiempo real la disponibilidad, precios y estado de los productos. '
+                'Compara tu catálogo con los datos de doTERRA.com para detectar discrepancias.'
                 '</div>',
                 unsafe_allow_html=True
             )
+
+            # --- Catalog Summary ---
+            st.markdown("##### 📊 Resumen del Catálogo")
+            summary_cols = st.columns(5)
+            type_labels = {
+                'aceite_individual': ('🫒', 'Aceites'),
+                'mezcla': ('🧪', 'Mezclas'),
+                'suplemento': ('💊', 'Suplementos'),
+                'kit': ('📦', 'Kits'),
+                'cuidado_personal': ('🧴', 'Cuidado Personal'),
+                'cuidado_piel': ('✨', 'Piel'),
+                'cuidado_cabello': ('💇', 'Cabello'),
+                'difusor': ('🌫️', 'Difusores'),
+                'accesorio': ('🔧', 'Accesorios'),
+            }
+            type_counts_cat = {}
+            for p in products_data:
+                t = p.get('tipo', 'otro')
+                type_counts_cat[t] = type_counts_cat.get(t, 0) + 1
+
+            for idx, (tipo, count) in enumerate(sorted(type_counts_cat.items(), key=lambda x: -x[1])):
+                icon, label = type_labels.get(tipo, ('📦', tipo.replace('_', ' ').title()))
+                col_idx = idx % 5
+                with summary_cols[col_idx]:
+                    st.metric(f"{icon} {label}", count)
+
+            # --- Country Coverage ---
+            st.markdown("##### 🌎 Cobertura por País")
+            coverage_cols = st.columns(len([c for c in DOTERRA_COUNTRIES if c not in ('BO', 'US')]))
+            for idx, (code, info) in enumerate([(c, DOTERRA_COUNTRIES[c]) for c in DOTERRA_COUNTRIES if c not in ('BO', 'US')]):
+                avail_count = sum(1 for p in products_data if _product_available_in(p, code))
+                total_in_country = len(COUNTRY_PRODUCTS.get(code, set()))
+                with coverage_cols[idx]:
+                    st.markdown(
+                        f'<div style="text-align:center;padding:8px;background:#f8f9fa;border-radius:8px;">'
+                        f'<div style="font-size:20px;">{info["flag"]}</div>'
+                        f'<div style="font-weight:600;font-size:14px;">{info["name"]}</div>'
+                        f'<div style="color:#16a34a;font-weight:600;">{avail_count}/{len(products_data)}</div>'
+                        f'<div style="color:#888;font-size:11px;">de {total_in_country} en doTERRA</div>'
+                        f'</div>',
+                        unsafe_allow_html=True
+                    )
+
+            # --- Missing Products Detector ---
+            st.markdown("##### 🔎 Productos No Incluidos en el Catálogo")
+            st.markdown(
+                '<div style="font-size:12px;color:#888;margin-bottom:8px;">'
+                'Productos disponibles en doTERRA que no están en tu catálogo actual (filtrado por Ecuador).'
+                '</div>',
+                unsafe_allow_html=True
+            )
+
+            # Get all slugs from our catalog
+            catalog_slugs = set()
+            for p in products_data:
+                slug = _get_product_slug(p)
+                catalog_slugs.add(slug)
+                # Also add known aliases
+                aliases = SLUG_ALIASES.get(slug, set())
+                catalog_slugs.update(aliases)
+                for primary, alt_set in SLUG_ALIASES.items():
+                    if slug in alt_set:
+                        catalog_slugs.add(primary)
+
+            ec_products = COUNTRY_PRODUCTS.get('EC', set())
+            missing_from_catalog = sorted(ec_products - catalog_slugs)
+
+            # Filter out obvious variants (5ml, touch, flavor versions of products we have)
+            significant_missing = []
+            for slug in missing_from_catalog:
+                # Skip variants of products already in catalog
+                is_variant = False
+                base = slug.replace('-oil-5ml', '-oil').replace('-touch-oil', '-oil').replace('-oil-flavor', '-oil')
+                if base in catalog_slugs:
+                    is_variant = True
+                if slug.endswith('-5ml') or slug.endswith('-flavor') or '-enrollment-' in slug:
+                    is_variant = True
+                if slug.startswith('curso-') or slug.startswith('doterra-essential-oil-specialist'):
+                    is_variant = True
+                if not is_variant:
+                    significant_missing.append(slug)
+
+            if significant_missing:
+                st.markdown(
+                    f'<div style="padding:8px 14px;background:#fffbeb;border-radius:8px;border-left:3px solid #f59e0b;margin-bottom:8px;">'
+                    f'<span style="font-weight:600;color:#d97706;">⚠️ {len(significant_missing)} productos en Ecuador no incluidos en catálogo</span>'
+                    f'</div>',
+                    unsafe_allow_html=True
+                )
+                with st.container(height=200):
+                    for slug in significant_missing:
+                        st.markdown(
+                            f'<div style="padding:3px 8px;font-size:12px;font-family:monospace;background:#f8f9fa;'
+                            f'border-radius:4px;margin-bottom:2px;">'
+                            f'<a href="https://www.doterra.com/EC/es_EC/p/{slug}" target="_blank">{slug}</a>'
+                            f'</div>',
+                            unsafe_allow_html=True
+                        )
+            else:
+                st.markdown(
+                    '<div style="padding:8px 14px;background:#f0fdf4;border-radius:8px;border-left:3px solid #22c55e;">'
+                    '<span style="color:#16a34a;">✅ Tu catálogo cubre todos los productos significativos de Ecuador</span>'
+                    '</div>',
+                    unsafe_allow_html=True
+                )
+
+            # --- Live Verification ---
+            st.markdown("##### 🔄 Verificación en Vivo")
             vcol1, vcol2 = st.columns([1, 3])
             with vcol1:
                 if st.button("🔄 Verificar Todos", key="verify_all_btn", type="primary"):
@@ -1621,7 +1880,7 @@ def page_dashboard():
                 else:
                     st.markdown(
                         '<div style="padding:8px 14px;background:#f8f9fa;border-radius:8px;border-left:3px solid #ccc;">'
-                        '<span style="color:#888;font-size:13px;">Aún no se ha verificado ningún producto. Pulsa "Verificar Todos" para empezar.</span>'
+                        '<span style="color:#888;font-size:13px;">Aún no se ha verificado. Pulsa "Verificar Todos" para comprobar URLs en vivo.</span>'
                         '</div>',
                         unsafe_allow_html=True
                     )
@@ -1634,84 +1893,28 @@ def page_dashboard():
                     vr = st.session_state.verify_results.get(pid, {})
                     if not vr:
                         continue
-                    for code in [c for c in DOTERRA_COUNTRIES if c != 'BO']:
+                    for code in [c for c in DOTERRA_COUNTRIES if c not in ('BO', 'US')]:
                         scraped_avail = _product_available_in(p, code)
                         live_ok = vr.get(code, {}).get('ok', False)
                         if scraped_avail and not live_ok:
-                            discrepancies.append((p['nombre'], DOTERRA_COUNTRIES[code]['flag'], DOTERRA_COUNTRIES[code]['name'], 'Dato dice SÍ, URL dice NO'))
+                            discrepancies.append((p['nombre'], DOTERRA_COUNTRIES[code]['flag'], DOTERRA_COUNTRIES[code]['name'], '📋 En datos pero ❌ URL inactiva'))
                         elif not scraped_avail and live_ok:
-                            discrepancies.append((p['nombre'], DOTERRA_COUNTRIES[code]['flag'], DOTERRA_COUNTRIES[code]['name'], 'Dato dice NO, URL dice SÍ'))
+                            discrepancies.append((p['nombre'], DOTERRA_COUNTRIES[code]['flag'], DOTERRA_COUNTRIES[code]['name'], '❌ No en datos pero ✅ URL activa'))
 
                 if discrepancies:
                     st.markdown(f'<div style="margin-top:12px;font-weight:600;color:#dc2626;">⚠️ {len(discrepancies)} discrepancia(s) encontrada(s):</div>', unsafe_allow_html=True)
-                    for name, flag, country, desc in discrepancies[:20]:
+                    for name, flag, country, desc in discrepancies[:30]:
                         st.markdown(
                             f'<div style="padding:4px 12px;background:#fef2f2;border-radius:6px;margin-bottom:4px;font-size:13px;border-left:3px solid #ef4444;">'
-                            f'<span style="font-weight:600;">{name}</span> — {flag} {country}: '
-                            f'<span style="color:#dc2626;">{desc}</span></div>',
+                            f'{flag} <strong>{name}</strong> — {country}: {desc}'
+                            f'</div>',
                             unsafe_allow_html=True
                         )
-                    if len(discrepancies) > 20:
-                        st.caption(f"... y {len(discrepancies) - 20} más")
                 else:
                     st.markdown(
                         '<div style="margin-top:12px;padding:8px 14px;background:#f0fdf4;border-radius:8px;border-left:3px solid #22c55e;">'
-                        '<span style="font-weight:600;color:#16a34a;">✅ Sin discrepancias — los datos guardados coinciden con las URLs en vivo.</span>'
+                        '<span style="color:#16a34a;">✅ Sin discrepancias — datos y URLs coinciden</span>'
                         '</div>',
-                        unsafe_allow_html=True
-                    )
-
-            # ---- Audit: products with zero country matches ----
-            st.markdown("---")
-            st.markdown('<div style="font-weight:600;color:#3D3229;margin-bottom:8px;">📊 Auditoría de Cobertura</div>', unsafe_allow_html=True)
-            no_match_products = []
-            partial_match = []
-            full_match = []
-            active_countries = [c for c in DOTERRA_COUNTRIES if c != 'BO']
-            for p in products_data:
-                match_count = sum(1 for c in active_countries if _product_available_in(p, c))
-                slug = _get_product_slug(p)
-                if match_count == 0:
-                    no_match_products.append((p['nombre'], p['id'], slug, p.get('tipo', '')))
-                elif match_count < 3:
-                    partial_match.append((p['nombre'], p['id'], slug, match_count))
-                else:
-                    full_match.append((p['nombre'], match_count))
-
-            ac1, ac2, ac3 = st.columns(3)
-            with ac1:
-                st.metric("Sin coincidencia", len(no_match_products), delta=None if not no_match_products else f"⚠️", delta_color="inverse")
-            with ac2:
-                st.metric("1-2 países", len(partial_match))
-            with ac3:
-                st.metric("3+ países", len(full_match))
-
-            if no_match_products:
-                st.markdown(
-                    '<div style="margin-top:8px;font-size:13px;color:#dc2626;font-weight:600;">'
-                    'Productos sin coincidencia en ningún país (posible slug incorrecto o no disponible en LATAM):'
-                    '</div>',
-                    unsafe_allow_html=True
-                )
-                for nombre, pid, slug, tipo in no_match_products:
-                    st.markdown(
-                        f'<div style="padding:4px 12px;background:#fef2f2;border-radius:6px;margin-bottom:3px;font-size:13px;border-left:3px solid #ef4444;">'
-                        f'<span style="font-weight:600;">{nombre}</span> '
-                        f'<span style="color:#888;">({tipo}) — slug: <code>{slug}</code></span></div>',
-                        unsafe_allow_html=True
-                    )
-            if partial_match:
-                st.markdown(
-                    '<div style="margin-top:8px;font-size:13px;color:#f59e0b;font-weight:600;">'
-                    'Productos en pocos países (verificar si hay slugs alternativos):'
-                    '</div>',
-                    unsafe_allow_html=True
-                )
-                for nombre, pid, slug, count in partial_match:
-                    st.markdown(
-                        f'<div style="padding:4px 12px;background:#fffbeb;border-radius:6px;margin-bottom:3px;font-size:13px;border-left:3px solid #f59e0b;">'
-                        f'<span style="font-weight:600;">{nombre}</span> '
-                        f'<span style="color:#888;">— slug: <code>{slug}</code> — {count} país(es)</span></div>',
                         unsafe_allow_html=True
                     )
 
