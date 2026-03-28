@@ -609,10 +609,26 @@ def get_product_icon(product):
     tipo = product.get('tipo', '').lower()
     nombre = product.get('nombre', '').lower()
     cats = ' '.join(product.get('categoria', []))
+    # Type-based icons first
+    if tipo == 'difusor':
+        return '🌫️'
+    if tipo == 'accesorio':
+        return '🔧'
+    if tipo == 'cuidado_personal':
+        return '🧴'
+    if tipo == 'cuidado_piel':
+        return '✨'
+    if tipo == 'cuidado_cabello':
+        return '💇'
+    if tipo == 'kit':
+        return '📦'
+    if tipo == 'suplemento':
+        return '💊'
     if 'blend' in tipo or 'mezcla' in tipo:
         return '🌸'
     if 'roll-on' in tipo or 'rollon' in nombre:
         return '🫧'
+    # Category-based icons
     if any(x in cats for x in ['digestion', 'digestiv']):
         return '🍃'
     if any(x in cats for x in ['respiracion', 'respirat']):
@@ -625,6 +641,10 @@ def get_product_icon(product):
         return '✨'
     if any(x in cats for x in ['inmunolog', 'defensa', 'proteccion']):
         return '🛡️'
+    if any(x in cats for x in ['muscular', 'articular']):
+        return '💪'
+    if any(x in cats for x in ['femenin', 'hormonal']):
+        return '🌺'
     return '🌿'
 
 def render_product_card(product, mode="catalog", match_percentage=None, recommendation_reason=None, rank=None):
@@ -1409,13 +1429,18 @@ def _product_edit_form(product, key_prefix, is_new=False):
         'sueño', 'relajacion', 'piel', 'bienestar_emocional', 'digestion',
         'bienestar_digestivo', 'energia', 'enfoque', 'concentracion',
         'respiracion', 'bienestar_respiratorio', 'proteccion', 'defensa_natural',
-        'bienestar_inmunologico', 'comodidad_muscular', 'comodidad_articular',
-        'equilibrio_hormonal', 'salud_femenina', 'autocuidado', 'limpieza',
-        'hogar_saludable', 'bienestar_general', 'claridad_mental',
-        'equilibrio_emocional', 'desintoxicacion', 'salud_celular',
-        'sistema_nervioso', 'circulacion', 'nutricion_fundamental',
+        'bienestar_inmunologico', 'bienestar_muscular', 'bienestar_articular',
+        'bienestar_femenino', 'bienestar_celular', 'bienestar_cerebral',
+        'bienestar_cardiovascular', 'bienestar_general',
+        'limpieza', 'purificacion', 'meditacion', 'enraizamiento',
+        'insectos', 'metabolismo', 'circulacion', 'nauseas', 'cabello',
+        'romance', 'duelo', 'estrés', 'niños', 'deporte', 'masaje',
+        'familia', 'hogar', 'difusor', 'accesorio', 'portador',
+        'cuidado_personal', 'cuidado_piel', 'cuidado_cabello',
+        'salud_bucal', 'nutricion', 'anti_envejecimiento',
+        'spa', 'kit', 'accesorio_suplemento',
     ]
-    ALL_TIPOS = ['aceite_individual', 'mezcla', 'suplemento', 'kit']
+    ALL_TIPOS = ['aceite_individual', 'mezcla', 'suplemento', 'kit', 'cuidado_personal', 'cuidado_piel', 'cuidado_cabello', 'difusor', 'accesorio']
 
     # ---- Tab layout for organized editing ----
     tab_basic, tab_content, tab_store = st.tabs(["📦 Producto", "📝 Contenido", "🛒 Tienda y Stripe"])
@@ -1656,7 +1681,7 @@ def page_dashboard():
             # Row 2: Type + Status + Country
             fc1, fc2, fc3 = st.columns(3)
             with fc1:
-                tipo_labels = {"Todos": "— Todos los tipos —", "aceite_individual": "🫧 Aceites Individuales", "mezcla": "🌸 Mezclas", "suplemento": "💊 Suplementos", "kit": "📦 Kits"}
+                tipo_labels = {"Todos": "— Todos los tipos —", "aceite_individual": "🫧 Aceites Individuales", "mezcla": "🌸 Mezclas", "suplemento": "💊 Suplementos", "kit": "📦 Kits", "cuidado_personal": "🧴 Cuidado Personal", "cuidado_piel": "✨ Cuidado de Piel", "cuidado_cabello": "💇 Cabello", "difusor": "🌫️ Difusores", "accesorio": "🔧 Accesorios"}
                 filter_tipo = st.selectbox("Tipo de Producto", list(tipo_labels.keys()), format_func=lambda x: tipo_labels[x], key="dash_filter_tipo")
             with fc2:
                 status_options = {"Todos": "— Todos —", "Activos": "✅ Activos", "Inactivos": "⏸️ Inactivos", "Con Precio": "💰 Con Precio", "Sin Precio": "🚫 Sin Precio", "Con Imagen": "🖼️ Con Imagen", "Sin Imagen": "📷 Sin Imagen", "Stripe Conectado": "💳 Stripe ✓", "Stripe Pendiente": "💳 Stripe Pendiente"}
