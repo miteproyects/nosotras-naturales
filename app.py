@@ -373,10 +373,10 @@ def load_css():
         with open(css_path, encoding="utf-8") as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-@st.cache_data
 def load_products():
-    """Load products from JSON"""
-    with open("data/products.json", "r", encoding="utf-8") as f:
+    """Load products from JSON (no cache to ensure fresh data after updates)"""
+    _path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data", "products.json")
+    with open(_path, "r", encoding="utf-8") as f:
         return json.load(f)
 
 @st.cache_data
