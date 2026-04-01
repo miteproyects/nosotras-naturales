@@ -771,10 +771,25 @@ def render_product_card(product, mode="catalog", match_percentage=None, recommen
     # ---- SKU line (dashboard only shows extra detail) ----
     sku_html = f'<span style="color:#ccc;font-size:11px;">SKU: {sku}</span>' if mode == "dashboard" and sku else ''
 
+    # ---- Dashboard inline action bar (inside card) ----
+    dash_action_bar = ''
+    if mode == "dashboard":
+        dash_action_bar = (
+            '<div class="dash-action-bar">'
+            '<div class="dash-action-bar-inner">'
+            f'{infog_btn}'
+            '<div class="dash-action-placeholder"></div>'
+            '</div>'
+            '</div>'
+        )
+
     # ---- Build card ----
+    card_bottom = f'{actions_html}' if mode != "dashboard" else dash_action_bar
+
     html = (
-        f'<div style="background:white;border-radius:16px;padding:24px;margin-bottom:18px;'
-        f'box-shadow:0 2px 12px rgba(60,50,41,0.07);{border}{opacity}">'
+        f'<div style="background:white;border-radius:16px;padding:24px;margin-bottom:0;'
+        f'box-shadow:0 2px 12px rgba(60,50,41,0.07);{border}{opacity}'
+        f'{"padding-bottom:12px;" if mode == "dashboard" else ""}">'
         f'{status_badges}'
         '<div style="display:flex;align-items:flex-start;gap:18px;margin-bottom:14px;">'
         f'<div style="flex-shrink:0;">{image_html}</div>'
@@ -798,7 +813,7 @@ def render_product_card(product, mode="catalog", match_percentage=None, recommen
         f'<div style="color:#666;font-size:14px;line-height:1.6;margin-bottom:12px;">{descripcion}</div>'
         f'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">{cat_badges}</div>'
         f'{details_section}'
-        f'{actions_html}'
+        f'{card_bottom}'
         '</div>'
     )
     return html
@@ -1960,7 +1975,7 @@ def page_dashboard():
                     else:
                         products_data.append(new_product)
                         save_products(products_data)
-                        load_products.clear()
+                        # products reloaded on next run (no cache)
                         st.session_state.dash_adding = False
                         st.session_state.dash_msg = ('success', f"✅ Producto '{new_product['nombre']}' creado exitosamente.")
                         st.rerun()
@@ -1981,76 +1996,81 @@ def page_dashboard():
 
                 with cols[idx % 2]:
                     if not is_editing:
-                        # ---- Product card with country flags ----
-                        _render_dashboard_product_card(p)
+                        # ---- Product card wrapped in container with inline actions ----
+                        card_container = st.container()
+                        with card_container:
+                            _render_dashboard_product_card(p)
 
-                        # Country availability flags with verification overlay
-                        product_slug = _get_product_slug(p)
-                        vr = st.session_state.verify_results.get(pid, {})
-                        vts = st.session_state.verify_timestamp.get(pid, '')
-                        flag_links = []
-                        avail_count = 0
-                        for code, info in DOTERRA_COUNTRIES.items():
-                            if code == 'BO':
-                                continue
-                            is_avail = _product_available_in(p, code)
-                            url = get_product_country_url(product_slug, code)
-                            opacity = '1.0' if is_avail else '0.25'
-                            pointer = 'pointer' if is_avail else 'default'
+                            # Country availability flags
+                            product_slug = _get_product_slug(p)
+                            vr = st.session_state.verify_results.get(pid, {})
+                            vts = st.session_state.verify_timestamp.get(pid, '')
+                            flag_links = []
+                            avail_count = 0
+                            for code, info in DOTERRA_COUNTRIES.items():
+                                if code == 'BO':
+                                    continue
+                                is_avail = _product_available_in(p, code)
+                                url = get_product_country_url(product_slug, code)
+                                opacity = '1.0' if is_avail else '0.25'
+                                pointer = 'pointer' if is_avail else 'default'
 
-                            # Build verification badge if data exists
-                            v_badge = ''
-                            if vr and code in vr:
-                                live_ok = vr[code].get('ok', False)
-                                if is_avail and live_ok:
-                                    v_badge = '<span style="font-size:8px;position:relative;top:-6px;">✅</span>'
-                                elif is_avail and not live_ok:
-                                    v_badge = '<span style="font-size:8px;position:relative;top:-6px;">❌</span>'
-                                elif not is_avail and live_ok:
-                                    v_badge = '<span style="font-size:8px;position:relative;top:-6px;">🟡</span>'
-                                # not avail & not live → no badge (expected)
+                                v_badge = ''
+                                if vr and code in vr:
+                                    live_ok = vr[code].get('ok', False)
+                                    if is_avail and live_ok:
+                                        v_badge = '<span style="font-size:8px;position:relative;top:-6px;">✅</span>'
+                                    elif is_avail and not live_ok:
+                                        v_badge = '<span style="font-size:8px;position:relative;top:-6px;">❌</span>'
+                                    elif not is_avail and live_ok:
+                                        v_badge = '<span style="font-size:8px;position:relative;top:-6px;">🟡</span>'
 
-                            title = f"{info['name']} ✓" if is_avail else f"{info['name']} — no disponible"
-                            if vr and code in vr:
-                                live_ok = vr[code].get('ok', False)
-                                status_code = vr[code].get('status', 0)
-                                title += f" | Verificado: {'✓ OK' if live_ok else f'✗ {status_code}'}"
+                                title = f"{info['name']} ✓" if is_avail else f"{info['name']} — no disponible"
+                                if vr and code in vr:
+                                    live_ok = vr[code].get('ok', False)
+                                    status_code = vr[code].get('status', 0)
+                                    title += f" | Verificado: {'✓ OK' if live_ok else f'✗ {status_code}'}"
 
-                            if is_avail:
-                                flag_links.append(f'<a href="{url}" target="_blank" title="{title}" style="text-decoration:none;font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}{v_badge}</a>')
-                                avail_count += 1
-                            else:
-                                flag_links.append(f'<span title="{title}" style="font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}{v_badge}</span>')
+                                if is_avail:
+                                    flag_links.append(f'<a href="{url}" target="_blank" title="{title}" style="text-decoration:none;font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}{v_badge}</a>')
+                                    avail_count += 1
+                                else:
+                                    flag_links.append(f'<span title="{title}" style="font-size:18px;opacity:{opacity};cursor:{pointer};">{info["flag"]}{v_badge}</span>')
 
-                        verify_label = f'<span style="font-size:10px;color:#16a34a;margin-left:6px;">verificado {vts}</span>' if vts else ''
-                        st.markdown(
-                            '<div style="display:flex;align-items:center;gap:3px;padding:4px 8px;background:#f8f9fa;border-radius:6px;margin-bottom:6px;">'
-                            f'<span style="font-size:11px;color:#888;margin-right:4px;">{avail_count} países:</span>'
-                            + ''.join(flag_links) + verify_label +
-                            '</div>',
-                            unsafe_allow_html=True
-                        )
+                            verify_label = f'<span style="font-size:10px;color:#16a34a;margin-left:6px;">verificado {vts}</span>' if vts else ''
+                            st.markdown(
+                                '<div style="display:flex;align-items:center;gap:3px;padding:6px 10px;background:#f8f6f2;border-radius:8px;'
+                                'border:1px solid #eae6df;">'
+                                f'<span style="font-size:11px;color:#888;margin-right:4px;">{avail_count} países:</span>'
+                                + ''.join(flag_links) + verify_label +
+                                '</div>',
+                                unsafe_allow_html=True
+                            )
 
-                        # Action buttons
-                        bc1, bc2, bc3 = st.columns([1, 1, 1])
-                        with bc1:
-                            if st.button("✏️ Editar", key=f"edit_{pid}"):
-                                st.session_state.dash_editing = pid
-                                st.session_state.dash_adding = False
-                                st.rerun()
-                        with bc2:
-                            if st.button("🗑️ Eliminar", key=f"del_{pid}"):
-                                st.session_state[f'confirm_del_{pid}'] = True
-                                st.rerun()
-                        with bc3:
-                            if st.button("🔍 Verificar", key=f"verify_{pid}"):
-                                with st.spinner("Verificando..."):
-                                    result = verify_product_urls(p)
-                                    st.session_state.verify_results[pid] = result
-                                    st.session_state.verify_timestamp[pid] = datetime.now().strftime("%Y-%m-%d %H:%M")
-                                st.rerun()
+                            # ---- Inline action toolbar divider ----
+                            st.markdown(
+                                '<div class="dash-action-divider" style="border-top:1px solid #eae6df;margin:8px -16px 4px -16px;padding-top:6px;"></div>',
+                                unsafe_allow_html=True
+                            )
+                            bc1, bc2, bc3 = st.columns([1, 1, 1])
+                            with bc1:
+                                if st.button("✏️ Editar", key=f"edit_{pid}", use_container_width=True):
+                                    st.session_state.dash_editing = pid
+                                    st.session_state.dash_adding = False
+                                    st.rerun()
+                            with bc2:
+                                if st.button("🗑️ Eliminar", key=f"del_{pid}", use_container_width=True):
+                                    st.session_state[f'confirm_del_{pid}'] = True
+                                    st.rerun()
+                            with bc3:
+                                if st.button("🔍 Verificar", key=f"verify_{pid}", use_container_width=True):
+                                    with st.spinner("Verificando..."):
+                                        result = verify_product_urls(p)
+                                        st.session_state.verify_results[pid] = result
+                                        st.session_state.verify_timestamp[pid] = datetime.now().strftime("%Y-%m-%d %H:%M")
+                                    st.rerun()
 
-                        # Confirm delete
+                        # Confirm delete (outside card container)
                         if st.session_state.get(f'confirm_del_{pid}'):
                             st.warning(f"¿Eliminar **{p['nombre']}**?")
                             cy, cn = st.columns(2)
@@ -2058,7 +2078,6 @@ def page_dashboard():
                                 if st.button("Sí", key=f"confirm_yes_{pid}", type="primary"):
                                     products_data[:] = [pr for pr in products_data if pr['id'] != pid]
                                     save_products(products_data)
-                                    load_products.clear()
                                     st.session_state.pop(f'confirm_del_{pid}', None)
                                     st.session_state.dash_msg = ('success', f"✅ '{p['nombre']}' eliminado.")
                                     st.rerun()
@@ -2082,7 +2101,7 @@ def page_dashboard():
                                         products_data[i] = updated
                                         break
                                 save_products(products_data)
-                                load_products.clear()
+                                # products reloaded on next run (no cache)
                                 st.session_state.dash_editing = None
                                 st.session_state.dash_msg = ('success', f"✅ '{updated['nombre']}' actualizado.")
                                 st.rerun()

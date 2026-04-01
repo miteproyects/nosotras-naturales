@@ -1003,6 +1003,92 @@ svg[data-testid="stHeaderNoBadge"] {
     border-radius: 8px !important;
 }
 
+/* ============================================
+   DASHBOARD PRODUCT CARD — INTEGRATED ACTION BAR
+   Inspired by Shopify/Notion card patterns:
+   actions live inside a unified card container.
+   ============================================ */
+
+/* The st.container() wraps each product card + flags + actions.
+   Style it as a clean card with rounded corners and shadow. */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) {
+    background: white !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    border-radius: 16px !important;
+    box-shadow: 0 2px 14px rgba(60,50,41,0.07) !important;
+    overflow: hidden !important;
+    margin-bottom: 16px !important;
+    transition: box-shadow 0.25s ease, transform 0.25s ease !important;
+}
+
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider):hover {
+    box-shadow: 0 8px 28px rgba(60,50,41,0.12) !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Remove inner padding adjustments */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) > div {
+    padding: 0 !important;
+}
+
+/* The action divider — horizontal line separating content from actions */
+.dash-action-divider {
+    border-top: 1px solid #eae6df !important;
+    margin: 6px 0 2px 0 !important;
+    padding-top: 4px !important;
+}
+
+/* Target the 3-column action button row inside the card container */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) div[data-testid="stHorizontalBlock"]:last-of-type {
+    background: linear-gradient(180deg, #faf8f5 0%, #f5f2ed 100%) !important;
+    padding: 6px 12px 10px 12px !important;
+    gap: 8px !important;
+    border-top: 1px solid #eee9e2 !important;
+    margin-top: 0 !important;
+}
+
+/* Compact pill-style action buttons */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) div[data-testid="stHorizontalBlock"]:last-of-type .stButton > button {
+    background: white !important;
+    color: #6b6358 !important;
+    border: 1px solid #ddd8d0 !important;
+    border-radius: 8px !important;
+    padding: 5px 8px !important;
+    font-size: 12.5px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 1px 3px rgba(60,50,41,0.06) !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    min-height: 32px !important;
+    letter-spacing: 0.01em !important;
+}
+
+/* Edit — green hover */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) div[data-testid="stHorizontalBlock"]:last-of-type > div:nth-child(1) .stButton > button:hover {
+    border-color: #7C9070 !important;
+    color: #5a8a4a !important;
+    background: #f0f7ed !important;
+    box-shadow: 0 2px 8px rgba(124,144,112,0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Delete — red hover */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) div[data-testid="stHorizontalBlock"]:last-of-type > div:nth-child(2) .stButton > button:hover {
+    border-color: #e57373 !important;
+    color: #c62828 !important;
+    background: #fef2f2 !important;
+    box-shadow: 0 2px 8px rgba(229,115,115,0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Verify — blue hover */
+div[data-testid="stVerticalBlockBorderWrapper"]:has(.dash-action-divider) div[data-testid="stHorizontalBlock"]:last-of-type > div:nth-child(3) .stButton > button:hover {
+    border-color: #64b5f6 !important;
+    color: #1565c0 !important;
+    background: #eff6ff !important;
+    box-shadow: 0 2px 8px rgba(100,181,246,0.15) !important;
+    transform: translateY(-1px) !important;
+}
+
 /* Smooth scrolling */
 html {
     scroll-behavior: smooth;
