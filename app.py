@@ -393,10 +393,24 @@ symptom_flow = load_symptom_flow()
 # PRODUCT DATA FILE PATH
 # ============================================
 PRODUCTS_JSON_PATH = os.path.join(os.path.dirname(__file__), "data", "products.json")
+RECRUITMENT_JSON_PATH = os.path.join(os.path.dirname(__file__), "data", "recruitment.json")
 
 def save_products(data):
     """Save products data to JSON file."""
     with open(PRODUCTS_JSON_PATH, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+
+def _load_recruitment_data():
+    """Load recruitment pipeline data."""
+    try:
+        with open(RECRUITMENT_JSON_PATH, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        return {"pipeline": [], "team_members": [], "content_calendar": [], "settings": {"weekly_prospecting_goal": 10, "weekly_followup_goal": 5, "monthly_enrollment_goal": 2}}
+
+def _save_recruitment_data(data):
+    """Save recruitment pipeline data."""
+    with open(RECRUITMENT_JSON_PATH, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 def _ensure_ecuador_spanish_url(url):
@@ -1662,6 +1676,13 @@ def page_dashboard():
         st.session_state.verify_running = False
     if 'verify_bulk_running' not in st.session_state:
         st.session_state.verify_bulk_running = False
+    # ---- Recruitment tab state ----
+    if 'recruit_pipeline' not in st.session_state:
+        st.session_state.recruit_pipeline = _load_recruitment_data().get('pipeline', [])
+    if 'recruit_adding' not in st.session_state:
+        st.session_state.recruit_adding = False
+    if 'recruit_view' not in st.session_state:
+        st.session_state.recruit_view = 'pipeline'
 
     # Show success/error message if any
     if st.session_state.dash_msg:
@@ -1675,7 +1696,7 @@ def page_dashboard():
     # ============================================
     # HORIZONTAL TAB BAR
     # ============================================
-    tab_productos, tab_stripe, tab_config = st.tabs(["📦 Productos", "💳 Stripe", "⚙️ Configuración"])
+    tab_productos, tab_recruit, tab_stripe, tab_config = st.tabs(["📦 Productos", "🚀 Reclutamiento", "💳 Stripe", "⚙️ Configuración"])
 
     # ============================================
     # TAB 1: PRODUCTOS
@@ -2113,7 +2134,670 @@ def page_dashboard():
                     st.markdown('<div style="margin-bottom:8px;"></div>', unsafe_allow_html=True)
 
     # ============================================
-    # TAB 2: STRIPE
+    # TAB 2: RECLUTAMIENTO — Team Building Strategy
+    # ============================================
+    with tab_recruit:
+        # ---- Load data ----
+        recruit_data = _load_recruitment_data()
+        pipeline = recruit_data.get('pipeline', [])
+        r_settings = recruit_data.get('settings', {})
+
+        # ---- Header ----
+        st.markdown(
+            '<div style="background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);padding:28px 24px;border-radius:16px;margin-bottom:20px;">'
+            '<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px;">'
+            '<span style="font-size:2rem;">🚀</span>'
+            '<div>'
+            '<div style="font-size:1.3rem;font-weight:700;color:#e2e8f0;">Constructor de Equipo doTERRA</div>'
+            '<div style="font-size:13px;color:#94a3b8;margin-top:2px;">Recluta, entrena y escala tus piernas con personas que <b style="color:#fbbf24;">necesitan</b> el ingreso</div>'
+            '</div>'
+            '</div>'
+            '</div>',
+            unsafe_allow_html=True
+        )
+
+        # ---- Sub-tabs ----
+        r_tab1, r_tab2, r_tab3, r_tab4, r_tab5 = st.tabs([
+            "🎯 Estrategia", "📋 Pipeline", "📱 Contenido Social", "📊 Métricas", "📖 Guía Paso a Paso"
+        ])
+
+        # ==============================================
+        # RECRUITMENT SUB-TAB 1: STRATEGY
+        # ==============================================
+        with r_tab1:
+            st.markdown(
+                '<div style="background:#fffbeb;padding:18px 20px;border-radius:12px;border-left:4px solid #f59e0b;margin-bottom:16px;">'
+                '<div style="font-weight:700;color:#92400e;font-size:15px;margin-bottom:6px;">💡 El Problema Actual de Suzanna</div>'
+                '<div style="color:#78350f;font-size:14px;line-height:1.7;">'
+                'Tus piernas actuales son mujeres que <b>no necesitan el dinero</b> — tienen esposos que pagan todo o ya tienen recursos. '
+                'Trabajan por entretenimiento, pero cuando tienen un mal día, se deprimen y paran. '
+                '<b>No hay urgencia real.</b> Necesitas personas como Verónica: mamás que venden seguros porque necesitan '
+                'flexibilidad Y el ingreso. Personas que no pueden ir a una oficina de 8 a 5 pero que <b>sí necesitan producir</b>.</div>'
+                '</div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Ideal Candidate Profile ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:16px;">'
+                '<div style="font-weight:700;color:#1e293b;font-size:16px;margin-bottom:14px;">🎯 Perfil de Candidata Ideal — Quito</div>'
+                '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'
+                # Profile 1
+                '<div style="background:#f0fdf4;padding:14px;border-radius:10px;border:1px solid #bbf7d0;">'
+                '<div style="font-weight:600;color:#166534;font-size:13px;margin-bottom:6px;">🏆 PERFIL A: Mamá Emprendedora</div>'
+                '<div style="color:#15803d;font-size:12.5px;line-height:1.6;">'
+                '• Mamá soltera o con hijos pequeños<br>'
+                '• No puede trabajar horario fijo 8-5<br>'
+                '• Necesita $300-$800/mes extra REAL<br>'
+                '• Tiene celular + internet + redes sociales<br>'
+                '• Edad: 25-45 años<br>'
+                '• Vive en Quito (Norte, Valles, Cumbayá)'
+                '</div></div>'
+                # Profile 2
+                '<div style="background:#eff6ff;padding:14px;border-radius:10px;border:1px solid #bfdbfe;">'
+                '<div style="font-weight:600;color:#1e40af;font-size:13px;margin-bottom:6px;">🥈 PERFIL B: Freelancer / Vendedora</div>'
+                '<div style="color:#1d4ed8;font-size:12.5px;line-height:1.6;">'
+                '• Ya vende algo (seguros, Avon, Tupperware, ropa)<br>'
+                '• Entiende comisiones y venta directa<br>'
+                '• Tiene red de contactos existente<br>'
+                '• Busca diversificar ingresos<br>'
+                '• Disciplinada con metas de venta<br>'
+                '• Activa en WhatsApp y Facebook'
+                '</div></div>'
+                # Profile 3
+                '<div style="background:#fdf4ff;padding:14px;border-radius:10px;border:1px solid #f0abfc;">'
+                '<div style="font-weight:600;color:#86198f;font-size:13px;margin-bottom:6px;">🥉 PERFIL C: Profesional en Bienestar</div>'
+                '<div style="color:#a21caf;font-size:12.5px;line-height:1.6;">'
+                '• Instructora de yoga, nutricionista, terapeuta<br>'
+                '• Ya tiene audiencia interesada en salud<br>'
+                '• Credibilidad natural para aceites<br>'
+                '• Puede integrar doTERRA a su práctica<br>'
+                '• Red profesional en bienestar<br>'
+                '• Instagram activo con contenido de salud'
+                '</div></div>'
+                # Anti-profile
+                '<div style="background:#fef2f2;padding:14px;border-radius:10px;border:1px solid #fecaca;">'
+                '<div style="font-weight:600;color:#991b1b;font-size:13px;margin-bottom:6px;">🚫 EVITAR: Perfil Sin Urgencia</div>'
+                '<div style="color:#b91c1c;font-size:12.5px;line-height:1.6;">'
+                '• Esposo paga todo, no necesita ingreso<br>'
+                '• Lo hace "por hobby" o "para entretenerse"<br>'
+                '• Se deprime fácil y para de trabajar<br>'
+                '• No tiene presión económica real<br>'
+                '• No ha vendido nada antes<br>'
+                '• Solo quiere descuento personal'
+                '</div></div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Where to Find Them ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:16px;">'
+                '<div style="font-weight:700;color:#1e293b;font-size:16px;margin-bottom:14px;">📍 Dónde Encontrarlas en Quito</div>'
+                '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">'
+                '<div style="background:#fefce8;padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.5rem;">📱</div>'
+                '<div style="font-weight:600;font-size:13px;color:#713f12;">Facebook Groups</div>'
+                '<div style="font-size:11.5px;color:#92400e;margin-top:4px;line-height:1.5;">"Mamás emprendedoras Quito"<br>"Trabajo desde casa Ecuador"<br>"Ventas directas Ecuador"</div>'
+                '</div>'
+                '<div style="background:#fefce8;padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.5rem;">🎵</div>'
+                '<div style="font-weight:600;font-size:13px;color:#713f12;">TikTok / Instagram</div>'
+                '<div style="font-size:11.5px;color:#92400e;margin-top:4px;line-height:1.5;">#mamáemprendedora<br>#trabajoflexible<br>#aceitesesenciales<br>#bienestarnatural</div>'
+                '</div>'
+                '<div style="background:#fefce8;padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.5rem;">🏫</div>'
+                '<div style="font-weight:600;font-size:13px;color:#713f12;">En Persona</div>'
+                '<div style="font-size:11.5px;color:#92400e;margin-top:4px;line-height:1.5;">Talleres de bienestar<br>Escuelas (grupos de mamás)<br>Gimnasios y estudios de yoga<br>Ferias de emprendimiento</div>'
+                '</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- The Recruitment Funnel ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);">'
+                '<div style="font-weight:700;color:#1e293b;font-size:16px;margin-bottom:14px;">🔄 Embudo de Reclutamiento (5 Etapas)</div>'
+                '<div style="display:flex;gap:6px;align-items:stretch;">'
+                # Stage 1
+                '<div style="flex:1;background:linear-gradient(180deg,#dbeafe,#eff6ff);padding:12px 10px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.2rem;">🔍</div>'
+                '<div style="font-weight:700;font-size:12px;color:#1e40af;">1. PROSPECTO</div>'
+                '<div style="font-size:11px;color:#3b82f6;margin-top:4px;line-height:1.4;">Identificar candidata<br>Redes sociales, referidos<br><b>Meta: 10/semana</b></div>'
+                '</div>'
+                # Stage 2
+                '<div style="flex:1;background:linear-gradient(180deg,#fef3c7,#fffbeb);padding:12px 10px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.2rem;">💬</div>'
+                '<div style="font-weight:700;font-size:12px;color:#92400e;">2. CONTACTO</div>'
+                '<div style="font-size:11px;color:#b45309;margin-top:4px;line-height:1.4;">Primer mensaje<br>Evaluar interés real<br><b>Meta: 5/semana</b></div>'
+                '</div>'
+                # Stage 3
+                '<div style="flex:1;background:linear-gradient(180deg,#fed7aa,#fff7ed);padding:12px 10px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.2rem;">🫙</div>'
+                '<div style="font-weight:700;font-size:12px;color:#9a3412;">3. MUESTRA</div>'
+                '<div style="font-size:11px;color:#c2410c;margin-top:4px;line-height:1.4;">Enviar kit de muestra<br>Clase virtual 1:1<br><b>Conversión: 40%</b></div>'
+                '</div>'
+                # Stage 4
+                '<div style="flex:1;background:linear-gradient(180deg,#bbf7d0,#f0fdf4);padding:12px 10px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.2rem;">🤝</div>'
+                '<div style="font-weight:700;font-size:12px;color:#166534;">4. INSCRIPCIÓN</div>'
+                '<div style="font-size:11px;color:#15803d;margin-top:4px;line-height:1.4;">Kit de inicio doTERRA<br>Setup de cuenta<br><b>Meta: 2/mes</b></div>'
+                '</div>'
+                # Stage 5
+                '<div style="flex:1;background:linear-gradient(180deg,#e9d5ff,#faf5ff);padding:12px 10px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.2rem;">🌱</div>'
+                '<div style="font-weight:700;font-size:12px;color:#6b21a8;">5. ACTIVACIÓN</div>'
+                '<div style="font-size:11px;color:#7c3aed;margin-top:4px;line-height:1.4;">Primera venta propia<br>Entrenamiento 30 días<br><b>Retención: 70%</b></div>'
+                '</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+        # ==============================================
+        # RECRUITMENT SUB-TAB 2: PIPELINE TRACKER
+        # ==============================================
+        with r_tab2:
+            st.markdown(
+                '<div style="font-weight:700;font-size:1.1rem;color:#1e293b;margin-bottom:12px;">📋 Tu Pipeline de Reclutamiento</div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Pipeline Stats ----
+            stages = ['prospecto', 'contacto', 'muestra', 'inscripcion', 'activa']
+            stage_labels = {'prospecto': '🔍 Prospecto', 'contacto': '💬 Contacto', 'muestra': '🫙 Muestra', 'inscripcion': '🤝 Inscrita', 'activa': '🌱 Activa'}
+            stage_colors = {'prospecto': '#3b82f6', 'contacto': '#f59e0b', 'muestra': '#f97316', 'inscripcion': '#22c55e', 'activa': '#8b5cf6'}
+            counts = {s: len([p for p in pipeline if p.get('stage') == s]) for s in stages}
+
+            stat_cols = st.columns(5)
+            for i, s in enumerate(stages):
+                with stat_cols[i]:
+                    st.markdown(
+                        f'<div style="background:white;padding:12px;border-radius:10px;text-align:center;border:2px solid {stage_colors[s]}20;box-shadow:0 1px 4px rgba(0,0,0,0.04);">'
+                        f'<div style="font-size:1.5rem;font-weight:700;color:{stage_colors[s]};">{counts[s]}</div>'
+                        f'<div style="font-size:11px;color:#64748b;font-weight:600;">{stage_labels[s]}</div>'
+                        '</div>',
+                        unsafe_allow_html=True
+                    )
+
+            st.markdown("")
+
+            # ---- Add new prospect button ----
+            if st.button("➕ Agregar Prospecto", key="add_prospect", use_container_width=True):
+                st.session_state.recruit_adding = True
+
+            if st.session_state.recruit_adding:
+                with st.form("new_prospect_form"):
+                    st.markdown("**Nueva Prospecto**")
+                    rp_cols1 = st.columns(2)
+                    with rp_cols1[0]:
+                        rp_name = st.text_input("Nombre completo")
+                    with rp_cols1[1]:
+                        rp_phone = st.text_input("WhatsApp / Teléfono")
+                    rp_cols2 = st.columns(2)
+                    with rp_cols2[0]:
+                        rp_source = st.selectbox("¿Dónde la encontraste?", [
+                            "Facebook", "Instagram", "TikTok", "WhatsApp", "Referida", "Evento presencial", "Taller", "Otro"
+                        ])
+                    with rp_cols2[1]:
+                        rp_profile = st.selectbox("Perfil", [
+                            "🏆 Mamá Emprendedora", "🥈 Freelancer/Vendedora", "🥉 Profesional Bienestar", "Otro"
+                        ])
+                    rp_cols3 = st.columns(2)
+                    with rp_cols3[0]:
+                        rp_needs_income = st.selectbox("¿Necesita el ingreso?", ["Sí, urgente", "Sí, complementario", "No realmente"])
+                    with rp_cols3[1]:
+                        rp_experience = st.selectbox("Experiencia en ventas", ["Sí, venta directa", "Sí, otro tipo", "No tiene"])
+                    rp_notes = st.text_area("Notas (situación, motivación, etc.)", height=80)
+
+                    rp_sub_cols = st.columns(2)
+                    with rp_sub_cols[0]:
+                        submitted = st.form_submit_button("✅ Agregar al Pipeline", type="primary", use_container_width=True)
+                    with rp_sub_cols[1]:
+                        cancelled = st.form_submit_button("❌ Cancelar", use_container_width=True)
+
+                    if submitted and rp_name:
+                        new_prospect = {
+                            "id": f"r_{datetime.now().strftime('%Y%m%d%H%M%S')}_{rp_name.lower().replace(' ', '_')[:10]}",
+                            "name": rp_name,
+                            "phone": rp_phone,
+                            "source": rp_source,
+                            "profile": rp_profile,
+                            "needs_income": rp_needs_income,
+                            "experience": rp_experience,
+                            "notes": rp_notes,
+                            "stage": "prospecto",
+                            "created": datetime.now().strftime("%Y-%m-%d"),
+                            "last_contact": "",
+                            "next_action": "Primer contacto",
+                            "score": 0
+                        }
+                        # Score the prospect
+                        score = 0
+                        if "Sí, urgente" in rp_needs_income:
+                            score += 40
+                        elif "Sí, complementario" in rp_needs_income:
+                            score += 20
+                        if "Sí, venta directa" in rp_experience:
+                            score += 30
+                        elif "Sí, otro tipo" in rp_experience:
+                            score += 15
+                        if "Mamá Emprendedora" in rp_profile:
+                            score += 20
+                        elif "Freelancer" in rp_profile:
+                            score += 25
+                        elif "Profesional" in rp_profile:
+                            score += 20
+                        new_prospect['score'] = min(score, 100)
+
+                        pipeline.append(new_prospect)
+                        recruit_data['pipeline'] = pipeline
+                        _save_recruitment_data(recruit_data)
+                        st.session_state.recruit_pipeline = pipeline
+                        st.session_state.recruit_adding = False
+                        st.session_state.dash_msg = ('success', f"✅ {rp_name} agregada al pipeline!")
+                        st.rerun()
+                    if cancelled:
+                        st.session_state.recruit_adding = False
+                        st.rerun()
+
+            # ---- Pipeline Board (Kanban-style) ----
+            if pipeline:
+                st.markdown("---")
+                for stage in stages:
+                    stage_items = [p for p in pipeline if p.get('stage') == stage]
+                    if not stage_items:
+                        continue
+
+                    st.markdown(
+                        f'<div style="background:{stage_colors[stage]}10;padding:10px 14px;border-radius:10px;border-left:4px solid {stage_colors[stage]};margin-bottom:8px;">'
+                        f'<span style="font-weight:700;color:{stage_colors[stage]};font-size:14px;">{stage_labels[stage]}</span>'
+                        f'<span style="color:#94a3b8;font-size:12px;margin-left:8px;">{len(stage_items)} personas</span>'
+                        '</div>',
+                        unsafe_allow_html=True
+                    )
+
+                    for prospect in stage_items:
+                        p_id = prospect['id']
+                        score = prospect.get('score', 0)
+                        score_color = '#22c55e' if score >= 60 else '#f59e0b' if score >= 30 else '#ef4444'
+
+                        st.markdown(
+                            f'<div style="background:white;padding:14px 18px;border-radius:12px;margin-bottom:8px;border:1px solid #e2e8f0;box-shadow:0 1px 4px rgba(0,0,0,0.04);">'
+                            f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">'
+                            f'<div style="font-weight:600;color:#1e293b;font-size:14px;">{prospect["name"]}</div>'
+                            f'<div style="display:flex;gap:8px;align-items:center;">'
+                            f'<span style="background:{score_color}15;color:{score_color};padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;">{score}pts</span>'
+                            f'<span style="color:#94a3b8;font-size:11px;">{prospect.get("created", "")}</span>'
+                            f'</div></div>'
+                            f'<div style="display:flex;gap:12px;font-size:12px;color:#64748b;margin-bottom:4px;">'
+                            f'<span>📱 {prospect.get("phone", "—")}</span>'
+                            f'<span>📍 {prospect.get("source", "")}</span>'
+                            f'<span>{prospect.get("profile", "")}</span>'
+                            f'</div>'
+                            f'<div style="font-size:12px;color:#94a3b8;">{prospect.get("notes", "")[:80]}</div>'
+                            '</div>',
+                            unsafe_allow_html=True
+                        )
+
+                        # Action buttons for this prospect
+                        act_cols = st.columns([1, 1, 1, 1])
+                        next_stage_map = {'prospecto': 'contacto', 'contacto': 'muestra', 'muestra': 'inscripcion', 'inscripcion': 'activa'}
+                        prev_stage_map = {'contacto': 'prospecto', 'muestra': 'contacto', 'inscripcion': 'muestra', 'activa': 'inscripcion'}
+
+                        with act_cols[0]:
+                            if stage in next_stage_map:
+                                next_s = next_stage_map[stage]
+                                if st.button(f"→ {stage_labels[next_s].split(' ')[1]}", key=f"advance_{p_id}", use_container_width=True):
+                                    for pp in pipeline:
+                                        if pp['id'] == p_id:
+                                            pp['stage'] = next_s
+                                            pp['last_contact'] = datetime.now().strftime("%Y-%m-%d")
+                                            break
+                                    recruit_data['pipeline'] = pipeline
+                                    _save_recruitment_data(recruit_data)
+                                    st.rerun()
+                        with act_cols[1]:
+                            if stage in prev_stage_map:
+                                prev_s = prev_stage_map[stage]
+                                if st.button(f"← Regresar", key=f"regress_{p_id}", use_container_width=True):
+                                    for pp in pipeline:
+                                        if pp['id'] == p_id:
+                                            pp['stage'] = prev_s
+                                            break
+                                    recruit_data['pipeline'] = pipeline
+                                    _save_recruitment_data(recruit_data)
+                                    st.rerun()
+                        with act_cols[2]:
+                            wa_msg = f"Hola {prospect['name'].split()[0]}! 🌿"
+                            wa_link = f"https://wa.me/593{prospect.get('phone', '').lstrip('0').replace(' ', '')}"
+                            st.markdown(f'<a href="{wa_link}" target="_blank" style="display:block;text-align:center;padding:6px;background:#25D366;color:white;border-radius:8px;text-decoration:none;font-size:12px;font-weight:600;">💬 WhatsApp</a>', unsafe_allow_html=True)
+                        with act_cols[3]:
+                            if st.button("🗑️", key=f"del_prospect_{p_id}", use_container_width=True):
+                                pipeline[:] = [pp for pp in pipeline if pp['id'] != p_id]
+                                recruit_data['pipeline'] = pipeline
+                                _save_recruitment_data(recruit_data)
+                                st.rerun()
+            else:
+                st.info("Tu pipeline está vacío. ¡Agrega tu primera prospecto! 🌱")
+
+        # ==============================================
+        # RECRUITMENT SUB-TAB 3: SOCIAL MEDIA CONTENT
+        # ==============================================
+        with r_tab3:
+            st.markdown(
+                '<div style="font-weight:700;font-size:1.1rem;color:#1e293b;margin-bottom:4px;">📱 Estrategia de Contenido para Reclutamiento</div>'
+                '<div style="color:#64748b;font-size:13px;margin-bottom:16px;">Contenido que atrae a las candidatas correctas — mamás y emprendedoras que necesitan ingresos flexibles</div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Content Pillars ----
+            st.markdown(
+                '<div style="background:white;padding:18px 22px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:16px;">'
+                '<div style="font-weight:700;color:#1e293b;font-size:15px;margin-bottom:12px;">4 Pilares de Contenido</div>'
+                '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'
+                # Pillar 1 - Lifestyle
+                '<div style="background:#fefce8;padding:14px;border-radius:10px;">'
+                '<div style="font-weight:600;color:#854d0e;font-size:13px;">🌅 ESTILO DE VIDA (40%)</div>'
+                '<div style="font-size:12px;color:#a16207;margin-top:6px;line-height:1.6;">'
+                '• Tu día como mamá emprendedora<br>'
+                '• Libertad de horarios con tu hija<br>'
+                '• "Hoy trabajé desde el parque"<br>'
+                '• Rutina matutina con aceites<br>'
+                '• Pedidos empacados desde casa'
+                '</div></div>'
+                # Pillar 2 - Opportunity
+                '<div style="background:#f0fdf4;padding:14px;border-radius:10px;">'
+                '<div style="font-weight:600;color:#166534;font-size:13px;">💰 OPORTUNIDAD (25%)</div>'
+                '<div style="font-size:12px;color:#15803d;margin-top:6px;line-height:1.6;">'
+                '• "Cómo gano dinero sin horario fijo"<br>'
+                '• Testimonio de ingreso real (sin exagerar)<br>'
+                '• "Lo que me costó el kit vs lo que gané"<br>'
+                '• Comparación: empleo vs doTERRA<br>'
+                '• "Buscamos mamás emprendedoras"'
+                '</div></div>'
+                # Pillar 3 - Education
+                '<div style="background:#eff6ff;padding:14px;border-radius:10px;">'
+                '<div style="font-weight:600;color:#1e40af;font-size:13px;">🧠 EDUCACIÓN (25%)</div>'
+                '<div style="font-size:12px;color:#2563eb;margin-top:6px;line-height:1.6;">'
+                '• Tips de aceites para mamás<br>'
+                '• Recetas con aceites esenciales<br>'
+                '• "3 aceites que toda mamá necesita"<br>'
+                '• Diferencia doTERRA vs marca genérica<br>'
+                '• Clase en vivo semanal (Instagram/FB)'
+                '</div></div>'
+                # Pillar 4 - Testimony
+                '<div style="background:#fdf4ff;padding:14px;border-radius:10px;">'
+                '<div style="font-weight:600;color:#86198f;font-size:13px;">🌟 TESTIMONIOS (10%)</div>'
+                '<div style="font-size:12px;color:#a21caf;margin-top:6px;line-height:1.6;">'
+                '• Historias de tu equipo actual<br>'
+                '• Antes/después de clientas<br>'
+                '• "Llevo 6 meses y esto cambió"<br>'
+                '• Video testimonial de miembro<br>'
+                '• Capturas de logros (con permiso)'
+                '</div></div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Weekly Content Calendar ----
+            st.markdown(
+                '<div style="background:white;padding:18px 22px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:16px;">'
+                '<div style="font-weight:700;color:#1e293b;font-size:15px;margin-bottom:12px;">📅 Calendario Semanal de Publicaciones</div>'
+                '<div style="overflow-x:auto;">'
+                '<table style="width:100%;border-collapse:collapse;font-size:12px;">'
+                '<tr style="background:#f1f5f9;">'
+                '<th style="padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">Día</th>'
+                '<th style="padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">Instagram</th>'
+                '<th style="padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">Facebook</th>'
+                '<th style="padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">TikTok</th>'
+                '<th style="padding:8px 10px;text-align:left;font-weight:600;color:#475569;border-bottom:2px solid #e2e8f0;">WhatsApp Status</th>'
+                '</tr>'
+                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-weight:600;color:#1e293b;">Lunes</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">🌅 Reel: Mi rutina matutina</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Post motivacional</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">—</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Frase + aceite del día</td></tr>'
+                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-weight:600;color:#1e293b;">Martes</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Carrusel: Tips aceites</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Grupo: Pregunta interactiva</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Tutorial rápido 30s</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Preparando pedidos</td></tr>'
+                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-weight:600;color:#1e293b;">Miércoles</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Story: Detrás de cámaras</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Testimonio de clienta</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">—</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Resultado de aceite</td></tr>'
+                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-weight:600;color:#1e293b;">Jueves</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Reel: Oportunidad doTERRA</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Post: Buscamos mamás</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Día en mi vida vendiendo</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Ingreso del mes (vago)</td></tr>'
+                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-weight:600;color:#1e293b;">Viernes</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Live: Clase abierta aceites</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Live compartido en grupo</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">—</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Invitación al Live</td></tr>'
+                '<tr><td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;font-weight:600;color:#1e293b;">Sábado</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Carrusel: Estilo de vida</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Evento: Taller gratuito</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Trend + aceites</td>'
+                '<td style="padding:8px 10px;border-bottom:1px solid #f1f5f9;color:#666;">Fin de semana con hija</td></tr>'
+                '<tr><td style="padding:8px 10px;font-weight:600;color:#1e293b;">Domingo</td>'
+                '<td style="padding:8px 10px;color:#666;">Story: Descanso + gratitud</td>'
+                '<td style="padding:8px 10px;color:#666;">—</td>'
+                '<td style="padding:8px 10px;color:#666;">—</td>'
+                '<td style="padding:8px 10px;color:#666;">Reflexión semanal</td></tr>'
+                '</table></div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Copy-paste message templates ----
+            st.markdown(
+                '<div style="background:white;padding:18px 22px;border-radius:14px;border:1px solid #e2e8f0;">'
+                '<div style="font-weight:700;color:#1e293b;font-size:15px;margin-bottom:12px;">💬 Mensajes Listos para Copiar</div>'
+                '</div>',
+                unsafe_allow_html=True
+            )
+
+            msg_templates = [
+                ("Primer Contacto (fría)", "Hola [nombre]! 🌿 Vi tu perfil y me encantó tu energía. Soy Suzanna, trabajo con aceites esenciales doTERRA desde casa. Estoy buscando mamás emprendedoras en Quito que quieran generar ingresos con horario flexible. ¿Te interesaría saber cómo funciona? Sin compromiso 😊"),
+                ("Primer Contacto (referida)", "Hola [nombre]! 🌿 [Persona] me habló super bien de ti. Trabajo con doTERRA y estoy armando un equipo de mamás que quieren generar ingresos desde casa. ¿Tienes 10 minutos para que te cuente cómo funciona?"),
+                ("Follow-up después de interés", "Hola [nombre]! 🙋‍♀️ ¿Pudiste ver la info que te envié sobre doTERRA? Me encantaría responder cualquier pregunta. También te puedo enviar unas muestras para que pruebes los aceites. ¿Cuándo te queda bien una llamada rápida?"),
+                ("Invitación a clase virtual", "Hola [nombre]! 🌿 Este viernes hago una clase GRATIS sobre aceites esenciales por Instagram Live. Es súper práctica — aprenderás 3 mezclas para dormir mejor, desestresarte y dar energía. ¿Te anoto? Es a las 7pm 🕖"),
+                ("Después de la muestra", "Hola [nombre]! ¿Cómo te fue con las muestras? 🌿 ¿Cuál te gustó más? Me encantaría contarte cómo puedes tener tus propios aceites a precio mayorista Y ganar dinero recomendándolos. ¿Hablamos 15 min?"),
+                ("Cierre suave", "Hola [nombre]! 🤗 Después de todo lo que hemos hablado, ¿te gustaría comenzar con tu propio kit? El Kit de Inicio incluye [detalles] y con eso ya empiezas a ganar. Yo te acompaño paso a paso los primeros 30 días. ¿Qué dices?")
+            ]
+
+            for title, msg in msg_templates:
+                with st.expander(f"📝 {title}"):
+                    st.code(msg, language=None)
+
+        # ==============================================
+        # RECRUITMENT SUB-TAB 4: METRICS
+        # ==============================================
+        with r_tab4:
+            st.markdown(
+                '<div style="font-weight:700;font-size:1.1rem;color:#1e293b;margin-bottom:12px;">📊 Métricas de Reclutamiento</div>',
+                unsafe_allow_html=True
+            )
+
+            if pipeline:
+                # Funnel conversion visualization
+                total_prospects = len(pipeline)
+                funnel_data = {s: counts[s] for s in stages}
+
+                st.markdown(
+                    '<div style="background:white;padding:18px 22px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:16px;">'
+                    '<div style="font-weight:700;color:#1e293b;font-size:15px;margin-bottom:12px;">Embudo de Conversión</div>',
+                    unsafe_allow_html=True
+                )
+
+                # Visual funnel
+                max_count = max(max(funnel_data.values()), 1)
+                funnel_html = ''
+                for s in stages:
+                    pct = (funnel_data[s] / max_count * 100) if max_count > 0 else 0
+                    conv = (funnel_data[s] / total_prospects * 100) if total_prospects > 0 else 0
+                    funnel_html += (
+                        f'<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">'
+                        f'<div style="width:120px;font-size:12px;font-weight:600;color:#475569;text-align:right;">{stage_labels[s]}</div>'
+                        f'<div style="flex:1;background:#f1f5f9;border-radius:6px;height:28px;overflow:hidden;">'
+                        f'<div style="width:{max(pct, 5)}%;height:100%;background:{stage_colors[s]};border-radius:6px;display:flex;align-items:center;padding-left:10px;">'
+                        f'<span style="color:white;font-size:12px;font-weight:600;">{funnel_data[s]}</span>'
+                        f'</div></div>'
+                        f'<div style="width:50px;font-size:11px;color:#94a3b8;">{conv:.0f}%</div>'
+                        f'</div>'
+                    )
+                st.markdown(funnel_html + '</div>', unsafe_allow_html=True)
+
+                # Source breakdown
+                sources = {}
+                for p in pipeline:
+                    src = p.get('source', 'Otro')
+                    sources[src] = sources.get(src, 0) + 1
+
+                st.markdown(
+                    '<div style="background:white;padding:18px 22px;border-radius:14px;border:1px solid #e2e8f0;margin-bottom:16px;">'
+                    '<div style="font-weight:700;color:#1e293b;font-size:15px;margin-bottom:12px;">Fuentes de Prospectos</div>',
+                    unsafe_allow_html=True
+                )
+                source_html = '<div style="display:flex;flex-wrap:wrap;gap:8px;">'
+                source_icons = {'Facebook': '📘', 'Instagram': '📸', 'TikTok': '🎵', 'WhatsApp': '💬', 'Referida': '🤝', 'Evento presencial': '🏫', 'Taller': '🎓', 'Otro': '📌'}
+                for src, count in sorted(sources.items(), key=lambda x: -x[1]):
+                    icon = source_icons.get(src, '📌')
+                    source_html += (
+                        f'<div style="background:#f8fafc;padding:10px 16px;border-radius:10px;border:1px solid #e2e8f0;text-align:center;">'
+                        f'<div style="font-size:1.2rem;">{icon}</div>'
+                        f'<div style="font-weight:700;color:#1e293b;font-size:16px;">{count}</div>'
+                        f'<div style="font-size:11px;color:#64748b;">{src}</div>'
+                        f'</div>'
+                    )
+                source_html += '</div>'
+                st.markdown(source_html + '</div>', unsafe_allow_html=True)
+
+                # Score distribution
+                avg_score = sum(p.get('score', 0) for p in pipeline) / len(pipeline) if pipeline else 0
+                high_score = len([p for p in pipeline if p.get('score', 0) >= 60])
+                st.markdown(
+                    '<div style="background:white;padding:18px 22px;border-radius:14px;border:1px solid #e2e8f0;">'
+                    f'<div style="font-weight:700;color:#1e293b;font-size:15px;margin-bottom:12px;">Calidad del Pipeline</div>'
+                    f'<div style="display:flex;gap:16px;">'
+                    f'<div style="flex:1;background:#f0fdf4;padding:14px;border-radius:10px;text-align:center;">'
+                    f'<div style="font-size:1.5rem;font-weight:700;color:#22c55e;">{avg_score:.0f}</div>'
+                    f'<div style="font-size:12px;color:#15803d;">Score Promedio</div></div>'
+                    f'<div style="flex:1;background:#eff6ff;padding:14px;border-radius:10px;text-align:center;">'
+                    f'<div style="font-size:1.5rem;font-weight:700;color:#3b82f6;">{high_score}</div>'
+                    f'<div style="font-size:12px;color:#2563eb;">Alta Calidad (60+)</div></div>'
+                    f'<div style="flex:1;background:#fefce8;padding:14px;border-radius:10px;text-align:center;">'
+                    f'<div style="font-size:1.5rem;font-weight:700;color:#eab308;">{total_prospects}</div>'
+                    f'<div style="font-size:12px;color:#ca8a04;">Total Pipeline</div></div>'
+                    f'</div></div>',
+                    unsafe_allow_html=True
+                )
+            else:
+                st.info("Agrega prospectos al pipeline para ver métricas 📊")
+
+        # ==============================================
+        # RECRUITMENT SUB-TAB 5: STEP-BY-STEP GUIDE
+        # ==============================================
+        with r_tab5:
+            st.markdown(
+                '<div style="font-weight:700;font-size:1.1rem;color:#1e293b;margin-bottom:4px;">📖 El Plan Completo: De 0 a Piernas Productivas</div>'
+                '<div style="color:#64748b;font-size:13px;margin-bottom:16px;">Plan de 90 días para construir un equipo que realmente produzca</div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Phase 1: Weeks 1-2 ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:14px;">'
+                '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
+                '<div style="background:#dbeafe;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#1e40af;font-size:14px;">1</div>'
+                '<div><div style="font-weight:700;color:#1e293b;font-size:15px;">SEMANAS 1-2: Preparar el Terreno</div>'
+                '<div style="font-size:12px;color:#64748b;">Antes de buscar gente, prepara tu imagen y herramientas</div></div></div>'
+                '<div style="padding-left:46px;font-size:13px;color:#475569;line-height:1.8;">'
+                '<div style="margin-bottom:6px;"><b style="color:#1e40af;">✅ Optimizar perfiles de redes sociales:</b> Bio que diga qué haces + que buscas equipo. Foto profesional pero cercana. Link a tu WhatsApp.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#1e40af;">✅ Crear contenido semilla (10 posts):</b> 4 de estilo de vida, 3 educativos, 2 de oportunidad, 1 testimonio. Programarlos para las próximas 2 semanas.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#1e40af;">✅ Preparar kit de bienvenida digital:</b> PDF con info de doTERRA, video tuyo de 2 min explicando la oportunidad, FAQ para candidatas.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#1e40af;">✅ Unirse a grupos de Facebook:</b> "Mamás emprendedoras Quito", "Trabajo desde casa Ecuador", grupos de yoga/bienestar Quito.</div>'
+                '<div><b style="color:#1e40af;">✅ Pedir 5 muestras doTERRA:</b> Lavanda, Menta, On Guard, Deep Blue, Balance — las más impactantes para primera experiencia.</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Phase 2: Weeks 3-4 ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:14px;">'
+                '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
+                '<div style="background:#fef3c7;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#92400e;font-size:14px;">2</div>'
+                '<div><div style="font-weight:700;color:#1e293b;font-size:15px;">SEMANAS 3-4: Prospección Activa</div>'
+                '<div style="font-size:12px;color:#64748b;">Salir a buscar candidatas con intención</div></div></div>'
+                '<div style="padding-left:46px;font-size:13px;color:#475569;line-height:1.8;">'
+                '<div style="margin-bottom:6px;"><b style="color:#92400e;">✅ Meta: 10 prospectos por semana.</b> Usar el pipeline de esta herramienta para trackear cada una.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#92400e;">✅ Filtrar con la pregunta clave:</b> "¿Necesitas realmente el ingreso o es un hobby?" Si es hobby → no invertir más tiempo.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#92400e;">✅ Mensaje directo personalizado:</b> Usar las plantillas de la pestaña "Contenido Social". NO copiar-pegar masivamente.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#92400e;">✅ Primera clase virtual:</b> Hacer un IG Live o Zoom el viernes. Tema: "Cómo gano dinero desde casa con aceites". Invitar a todas las prospectos.</div>'
+                '<div><b style="color:#92400e;">✅ Enviar muestras:</b> A toda prospecto que muestre interés real, enviar muestra física. El olor vende más que cualquier pitch.</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Phase 3: Weeks 5-8 ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:14px;">'
+                '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
+                '<div style="background:#fed7aa;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#9a3412;font-size:14px;">3</div>'
+                '<div><div style="font-weight:700;color:#1e293b;font-size:15px;">SEMANAS 5-8: Convertir e Inscribir</div>'
+                '<div style="font-size:12px;color:#64748b;">Cerrar inscripciones y activar nuevas piernas</div></div></div>'
+                '<div style="padding-left:46px;font-size:13px;color:#475569;line-height:1.8;">'
+                '<div style="margin-bottom:6px;"><b style="color:#9a3412;">✅ Meta: 2 inscripciones por mes.</b> De 10 prospectos/semana → 5 contactos → 2 muestras → 1 inscripción cada 2 semanas.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#9a3412;">✅ Llamada de cierre 1:1:</b> No en grupo. Llamada personal de 15 min. Escuchar su situación. Presentar el kit que mejor le sirve.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#9a3412;">✅ Onboarding día 1:</b> Ayudarla a hacer su primera publicación, configurar su cuenta doTERRA, unirla al grupo de WhatsApp del equipo.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#9a3412;">✅ Plan de 30 días para nueva inscrita:</b> Semana 1: conocer productos. Semana 2: primera venta a familia/amigos. Semana 3: primera publicación propia. Semana 4: primer prospecto de ella.</div>'
+                '<div><b style="color:#9a3412;">✅ Check-in diario por WhatsApp:</b> Los primeros 30 días, mensaje diario. "¿Cómo te fue hoy? ¿Necesitas algo?" Esto retiene.</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Phase 4: Weeks 9-12 ----
+            st.markdown(
+                '<div style="background:white;padding:20px 24px;border-radius:14px;border:1px solid #e2e8f0;box-shadow:0 2px 8px rgba(0,0,0,0.04);margin-bottom:14px;">'
+                '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">'
+                '<div style="background:#bbf7d0;width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#166534;font-size:14px;">4</div>'
+                '<div><div style="font-weight:700;color:#1e293b;font-size:15px;">SEMANAS 9-12: Escalar y Duplicar</div>'
+                '<div style="font-size:12px;color:#64748b;">Tu equipo empieza a reclutar por su cuenta</div></div></div>'
+                '<div style="padding-left:46px;font-size:13px;color:#475569;line-height:1.8;">'
+                '<div style="margin-bottom:6px;"><b style="color:#166534;">✅ Entrenar a tus inscritas a reclutar:</b> Compartirles esta misma herramienta. Enseñarles el embudo. Que repliquen el proceso.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#166534;">✅ Reunión semanal de equipo:</b> Zoom de 30 min cada lunes. Compartir logros, resolver dudas, motivar. Crear cultura de equipo.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#166534;">✅ Reconocimiento público:</b> Publicar logros de tu equipo en redes. "María hizo su primera venta esta semana 🎉". Esto motiva y atrae más candidatas.</div>'
+                '<div style="margin-bottom:6px;"><b style="color:#166534;">✅ Sistema de metas compartidas:</b> Meta grupal mensual. Si el equipo llega a X PV, celebración. Crear presión social positiva.</div>'
+                '<div><b style="color:#166534;">✅ Evaluar y podar:</b> A los 90 días, evaluar quién produce y quién no. Invertir más tiempo en las que producen. Las que no, dejar de presionar — buscar reemplazos.</div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+            # ---- Key Numbers ----
+            st.markdown(
+                '<div style="background:linear-gradient(135deg,#1e293b,#334155);padding:20px 24px;border-radius:14px;margin-bottom:14px;">'
+                '<div style="font-weight:700;color:#e2e8f0;font-size:15px;margin-bottom:12px;">🔢 Los Números que Importan</div>'
+                '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;">'
+                '<div style="background:rgba(255,255,255,0.1);padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.4rem;font-weight:700;color:#fbbf24;">10</div>'
+                '<div style="font-size:11px;color:#94a3b8;">Prospectos / semana</div></div>'
+                '<div style="background:rgba(255,255,255,0.1);padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.4rem;font-weight:700;color:#34d399;">50%</div>'
+                '<div style="font-size:11px;color:#94a3b8;">Tasa contacto</div></div>'
+                '<div style="background:rgba(255,255,255,0.1);padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.4rem;font-weight:700;color:#60a5fa;">20%</div>'
+                '<div style="font-size:11px;color:#94a3b8;">Tasa inscripción</div></div>'
+                '<div style="background:rgba(255,255,255,0.1);padding:12px;border-radius:10px;text-align:center;">'
+                '<div style="font-size:1.4rem;font-weight:700;color:#f472b6;">2</div>'
+                '<div style="font-size:11px;color:#94a3b8;">Nuevas piernas / mes</div></div>'
+                '</div></div>',
+                unsafe_allow_html=True
+            )
+
+    # ============================================
+    # TAB 3: STRIPE
     # ============================================
     with tab_stripe:
         st.markdown(
